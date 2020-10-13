@@ -1,0 +1,1 @@
+0, 0, 13, 10, 2020, ../Database/NewspaperPages/test.png, ../Database/NewspaperPages/test.png
