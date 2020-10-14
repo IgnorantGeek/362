@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 /**
  * A class that represents a physical newspaper.
  * @author Alexander Irlbeck
- *
+ * **Works as of 10/14/20
  */
 public class Newspaper {
 	/**
@@ -142,22 +142,22 @@ public class Newspaper {
 	 * Allows the consumer to order this paper individually. Takes their payment info, runs it through the Sales class, takes their name and address, and sends it to Newspaper_Orders.txt
 	 * to be handled by the distributors.
 	 * @return Returns whether or not the operation succeeded successfully or not.
+	 * **Works as of 10/14/20
 	 */
 	public boolean orderPaper()
 	{
-		//TODO Test if it works.
 		System.out.println("Would you like to input a Credit Card('CC'), enter PayPal('p'), or cancel('c') to complete your order?");
 		@SuppressWarnings("resource")//System.in should not be closed before the program has finished.
 		Scanner scan = new Scanner(System.in);
-		String in=scan.next();
+		String in=scan.nextLine();
 		Sales sale=new Sales();
 		if(in.compareTo("CC")==0)
 		{
 			System.out.println("Credit Card selected. Please input your full name, credit card number, CVV, and expiration date all seperated by hitting enter.");
 			String name = scan.nextLine();
-			String cardNum=scan.next();
-			int cvv = scan.nextInt();
-			int exp = scan.nextInt();
+			String cardNum=scan.nextLine();
+			String cvv = scan.nextLine();
+			String exp = scan.nextLine();
 			boolean tried = sale.cardSale(cardNum, cvv, exp, name);
 			if(tried)
 			{
@@ -224,6 +224,14 @@ public class Newspaper {
 		return false;
 	}
 	/**
+	 * Developer method that sets the newspaper to be published, in a method that a user can not see.
+	 * **Works as of 10/14/20
+	 */
+	protected void setFinal()
+	{
+		finalized=true;
+	}
+	/**
 	 * A helper method for read paper that shows the page in the newspaper as a pop-up.
 	 * @return returns whether or not the program successfully displayed a picture.
 	 * **Works as of 10/14/20
@@ -238,7 +246,6 @@ public class Newspaper {
 			@SuppressWarnings("resource")//System.in should not be closed before the program has finished.
 			Scanner scan = new Scanner(System.in);
 			String input=scan.next();
-			JFrame f = new JFrame();
 			while(!(0==input.compareTo("Quit"))&&!(0==input.compareTo("quit"))&&!(0==input.compareTo("q"))&&!(0==input.compareTo("Q")))
 			{
 				if(!(0==input.compareTo("Quit"))&&!(0==input.compareTo("quit"))||!(0==input.compareTo("q"))||!(0==input.compareTo("Q")))
@@ -249,6 +256,7 @@ public class Newspaper {
 						in = Integer.parseInt(input);
 						if(in>0 && in<=pages.size())
 						{
+							JFrame f = new JFrame();
 							String address = pages.get(in-1);
 							ImageIcon image = new ImageIcon(address);
 							JLabel l = new JLabel(image);
