@@ -3,12 +3,12 @@ package newspaper;
 
 public abstract class Customer 
 {
-    private String custID;
+    private String id;
 
-    public Customer(String ID)
+    public Customer(String id)
     {
-        custID = ID;
+        this.id = id;
     }
 
-    public String custID() { return custID; }
+    public String id() { return id; }
 }

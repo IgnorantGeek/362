@@ -135,7 +135,7 @@ public class NewspaperManager
 	{
 		Scanner scan;
 		try {
-			File f = new File("./newspaper/Database/NewspaperPages/NewspaperInit.txt");
+			File f = new File("../Database/NewspaperPages/NewspaperInit.txt");
 			scan = new Scanner(f);
 		} catch (FileNotFoundException e) {
 			System.out.println("Newspaper initialization file corrupted or missing. Please contact tech support.");
@@ -268,6 +268,23 @@ public class NewspaperManager
 					return null;
 				}
 			}
+		}
+		return null;
+	}
+
+	public Newspaper findPaper(int[] paperInfo)
+	{
+		String vol_string = Integer.toString(paperInfo[0]) + Integer.toString(paperInfo[1]);
+		String date_string = Integer.toString(paperInfo[2]) +
+							 Integer.toString(paperInfo[3]) +
+							 Integer.toString(paperInfo[4]);
+		if (volumeAndIssue.containsKey(vol_string))
+		{
+			return volumeAndIssue.get(vol_string);
+		}
+		if (dayMonYear.containsKey(date_string))
+		{
+			return dayMonYear.get(date_string);
 		}
 		return null;
 	}
