@@ -1,5 +1,6 @@
 package newspaper;
 
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
@@ -7,6 +8,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -16,16 +18,27 @@ import javax.swing.ImageIcon;
 /**
  * A class that manages all newspapers in the program, grabs them from its initialization file, and after .close() is called, saves the settings in init file, then wipes everything.
  * @author Alexander Irlbeck
- *
+ * **Works as of 10/14/20
  */
 public class NewspaperManager 
 {
+	/**
+	 * Input is in the format of "volume, issue" for the key, and the newspaper corresponds with that key.
+	 */
 	private HashMap<String,Newspaper> volumeAndIssue;
+	/**
+	 * Input is in the format of "day, month, year" for the key, and the newspaper corresponds with that key.
+	 */
 	private HashMap<String,Newspaper> dayMonYear;
+	/**
+	 * A list of every newspaper available.
+	 */
+	private ArrayList<Newspaper> news;
 	public NewspaperManager()
 	{
 		volumeAndIssue=new HashMap<String, Newspaper>();
 		dayMonYear=new HashMap<String, Newspaper>();
+		news = new ArrayList<Newspaper>();
 		init();
 	}
 	/**
@@ -146,39 +159,112 @@ public class NewspaperManager
 	 * Adds a paper to the collection and allows for edits on that paper right away. Initialized as not finalized and is added to the init file with its pages.
 	 * @param clearance The actors clearance level that allows for them to use this function or not.
 	 * @return returns the finished newspaper, or null if the method was unsuccessful.
+	 * **Works as of 10/14/20
 	 */
 	public Newspaper addPaper(int clearance)
 	{
-		//TODO Test it.
 		if(clearance<3)
 		{
 			return null;
 		}
 		@SuppressWarnings("resource")//System.in should not be closed before the program has finished.
 		Scanner scan = new Scanner(System.in);
-		int volume = scan.nextInt();
-		int issue = scan.nextInt();
-		int day = scan.nextInt();
-		int month = scan.nextInt();
-		int year = scan.nextInt();
+		int volume = 0;
+		System.out.println("Please enter the newspaper's volume.");
+		String between = scan.next();
+		try
+		{
+			volume = Integer.parseInt(between);
+		}
+		catch(Exception NumberFormatException)
+		{
+			System.out.println(between+" is not a valid number. Cancelling current add.");
+			return null;
+		}
+		int issue = 0;
+		System.out.println("Please enter the newspaper's issue.");
+		between = scan.next();
+		try
+		{
+			issue = Integer.parseInt(between);
+		}
+		catch(Exception NumberFormatException)
+		{
+			System.out.println(between+" is not a valid number. Cancelling current add.");
+			return null;
+		}
+		int day = 0;
+		System.out.println("Please enter the newspaper's day.");
+		between = scan.next();
+		try
+		{
+			day = Integer.parseInt(between);
+		}
+		catch(Exception NumberFormatException)
+		{
+			System.out.println(between+" is not a valid number. Cancelling current add.");
+			return null;
+		}
+		int month = 0;
+		System.out.println("Please enter the newspaper's month.");
+		between = scan.next();
+		try
+		{
+			month = Integer.parseInt(between);
+		}
+		catch(Exception NumberFormatException)
+		{
+			System.out.println(between+" is not a valid number. Cancelling current add.");
+			return null;
+		}
+		int year = 0;
+		System.out.println("Please enter the newspaper's year.");
+		between = scan.next();
+		try
+		{
+			year = Integer.parseInt(between);
+		}
+		catch(Exception NumberFormatException)
+		{
+			System.out.println(between+" is not a valid number. Cancelling current add.");
+			return null;
+		}
 		Newspaper toAdd = new Newspaper(volume, issue, day, month, year, false);
 		System.out.println("If you want to enter editing pages mode, type anything but 'q'. If you want to exit editing mode, enter 'q'.");
 		String next = scan.next();
 		String added = "";
+		int counter=1;
 		while(!next.equals("q"))
 		{
 			String temp = editPaper(toAdd,clearance);
 			if(temp!=null)
 			{
-				added= added+", "+temp;
+				if(counter==1)
+				{
+					added= added+temp;
+				}
+				else
+				{
+					added= added+", "+temp;
+				}
+				counter++;
 			}
+			System.out.println("If you want to enter editing pages mode, type anything but 'q'. If you want to exit editing mode, enter 'q'.");
+			next = scan.next();
 		}
 		String volumeAndIssue = volume+", "+issue;
 		String date = day+", "+month+", "+year;
+		if((this.volumeAndIssue.containsKey(volumeAndIssue)&&this.volumeAndIssue.get(volumeAndIssue).getPublished())||(dayMonYear.containsKey(date)&&dayMonYear.get(date).getPublished()))
+		{
+			System.out.println("Published paper with this volume and issue already exist. Aborting process.");
+			return null;
+			
+		}
 		if(this.volumeAndIssue.containsKey(volumeAndIssue))
 		{
 			this.volumeAndIssue.replace(volumeAndIssue,toAdd);
 		}
+		
 		else
 		{
 			this.volumeAndIssue.put(volumeAndIssue, toAdd);
@@ -191,16 +277,17 @@ public class NewspaperManager
 		{
 			dayMonYear.put(date, toAdd);
 		}
-		String builder = + volume + ", " + issue + ", " + day + ", " + month + ", " + year + ", " + false + ", " + added;
+		String builder ="\n" + volume + ", " + issue + ", " + day + ", " + month + ", " + year + ", " + false + ", " + added;
 		BufferedWriter write;
 		try {
 			write = new BufferedWriter (new FileWriter("../Database/NewspaperPages/NewspaperInit.txt",true));
 			write.append(builder);
 			write.close();
 		} catch (IOException e) {
-			System.out.println("Article initialization file corrupted or missing. Please contact tech support.");
+			System.out.println("Newspaper initialization file corrupted or missing. Please contact tech support.");
 			return null;
 		}
+		news.add(toAdd);
 		return toAdd;
 	}
 	/**
@@ -258,6 +345,7 @@ public class NewspaperManager
 			{
 				dayMonYear.put(date, toAdd);
 			}
+			news.add(toAdd);
 		}
 		scan.close();
 		return true;
@@ -268,10 +356,10 @@ public class NewspaperManager
 	 * @param n The newspaper to edit
 	 * @param clearance The clearance level of the actor
 	 * @return The new address location of any changed files, or null if the method was unsuccessful.
+	 * **Works as of 10/14/20
 	 */
 	public String editPaper(Newspaper n,int clearance)
 	{
-		//TODO Test it.
 		if(n.getPublished())
 		{
 			System.out.println("Paper has already been finalized.");
@@ -289,13 +377,24 @@ public class NewspaperManager
 				input = in.next();
 				ImageIcon image = new ImageIcon(input);
 				Image between = image.getImage();
-				BufferedImage image2 = (BufferedImage)between;
-				String[] list = input.split("/");
-				File outputFile = new File("../Database/NewspaperPages/"+list[list.length-1]);
-				try {
-					ImageIO.write(image2, "png", outputFile);
-					return "../Database/NewspaperPages/"+list[list.length-1];
-				} catch (IOException e) {
+				try
+				{
+					BufferedImage image2 = new BufferedImage(between.getWidth(null), between.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+					Graphics2D gr = image2.createGraphics();
+					gr.drawImage(between, 0, 0, null);
+					gr.dispose();
+					String[] list = input.split("/");
+					File outputFile = new File("../Database/NewspaperPages/"+list[list.length-1]);
+					try {
+						ImageIO.write(image2, "png", outputFile);
+						return "../Database/NewspaperPages/"+list[list.length-1];
+					} catch (IOException e) {
+						System.out.println("Image could not be found and/or was not in the correct format.");
+						return null;
+					}
+				}
+				catch(IllegalArgumentException e)
+				{
 					System.out.println("Image could not be found and/or was not in the correct format.");
 					return null;
 				}
@@ -311,7 +410,7 @@ public class NewspaperManager
 				{
 					System.out.println(input+" is not a valid number. Please insert a valid number or 'a'.");
 				}
-				if(converted>n.pages.size()||converted<1)
+				if(converted<=n.pages.size()&&converted>0)
 				{
 					System.out.println("Would you like to replace the current page (Press 'r')?");
 					input=in.next();
@@ -322,15 +421,27 @@ public class NewspaperManager
 						input = in.next();
 						ImageIcon image = new ImageIcon(input);
 						Image between = image.getImage();
-						BufferedImage image2 = (BufferedImage)between;
-						File outputFile = new File(address);
-						try {
-							ImageIO.write(image2, "png", outputFile);
-							return address;
-						} catch (IOException e) {
+						try
+						{
+							BufferedImage image2 = new BufferedImage(between.getWidth(null), between.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+							Graphics2D gr = image2.createGraphics();
+							gr.drawImage(between, 0, 0, null);
+							gr.dispose();
+							File outputFile = new File(address);
+							try {
+								ImageIO.write(image2, "png", outputFile);
+								return address;
+							} catch (IOException e) {
+								System.out.println("Image could not be found and/or was not in the correct format.");
+								return null;
+							}
+						}
+						catch(IllegalArgumentException e)
+						{
 							System.out.println("Image could not be found and/or was not in the correct format.");
 							return null;
 						}
+						
 					}
 					else
 					{
@@ -356,7 +467,6 @@ public class NewspaperManager
 	 */
 	public Newspaper findPaper(int[] paperInfo)
 	{
-		//TODO Give credit to who made it.
 		String vol_string = Integer.toString(paperInfo[0]) + Integer.toString(paperInfo[1]);
 		String date_string = Integer.toString(paperInfo[2]) +
 							 Integer.toString(paperInfo[3]) +
@@ -374,10 +484,34 @@ public class NewspaperManager
 	/**
 	 * Rewrites the init file to show all changes that have been made to each newspaper in the database.
 	 * @return Returns whether or not the method was successful.
+	 * **Works as of 10/14/20
 	 */
-	public boolean close()
+	public boolean save()
 	{
-		//TODO Rewrite init file.
-		return false;
+		String builder="";
+		for(int i=0;i<news.size();i++)
+		{
+			Newspaper cur = news.get(i);
+			int[] info = cur.getInfo();
+			builder = builder + info[0] + ", " + info[1] + ", " + info[2] + ", " + info[3] + ", " + info[4] + ", " + cur.getPublished();
+			for(int j = 0; j<cur.pages.size();j++)
+			{
+				builder = builder + ", " + cur.pages.get(j);
+			}
+			if(i+1!=news.size())
+			{
+				builder = builder + "\n";
+			}
+		}
+		BufferedWriter write;
+		try {
+			write = new BufferedWriter (new FileWriter("../Database/NewspaperPages/NewspaperInit.txt"));
+			write.write(builder);
+			write.close();
+		} catch (IOException e) {
+			System.out.println("Newspaper initialization file corrupted or missing. Please contact tech support.");
+			return false;
+		}
+		return true;
 	}
 }
