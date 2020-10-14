@@ -13,7 +13,7 @@ public class AdManager
     public AdManager(String rootDir, NewspaperManager manager)
     {
         ads = new ArrayList<Ad>();
-        databasePath = new String(rootDir);
+        databasePath = new String(rootDir + "/Ads");
         paperRef = manager;
         initialized = false;
     }
@@ -27,7 +27,7 @@ public class AdManager
         }
 
         // Create files
-        File root_dir = new File(this.databasePath + "Ads");
+        File root_dir = new File(this.databasePath);
         if (!root_dir.mkdir())
         {
             return -2;

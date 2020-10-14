@@ -6,13 +6,13 @@ import java.util.Scanner;
 /**
  * Handle the IOException properly
  */
-public class App 
+public class App
 {
     public static void main( String[] args ) throws IOException
     {
         NewspaperManager man = new NewspaperManager();
         ArticleManager aman = new ArticleManager();
-        AdManager adManager = new AdManager("/home/nick/Documents/Workspace/362/Database", man);
+        AdManager adManager = new AdManager("../Database", man);
 
         Scanner in = new Scanner(System.in);
 
@@ -24,7 +24,8 @@ public class App
         switch(input)
         {
             case "1":
-                man.search(); // however you run this guy
+                // Alex this will be the main entry point for newspaperManager
+                man.search();
                 break;
             case "2":
                 aman.addArticle();
@@ -38,7 +39,7 @@ public class App
             case "exit":
             case "Exit":
                 System.out.println("Goodbye.");
-                return;  
+                return;
         }
     }
 }
