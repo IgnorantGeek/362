@@ -25,7 +25,36 @@ public class App
         {
             case "1":
                 // Alex this will be the main entry point for newspaperManager
-                man.search().readPaper(20);
+                Newspaper paper=man.search();
+                if (paper!=null)
+                {
+                	paper.readPaper(20);
+                }
+                paper=man.search();
+                if (paper!=null)
+                {
+                	paper.readPaper(1);
+                }
+                paper=man.search();
+                if (paper!=null)
+                {
+                	paper.finalizePaper(1);
+                }
+                paper=man.search();
+                if (paper!=null)
+                {
+                	paper.finalizePaper(5);
+                }
+                paper=man.search();
+                if (paper!=null)
+                {
+                	paper.readPaper(1);
+                }
+                paper=man.search();
+                if (paper!=null)
+                {
+                	paper.readPaper(2);
+                }
                 break;
             case "2":
                 aman.addArticle();
