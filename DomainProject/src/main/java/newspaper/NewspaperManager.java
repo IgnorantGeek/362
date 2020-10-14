@@ -349,7 +349,7 @@ public class NewspaperManager
 	 * @param paperInfo All of the papers info
 	 * @return The newspaper found, or null if nothing was found.
 	 * **Works as of 10/14/20
-	 * **Made by __________
+	 * **Made by Nick Heisler
 	 */
 	public Newspaper findPaper(int[] paperInfo)
 	{
