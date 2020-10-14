@@ -13,6 +13,11 @@ import java.util.Scanner;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+/**
+ * A class that manages all newspapers in the program, grabs them from its initialization file, and after .close() is called, saves the settings in init file, then wipes everything.
+ * @author Alexander Irlbeck
+ *
+ */
 public class NewspaperManager 
 {
 	private HashMap<String,Newspaper> volumeAndIssue;
@@ -23,27 +28,58 @@ public class NewspaperManager
 		dayMonYear=new HashMap<String, Newspaper>();
 		init();
 	}
+	/**
+	 * Searches current newspapers for a paper and will return it whether or not the actor should see it. Like a coming soon type of deal when it is not yet published.
+	 * @return The newspaper that was found, or null if no newspaper was found.
+	 * **Works as of 10/14/20
+	 */
 	public Newspaper search()
 	{
-		System.out.println("Enter '1' to look for a newspaper by volume/issue, '2' to look for a newspaper by its publishing date.");
+		System.out.println("Enter '1' to look for a newspaper by volume/issue, '2' to look for a newspaper by its publishing date. Press 'q' to exit.");
 		@SuppressWarnings("resource")//System.in should not be closed before the program has finished.
 		Scanner in = new Scanner(System.in);
-		boolean going = true;
-		while(going)
+		String next=in.next();
+		while(!next.equals("q"))
 		{
-			going=false;
-			int num = in.nextInt();
+			int num = 0;
+			try
+			{
+				num = Integer.parseInt(next);
+			}
+			catch(Exception NumberFormatException)
+			{
+				System.out.println(next+" is not a valid number or 'q'. Please insert a valid number or 'q'.");
+			}
 			if(num==1)
 			{
 				System.out.println("Please enter the newspaper's volume.");
-				int volume = in.nextInt();
+				int volume = 0;
+				next = in.next();
+				try
+				{
+					volume = Integer.parseInt(next);
+				}
+				catch(Exception NumberFormatException)
+				{
+					System.out.println(next+" is not a valid number. Cancelling current search.");
+					System.out.println("Enter '1' to look for a newspaper by volume/issue, '2' to look for a newspaper by its publishing date. Press 'q' to exit.");
+				}
 				System.out.println("Please enter the newspaper's issue.");
-				int issue = in.nextInt();
+				int issue = 0;
+				next = in.next();
+				try
+				{
+					issue = Integer.parseInt(next);
+				}
+				catch(Exception NumberFormatException)
+				{
+					System.out.println(next+" is not a valid number. Cancelling current search.");
+					System.out.println("Enter '1' to look for a newspaper by volume/issue, '2' to look for a newspaper by its publishing date. Press 'q' to exit.");
+				}
 				String volIss = volume+", " + issue;
 				if(!volumeAndIssue.containsKey(volIss))
 				{
 					System.out.println("Volume and issue could not be found. Press '1' to search again or select another searching method.");
-					going=true;
 				}
 				else
 				{
@@ -53,16 +89,45 @@ public class NewspaperManager
 			else if(num==2)
 			{
 				System.out.println("Please enter the newspaper's day.");
-				int day = in.nextInt();
+				int day = 0;
+				next = in.next();
+				try
+				{
+					day = Integer.parseInt(next);
+				}
+				catch(Exception NumberFormatException)
+				{
+					System.out.println(next+" is not a valid number. Cancelling current search.");
+					System.out.println("Enter '1' to look for a newspaper by volume/issue, '2' to look for a newspaper by its publishing date. Press 'q' to exit.");
+				}
 				System.out.println("Please enter the newspaper's month.");
-				int month = in.nextInt();
+				int month = 0;
+				next = in.next();
+				try
+				{
+					month = Integer.parseInt(next);
+				}
+				catch(Exception NumberFormatException)
+				{
+					System.out.println(next+" is not a valid number. Cancelling current search.");
+					System.out.println("Enter '1' to look for a newspaper by volume/issue, '2' to look for a newspaper by its publishing date. Press 'q' to exit.");
+				}
 				System.out.println("Please enter the newspaper's year.");
-				int year = in.nextInt();
+				int year = 0;
+				next = in.next();
+				try
+				{
+					year = Integer.parseInt(next);
+				}
+				catch(Exception NumberFormatException)
+				{
+					System.out.println(next+" is not a valid number. Cancelling current search.");
+					System.out.println("Enter '1' to look for a newspaper by volume/issue, '2' to look for a newspaper by its publishing date. Press 'q' to exit.");
+				}
 				String date = day+", "+month+", "+year;
 				if(!dayMonYear.containsKey(date))
 				{
-					System.out.println("Volume and issue could not be found. Press '1' to search again or select another searching method.");
-					going=true;
+					System.out.println("Date could not be found. Press '2' to search again or select another searching method.");
 				}
 				else
 				{
@@ -72,13 +137,23 @@ public class NewspaperManager
 			else
 			{
 				System.out.println("The number inputed is not in the the approved options. Please an acceptable number.");
-				going=true;
 			}
+			next=in.next();
 		}
 		return null;
 	}
+	/**
+	 * Adds a paper to the collection and allows for edits on that paper right away. Initialized as not finalized and is added to the init file with its pages.
+	 * @param clearance The actors clearance level that allows for them to use this function or not.
+	 * @return returns the finished newspaper, or null if the method was unsuccessful.
+	 */
 	public Newspaper addPaper(int clearance)
 	{
+		//TODO Test it.
+		if(clearance<3)
+		{
+			return null;
+		}
 		@SuppressWarnings("resource")//System.in should not be closed before the program has finished.
 		Scanner scan = new Scanner(System.in);
 		int volume = scan.nextInt();
@@ -128,6 +203,11 @@ public class NewspaperManager
 		}
 		return toAdd;
 	}
+	/**
+	 * Initializes the class from the init file in the Database.
+	 * @return Returns true if it was successful.
+	 * **Works as of 10/14/20
+	 */
 	private boolean init()
 	{
 		Scanner scan;
@@ -179,8 +259,16 @@ public class NewspaperManager
 		scan.close();
 		return true;
 	}
-	private String editPaper(Newspaper n,int clearance)
+	/**
+	 * Allows for the actor to edit the newspaper n. The actor can add onto the end of the newspaper, or replace a page. Necessitates the need for .close() to be called
+	 * because it does not update the init file.
+	 * @param n The newspaper to edit
+	 * @param clearance The clearance level of the actor
+	 * @return The new address location of any changed files, or null if the method was unsuccessful.
+	 */
+	public String editPaper(Newspaper n,int clearance)
 	{
+		//TODO Test it.
 		if(n.getPublished())
 		{
 			System.out.println("Paper has already been finalized.");
@@ -188,7 +276,7 @@ public class NewspaperManager
 		}
 		if(clearance>3)
 		{
-			System.out.println("Please choose a page between 1 and " + (n.pages.size()-1) + " to edit a specific page, or 'a' to add to the end of the newspaper.");
+			System.out.println("Please choose a page between 1 and " + (n.pages.size()) + " to edit a specific page, or 'a' to add to the end of the newspaper.");
 			@SuppressWarnings("resource")//System.in should not be closed before the program has finished.
 			Scanner in = new Scanner(System.in);
 			String input = in.next();
@@ -222,7 +310,7 @@ public class NewspaperManager
 				}
 				if(converted>n.pages.size()||converted<1)
 				{
-					System.out.println("Would you like to delete ('d') the page or replace it ('r')?");
+					System.out.println("Would you like to replace the current page (Press 'r')?");
 					input=in.next();
 					if(input.equals("r"))
 					{
@@ -241,15 +329,9 @@ public class NewspaperManager
 							return null;
 						}
 					}
-					else if(input.equals("d"))
-					{
-						String removed = n.pages.remove(converted-1);
-						System.out.println("Page was successfully removed.");
-						return removed;
-					}
 					else
 					{
-						System.out.println("Paper has already been finalized.");
+						System.out.println("Nothing has been changed.");
 						return null;
 					}
 				}
@@ -262,9 +344,16 @@ public class NewspaperManager
 		}
 		return null;
 	}
-
+	/**
+	 * Developer use only. Shorthand way of getting a paper.
+	 * @param paperInfo All of the papers info
+	 * @return The newspaper found, or null if nothing was found.
+	 * **Works as of 10/14/20
+	 * **Made by __________
+	 */
 	public Newspaper findPaper(int[] paperInfo)
 	{
+		//TODO Give credit to who made it.
 		String vol_string = Integer.toString(paperInfo[0]) + Integer.toString(paperInfo[1]);
 		String date_string = Integer.toString(paperInfo[2]) +
 							 Integer.toString(paperInfo[3]) +
@@ -278,5 +367,14 @@ public class NewspaperManager
 			return dayMonYear.get(date_string);
 		}
 		return null;
+	}
+	/**
+	 * Rewrites the init file to show all changes that have been made to each newspaper in the database.
+	 * @return Returns whether or not the method was successful.
+	 */
+	public boolean close()
+	{
+		//TODO Rewrite init file.
+		return false;
 	}
 }
