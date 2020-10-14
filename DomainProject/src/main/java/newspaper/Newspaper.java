@@ -29,6 +29,7 @@ public class Newspaper {
 	{
 		return finalized;
 	}
+	@SuppressWarnings("resource")//System.in should not be closed before the program has finished.
 	public boolean finalizePaper(int clearance)
 	{
 		if(finalized)
@@ -46,7 +47,6 @@ public class Newspaper {
 				Scanner scan = new Scanner(System.in);
 				String answer = scan.next();
 				answer=answer.toLowerCase();
-				scan.close();
 				if(answer.compareTo("yes")==0)
 				{
 					ended=true;
@@ -100,6 +100,7 @@ public class Newspaper {
 	public boolean orderPaper() throws IOException
 	{
 		System.out.println("Would you like to input a Credit Card('CC'), enter PayPal('p'), or cancel('c') to complete your order?");
+		@SuppressWarnings("resource")//System.in should not be closed before the program has finished.
 		Scanner scan = new Scanner(System.in);
 		String in=scan.next();
 		Sales sale=new Sales();
@@ -118,7 +119,6 @@ public class Newspaper {
 				String destination = scan.nextLine();
 				System.out.println("Destination confirmed for "+destination);
 				System.out.println("If any problems occur, contact us at newspaperSales@gmail.com");
-				scan.close();
 				Writer edit = new BufferedWriter(new FileWriter("../Database/NewspaperPages/Newspaper_Orders.txt", true));
 				edit.append("Order for "+name+" is to be delivered at " + destination);
 				edit.close();
@@ -127,7 +127,6 @@ public class Newspaper {
 			else
 			{
 				System.out.println("Payment failed. Terminating payment.");
-				scan.close();
 				return false;
 			}
 		}
@@ -143,7 +142,6 @@ public class Newspaper {
 				String destination = scan.nextLine();
 				System.out.println("Destination confirmed for "+destination);
 				System.out.println("If any problems occur, contact us at newspaperSales@gmail.com");
-				scan.close();
 				Writer edit = new BufferedWriter(new FileWriter("../Database/NewspaperPages/Newspaper_Orders.txt", true));
 				edit.append("Order for "+name+" is to be delivered at " + destination);
 				edit.close();
@@ -152,7 +150,6 @@ public class Newspaper {
 			else
 			{
 				System.out.println("Payment failed. Terminating payment.");
-				scan.close();
 				return false;
 			}
 		}
@@ -164,7 +161,6 @@ public class Newspaper {
 		{
 			System.out.println("No approved option was inserted. Automatically cancelling order.");
 		}
-		scan.close();
 		return false;
 	}
 	private boolean printPage()
@@ -174,11 +170,11 @@ public class Newspaper {
 			System.out.println("Please input the page you want to visit between 1 and "+pages.size()+" or");
 			System.out.println("'Quit', 'quit', 'q' or 'Q' if you want to stop looking at this newspaper's");
 			System.out.println("pages.");
+			@SuppressWarnings("resource")//System.in should not be closed before the program has finished.
 			Scanner scan = new Scanner(System.in);
 			String input=scan.next();
 			while(!(0==input.compareTo("Quit"))&&!(0==input.compareTo("quit"))&&!(0==input.compareTo("q"))&&!(0==input.compareTo("Q")))
 			{
-				scan = new Scanner(System.in);
 				input=scan.next();
 				if(!(0==input.compareTo("Quit"))&&!(0==input.compareTo("quit"))||!(0==input.compareTo("q"))||!(0==input.compareTo("Q")))
 				{
@@ -207,7 +203,6 @@ public class Newspaper {
 					}
 				}
 			}
-			scan.close();
 			return true;
 		}
 		else

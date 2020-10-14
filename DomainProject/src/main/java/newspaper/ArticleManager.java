@@ -31,6 +31,7 @@ public class ArticleManager
 		System.out.println("Enter '1' to look for an article by its title, '2' to look for an article by its description,");
 		System.out.println("'3' to look for an article based off of it volume/issue appearance, or '4' to look up an article");
 		System.out.println("based off of its publishing date.");
+		@SuppressWarnings("resource")//System.in should not be closed before the program has finished.
 		Scanner in = new Scanner(System.in);
 		boolean going = true;
 		while(going)
@@ -50,7 +51,6 @@ public class ArticleManager
 				{
 					Article[] retual= new Article[1];
 					retual[0]=nameToAll.get(input);
-					in.close();
 					return retual;
 				}
 			}
@@ -87,7 +87,6 @@ public class ArticleManager
 					{
 						retual[i]=inBetween.get(i);
 					}
-					in.close();
 					return retual;
 				}
 			}
@@ -111,7 +110,6 @@ public class ArticleManager
 					{
 						retual[i]=volumeAndIssueToName.get(volIss).get(i);
 					}
-					in.close();
 					return retual;
 				}
 			}
@@ -136,7 +134,6 @@ public class ArticleManager
 					{
 						retual[i]=dayMonYearToName.get(date).get(i);
 					}
-					in.close();
 					return retual;
 				}
 			}
@@ -146,12 +143,12 @@ public class ArticleManager
 				going=true;
 			}
 		}
-		in.close();
 		return null;
 	}
 	public boolean addArticle() throws IOException
 	{
 		System.out.println("Please enter your the path to the article you want to add.");
+		@SuppressWarnings("resource")//System.in should not be closed before the program has finished.
 		Scanner scan = new Scanner(System.in);
 		String fileName = scan.next();
 		String[] split = fileName.split("/");
@@ -161,7 +158,6 @@ public class ArticleManager
 			fileCopy = new Scanner(f);
 		} catch (FileNotFoundException e) {
 			System.out.println("File could not be found. Ending add article process.");
-			scan.close();
 			return false;
 		}
 		ArrayList<String> lines = new ArrayList<String>();
@@ -171,7 +167,6 @@ public class ArticleManager
 		}
 		fileCopy.close();
 		String path = "../Database/Articles/"+split[split.length-1];
-		File out = new File(path);
 		try {
 			BufferedWriter write = new BufferedWriter (new FileWriter(path));
 			write.write(lines.remove(0));
@@ -184,7 +179,6 @@ public class ArticleManager
 			write.close();
 		} catch (IOException e) {
 			System.out.println("Error in creating file occured. Contact tech support.");
-			scan.close();
 			return false;
 		}
 		System.out.println("Insert the volume.");
@@ -217,7 +211,6 @@ public class ArticleManager
 		BufferedWriter write = new BufferedWriter (new FileWriter("../Database/Articles/ArticlesInit.txt",true));
 		write.append(builder);
 		write.close();
-		scan.close();
 		fileCopy.close();
 		return true;
 	}

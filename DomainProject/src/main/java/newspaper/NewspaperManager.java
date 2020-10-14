@@ -26,6 +26,7 @@ public class NewspaperManager
 	public Newspaper search()
 	{
 		System.out.println("Enter '1' to look for a newspaper by volume/issue, '2' to look for a newspaper by its publishing date.");
+		@SuppressWarnings("resource")//System.in should not be closed before the program has finished.
 		Scanner in = new Scanner(System.in);
 		boolean going = true;
 		while(going)
@@ -46,7 +47,6 @@ public class NewspaperManager
 				}
 				else
 				{
-					in.close();
 					return volumeAndIssue.get(volIss);
 				}
 			}
@@ -66,7 +66,6 @@ public class NewspaperManager
 				}
 				else
 				{
-					in.close();
 					return dayMonYear.get(date);
 				}
 			}
@@ -76,11 +75,11 @@ public class NewspaperManager
 				going=true;
 			}
 		}
-		in.close();
 		return null;
 	}
 	public Newspaper addPaper(int clearance)
 	{
+		@SuppressWarnings("resource")//System.in should not be closed before the program has finished.
 		Scanner scan = new Scanner(System.in);
 		int volume = scan.nextInt();
 		int issue = scan.nextInt();
@@ -99,7 +98,6 @@ public class NewspaperManager
 				added= added+", "+temp;
 			}
 		}
-		scan.close();
 		String volumeAndIssue = volume+", "+issue;
 		String date = day+", "+month+", "+year;
 		if(this.volumeAndIssue.containsKey(volumeAndIssue))
@@ -128,7 +126,6 @@ public class NewspaperManager
 			System.out.println("Article initialization file corrupted or missing. Please contact tech support.");
 			return null;
 		}
-		scan.close();
 		return toAdd;
 	}
 	private boolean init()
@@ -192,6 +189,7 @@ public class NewspaperManager
 		if(clearance>3)
 		{
 			System.out.println("Please choose a page between 1 and " + (n.pages.size()-1) + " to edit a specific page, or 'a' to add to the end of the newspaper.");
+			@SuppressWarnings("resource")//System.in should not be closed before the program has finished.
 			Scanner in = new Scanner(System.in);
 			String input = in.next();
 			if (input.equals("a"))
@@ -205,11 +203,9 @@ public class NewspaperManager
 				File outputFile = new File("../Database/NewspaperPages/"+list[list.length-1]);
 				try {
 					ImageIO.write(image2, "png", outputFile);
-					in.close();
 					return "../Database/NewspaperPages/"+list[list.length-1];
 				} catch (IOException e) {
 					System.out.println("Image could not be found and/or was not in the correct format.");
-					in.close();
 					return null;
 				}
 			}
@@ -239,11 +235,9 @@ public class NewspaperManager
 						File outputFile = new File(address);
 						try {
 							ImageIO.write(image2, "png", outputFile);
-							in.close();
 							return address;
 						} catch (IOException e) {
 							System.out.println("Image could not be found and/or was not in the correct format.");
-							in.close();
 							return null;
 						}
 					}
@@ -251,20 +245,17 @@ public class NewspaperManager
 					{
 						String removed = n.pages.remove(converted-1);
 						System.out.println("Page was successfully removed.");
-						in.close();
 						return removed;
 					}
 					else
 					{
 						System.out.println("Paper has already been finalized.");
-						in.close();
 						return null;
 					}
 				}
 				else
 				{
 					System.out.println("Inputed number out of range of current pages. Ending edit session.");
-					in.close();
 					return null;
 				}
 			}
