@@ -175,7 +175,6 @@ public class Newspaper {
 			String input=scan.next();
 			while(!(0==input.compareTo("Quit"))&&!(0==input.compareTo("quit"))&&!(0==input.compareTo("q"))&&!(0==input.compareTo("Q")))
 			{
-				input=scan.next();
 				if(!(0==input.compareTo("Quit"))&&!(0==input.compareTo("quit"))||!(0==input.compareTo("q"))||!(0==input.compareTo("Q")))
 				{
 					int in;
@@ -202,6 +201,7 @@ public class Newspaper {
 						System.out.println("pages.");
 					}
 				}
+				input=scan.next();
 			}
 			return true;
 		}
