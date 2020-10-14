@@ -288,4 +288,13 @@ public class Newspaper {
 			return false;
 		}
 	}
+	/**
+	 * Returns the info in the newspaper for use elsewhere. For the developer only.
+	 * @return Returns the info in the newspaper for use elsewhere.
+	 * **Works as of 10/14/20
+	 */
+	public int[] getInfo()
+	{
+		return info;
+	}
 }
