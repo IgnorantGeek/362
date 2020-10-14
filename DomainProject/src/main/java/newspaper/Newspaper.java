@@ -1,3 +1,4 @@
+
 package newspaper;
 
 import java.io.BufferedWriter;
@@ -9,11 +10,34 @@ import java.util.Scanner;
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-
+/**
+ * A class that represents a physical newspaper.
+ * @author Alexander Irlbeck
+ *
+ */
 public class Newspaper {
+	/**
+	 * Contains the volume(index 0), issue(index 1), day(index 2), month(index 3), year(index 4)
+	 */
 	private int[] info;
+	/**
+	 * An array for all the pages in the newspaper.
+	 */
 	public ArrayList <String> pages;
+	/**
+	 * Whether or not the newspaper was published.
+	 */
 	private boolean finalized;
+	/**
+	 * Constructor that creates a new newspaper object with no pages.
+	 * @param volume - volume of the newspaper
+	 * @param issue - issue of the newspaper
+	 * @param day - publishing date of the newspaper
+	 * @param month - publishing month of the newspaper
+	 * @param year - publishing year of the newspaper
+	 * @param finalized - whether or not the paper has been published.
+	 * **Works as of 10/14/20
+	 */
 	public Newspaper(int volume, int issue, int day, int month, int year, boolean finalized)
 	{
 		info=new int[5];
@@ -25,10 +49,21 @@ public class Newspaper {
 		this.finalized=finalized;
 		pages = new ArrayList<String>();
 	}
+	/**
+	 * Returns if the paper was published.
+	 * @return Returns if the paper was published or not.
+	 * **Works as of 10/14/20
+	 */
 	public boolean getPublished()
 	{
 		return finalized;
 	}
+	/**
+	 * Allows an actor to finalize a paper if they are cleared to do so. First lets the actor view it, then it prompts for a final yes/no on publishing it.
+	 * @param clearance The clearance of the actor
+	 * @return returns if the method successfully finalized the paper or not.
+	 * **Works as of 10/14/20
+	 */
 	@SuppressWarnings("resource")//System.in should not be closed before the program has finished.
 	public boolean finalizePaper(int clearance)
 	{
@@ -69,6 +104,12 @@ public class Newspaper {
 		System.out.println("You are not authorized to finalize this paper. Please speak to your Manager on why this is.");
 		return false;
 	}
+	/**
+	 * Allows an actor to read a paper if they are cleared to do so.
+	 * @param clearance The clearance of the actor.
+	 * @return returns if the method successfully read out the paper or not.
+	 * **Works as of 10/14/20
+	 */
 	public boolean readPaper(int clearance)
 	{
 		if(!finalized)
@@ -97,8 +138,14 @@ public class Newspaper {
 		}
 		return false;
 	}
-	public boolean orderPaper() throws IOException
+	/**
+	 * Allows the consumer to order this paper individually. Takes their payment info, runs it through the Sales class, takes their name and address, and sends it to Newspaper_Orders.txt
+	 * to be handled by the distributors.
+	 * @return Returns whether or not the operation succeeded successfully or not.
+	 */
+	public boolean orderPaper()
 	{
+		//TODO Test if it works.
 		System.out.println("Would you like to input a Credit Card('CC'), enter PayPal('p'), or cancel('c') to complete your order?");
 		@SuppressWarnings("resource")//System.in should not be closed before the program has finished.
 		Scanner scan = new Scanner(System.in);
@@ -119,9 +166,14 @@ public class Newspaper {
 				String destination = scan.nextLine();
 				System.out.println("Destination confirmed for "+destination);
 				System.out.println("If any problems occur, contact us at newspaperSales@gmail.com");
-				Writer edit = new BufferedWriter(new FileWriter("../Database/NewspaperPages/Newspaper_Orders.txt", true));
-				edit.append("Order for "+name+" is to be delivered at " + destination);
-				edit.close();
+				try {
+					Writer edit = new BufferedWriter(new FileWriter("../Database/NewspaperPages/Newspaper_Orders.txt", true));
+					edit.append("Order for "+name+" is to be delivered at " + destination);
+					edit.close();
+				} catch (IOException e) {
+					System.out.println("Newspaper_Orders.txt file not found. Please contact technical support.");
+					return false;
+				}
 				return true;
 			}
 			else
@@ -142,9 +194,17 @@ public class Newspaper {
 				String destination = scan.nextLine();
 				System.out.println("Destination confirmed for "+destination);
 				System.out.println("If any problems occur, contact us at newspaperSales@gmail.com");
-				Writer edit = new BufferedWriter(new FileWriter("../Database/NewspaperPages/Newspaper_Orders.txt", true));
-				edit.append("Order for "+name+" is to be delivered at " + destination);
-				edit.close();
+				try 
+				{
+					Writer edit = new BufferedWriter(new FileWriter("../Database/NewspaperPages/Newspaper_Orders.txt", true));
+					edit.append("Order for "+name+" is to be delivered at " + destination);
+					edit.close();
+				}
+				catch(IOException e)
+				{
+					System.out.println("Newspaper_Orders.txt file not found. Please contact technical support.");
+					return false;
+				}
 				return true;
 			}
 			else
@@ -163,6 +223,11 @@ public class Newspaper {
 		}
 		return false;
 	}
+	/**
+	 * A helper method for read paper that shows the page in the newspaper as a pop-up.
+	 * @return returns whether or not the program successfully displayed a picture.
+	 * **Works as of 10/14/20
+	 */
 	private boolean printPage()
 	{
 		if(pages.size()>0)
@@ -173,6 +238,7 @@ public class Newspaper {
 			@SuppressWarnings("resource")//System.in should not be closed before the program has finished.
 			Scanner scan = new Scanner(System.in);
 			String input=scan.next();
+			JFrame f = new JFrame();
 			while(!(0==input.compareTo("Quit"))&&!(0==input.compareTo("quit"))&&!(0==input.compareTo("q"))&&!(0==input.compareTo("Q")))
 			{
 				if(!(0==input.compareTo("Quit"))&&!(0==input.compareTo("quit"))||!(0==input.compareTo("q"))||!(0==input.compareTo("Q")))
@@ -184,13 +250,16 @@ public class Newspaper {
 						if(in>0 && in<=pages.size())
 						{
 							String address = pages.get(in-1);
-							JFrame f = new JFrame();
 							ImageIcon image = new ImageIcon(address);
 							JLabel l = new JLabel(image);
 							f.add(l);
-							f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+							f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 							f.pack();
 							f.setVisible(true);
+						}
+						else
+						{
+							System.out.println(in+" is not between 1 and " + pages.size()+". Please input a page number between 1 and "+pages.size()+".");
 						}
 					}
 					catch(Exception NumberFormatException)
