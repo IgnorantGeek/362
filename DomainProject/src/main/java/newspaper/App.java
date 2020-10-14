@@ -39,6 +39,7 @@ public class App
             case "exit":
             case "Exit":
                 System.out.println("Goodbye.");
+                in.close();
                 return;
         }
 
