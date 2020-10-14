@@ -25,7 +25,7 @@ public class App
         {
             case "1":
                 // Alex this will be the main entry point for newspaperManager
-                man.search();
+                man.search().readPaper(20);
                 break;
             case "2":
                 aman.addArticle();
