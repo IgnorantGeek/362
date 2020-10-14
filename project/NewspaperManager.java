@@ -15,12 +15,12 @@ import javax.swing.ImageIcon;
 
 public class NewspaperManager 
 {
-	private HashMap<int[],Newspaper> volumeAndIssue;
-	private HashMap<int[],Newspaper> dayMonYear;
+	private HashMap<String,Newspaper> volumeAndIssue;
+	private HashMap<String,Newspaper> dayMonYear;
 	public NewspaperManager()
 	{
-		volumeAndIssue=new HashMap<int[], Newspaper>();
-		dayMonYear=new HashMap<int[], Newspaper>();
+		volumeAndIssue=new HashMap<String, Newspaper>();
+		dayMonYear=new HashMap<String, Newspaper>();
 		init();
 	}
 	public Newspaper search()
@@ -38,7 +38,7 @@ public class NewspaperManager
 				int volume = in.nextInt();
 				System.out.println("Please enter the newspaper's issue.");
 				int issue = in.nextInt();
-				int[] volIss = {volume, issue};
+				String volIss = volume+", " + issue;
 				if(!volumeAndIssue.containsKey(volIss))
 				{
 					System.out.println("Volume and issue could not be found. Press '1' to search again or select another searching method.");
@@ -58,7 +58,7 @@ public class NewspaperManager
 				int month = in.nextInt();
 				System.out.println("Please enter the newspaper's year.");
 				int year = in.nextInt();
-				int[] date = {day,month,year};
+				String date = day+", "+month+", "+year;
 				if(!dayMonYear.containsKey(date))
 				{
 					System.out.println("Volume and issue could not be found. Press '1' to search again or select another searching method.");
@@ -100,13 +100,8 @@ public class NewspaperManager
 			}
 		}
 		scan.close();
-		int[] volumeAndIssue = new int[2];
-		int[] date = new int[3];
-		volumeAndIssue[0] = volume;
-		volumeAndIssue[1] = issue;
-		date[0]=day;
-		date[1]=month;
-		date[2]=year;
+		String volumeAndIssue = volume+", "+issue;
+		String date = day+", "+month+", "+year;
 		if(this.volumeAndIssue.containsKey(volumeAndIssue))
 		{
 			this.volumeAndIssue.replace(volumeAndIssue,toAdd);
@@ -140,14 +135,12 @@ public class NewspaperManager
 	{
 		Scanner scan;
 		try {
-			File f = new File("./project/Database/NewspaperPages/"
-					+ "NewspaperInit.txt");
+			File f = new File("./project/Database/NewspaperPages/NewspaperInit.txt");
 			scan = new Scanner(f);
 		} catch (FileNotFoundException e) {
 			System.out.println("Newspaper initialization file corrupted or missing. Please contact tech support.");
 			return false;
 		}
-		System.out.println(System.getProperty("user.dir"));
 		while(scan.hasNextLine())
 		{
 			String line = scan.nextLine();
@@ -167,13 +160,8 @@ public class NewspaperManager
 			{
 				toAdd.finalizePaper(40);
 			}
-			int[] volumeAndIssue = new int[2];
-			int[] date = new int[3];
-			volumeAndIssue[0] = volume;
-			volumeAndIssue[1] = issue;
-			date[0]=day;
-			date[1]=month;
-			date[2]=year;
+			String volumeAndIssue = volume+", "+issue;
+			String date = day+", "+month+", "+year;
 			if(this.volumeAndIssue.containsKey(volumeAndIssue))
 			{
 				this.volumeAndIssue.replace(volumeAndIssue,toAdd);

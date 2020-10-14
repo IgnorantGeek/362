@@ -171,13 +171,14 @@ public class Newspaper {
 	{
 		if(pages.size()>0)
 		{
-			String input = "";
-			System.out.println("Please input the page you want to visit between 1 and "+pages.size()+"or");
+			System.out.println("Please input the page you want to visit between 1 and "+pages.size()+" or");
 			System.out.println("'Quit', 'quit', 'q' or 'Q' if you want to stop looking at this newspaper's");
 			System.out.println("pages.");
+			Scanner scan = new Scanner(System.in);
+			String input=scan.next();
 			while(!(0==input.compareTo("Quit"))&&!(0==input.compareTo("quit"))&&!(0==input.compareTo("q"))&&!(0==input.compareTo("Q")))
 			{
-				Scanner scan = new Scanner(System.in);
+				scan = new Scanner(System.in);
 				input=scan.next();
 				if(!(0==input.compareTo("Quit"))&&!(0==input.compareTo("quit"))||!(0==input.compareTo("q"))||!(0==input.compareTo("Q")))
 				{
@@ -205,8 +206,8 @@ public class Newspaper {
 						System.out.println("pages.");
 					}
 				}
-				scan.close();
 			}
+			scan.close();
 			return true;
 		}
 		else
