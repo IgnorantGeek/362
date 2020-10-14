@@ -230,12 +230,15 @@ public class NewspaperManager
 			Newspaper toAdd = new Newspaper(volume, issue, day, month, year, false);
 			for(int i = 6; i<in.length;i++)
 			{
-				toAdd.pages.add(in[i]);
+				if(!toAdd.pages.contains(in[i]))
+				{
+					toAdd.pages.add(in[i]);
+				}
 			}
 			boolean finalized=in[5].compareTo("true")==0;
 			if(finalized)
 			{
-				toAdd.finalizePaper(40);
+				toAdd.setFinal();
 			}
 			String volumeAndIssue = volume+", "+issue;
 			String date = day+", "+month+", "+year;
