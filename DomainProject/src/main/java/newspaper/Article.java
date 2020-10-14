@@ -1,4 +1,4 @@
-package project;
+package newspaper;
 
 public abstract class Article {
 	private String name;

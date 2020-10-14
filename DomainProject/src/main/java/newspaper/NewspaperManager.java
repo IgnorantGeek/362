@@ -1,4 +1,4 @@
-package project;
+package newspaper;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -135,7 +135,7 @@ public class NewspaperManager
 	{
 		Scanner scan;
 		try {
-			File f = new File("./project/Database/NewspaperPages/NewspaperInit.txt");
+			File f = new File("./newspaper/Database/NewspaperPages/NewspaperInit.txt");
 			scan = new Scanner(f);
 		} catch (FileNotFoundException e) {
 			System.out.println("Newspaper initialization file corrupted or missing. Please contact tech support.");

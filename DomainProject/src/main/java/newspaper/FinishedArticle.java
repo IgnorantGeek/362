@@ -1,4 +1,4 @@
-package project;
+package newspaper;
 
 import java.io.File;
 import java.io.FileNotFoundException;

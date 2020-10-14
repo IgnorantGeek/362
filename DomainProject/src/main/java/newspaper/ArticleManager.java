@@ -1,4 +1,4 @@
-package project;
+package newspaper;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -149,7 +149,7 @@ public class ArticleManager
 		in.close();
 		return null;
 	}
-	public boolean addArticle()
+	public boolean addArticle() throws IOException
 	{
 		System.out.println("Please enter your the path to the article you want to add.");
 		Scanner scan = new Scanner(System.in);
@@ -162,7 +162,6 @@ public class ArticleManager
 		} catch (FileNotFoundException e) {
 			System.out.println("File could not be found. Ending add article process.");
 			scan.close();
-			fileCopy.close();
 			return false;
 		}
 		ArrayList<String> lines = new ArrayList<String>();
@@ -219,6 +218,7 @@ public class ArticleManager
 		write.append(builder);
 		write.close();
 		scan.close();
+		fileCopy.close();
 		return true;
 	}
 	private boolean init()
@@ -283,5 +283,8 @@ public class ArticleManager
 				dayMonYearToName.put(date, temp);
 			}
 		}
+
+		scan.close();
+		return true;
 	}
 }
