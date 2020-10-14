@@ -145,7 +145,7 @@ public class ArticleManager
 		}
 		return null;
 	}
-	public boolean addArticle() throws IOException
+	public boolean addArticle()
 	{
 		System.out.println("Please enter your the path to the article you want to add.");
 		@SuppressWarnings("resource")//System.in should not be closed before the program has finished.
@@ -208,9 +208,14 @@ public class ArticleManager
 		temp[2]=year;
 		dayMonYearToName.get(temp).add(toAdd);
 		String builder = name + ", " + desc + ", " + volume + ", " + issue + ", " + day + ", " + month + ", " + year + ", " + false + ", " + path;
-		BufferedWriter write = new BufferedWriter (new FileWriter("../Database/Articles/ArticlesInit.txt",true));
-		write.append(builder);
-		write.close();
+		try {
+			BufferedWriter write = new BufferedWriter (new FileWriter("../Database/Articles/ArticlesInit.txt",true));
+			write.append(builder);		
+			write.close();
+		} catch (IOException e) {
+			System.out.println("Error occured in adding page to the init file. Please contact technical support.");
+			return false;
+		}
 		fileCopy.close();
 		return true;
 	}
