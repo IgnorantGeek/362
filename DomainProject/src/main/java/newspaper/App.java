@@ -33,27 +33,7 @@ public class App
                 paper=man.search();
                 if (paper!=null)
                 {
-                	paper.readPaper(1);
-                }
-                paper=man.search();
-                if (paper!=null)
-                {
-                	paper.finalizePaper(1);
-                }
-                paper=man.search();
-                if (paper!=null)
-                {
-                	paper.finalizePaper(5);
-                }
-                paper=man.search();
-                if (paper!=null)
-                {
-                	paper.readPaper(1);
-                }
-                paper=man.search();
-                if (paper!=null)
-                {
-                	paper.readPaper(2);
+                	paper.readPaper(20);
                 }
                 break;
             case "2":
