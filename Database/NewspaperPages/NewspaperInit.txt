@@ -1,1 +1,3 @@
-0, 0, 13, 10, 2020, ../Database/NewspaperPages/test.png, ../Database/NewspaperPages/test.png
+0, 0, 13, 10, 2020, false, ../Database/NewspaperPages/test.png, ../Database/NewspaperPages/test.png
+0, 1, 14, 10, 2020, false, ../Database/NewspaperPages/test.png, ../Database/NewspaperPages/test2.png
+0, 2, 15, 10, 2020, true, ../Database/NewspaperPages/test.png, ../Database/NewspaperPages/test2.png
