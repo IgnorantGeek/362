@@ -295,7 +295,7 @@ public class NewspaperManager
 	 * @return Returns true if it was successful.
 	 * **Works as of 10/14/20
 	 */
-	private boolean init()
+	public boolean init()
 	{
 		Scanner scan;
 		try {

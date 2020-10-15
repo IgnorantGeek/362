@@ -16,6 +16,7 @@ public class App
 
 		// Intialize adManager 
 		adManager.init();
+		System.out.println(man.init());
 
 		Scanner in = new Scanner(System.in);
 
@@ -194,6 +195,7 @@ public class App
 								int[] paperInfo = {issue, volume, 0, 0, 0};
 								if (man.findPaper(paperInfo) == null)
 								{
+									System.out.println(paperInfo);
 									System.out.println("Could not find a paper with that issue and volume.");
 									break;
 								}
