@@ -16,12 +16,14 @@ public class App
 		ArticleManager aman = new ArticleManager();
 		AdManager adManager = new AdManager("../Database");
 		SubscriptionManager subManager = new SubscriptionManager();
+		DistributionManager dman = new DistributionManager("../Database");
 
 		// Intialize adManager 
 		adManager.init();
+		dman.init();
 
 		System.out.println("Welcome to the FakeNews Newspaper Management System. What would you like to do?");
-		System.out.println("1: Edit/Publish a Newspaper\n2: Edit/Create an Article\n3: Enter a New Ad Sale\n4: Add/Remove a Distribution Subscription\nq: Quit");
+		System.out.println("1: Edit/Publish a Newspaper\n2: Edit/Create an Article\n3: Enter a New Ad Sale\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\nq: Quit");
 		Scanner in = new Scanner(System.in);
 		while (true)
 		{
@@ -332,6 +334,54 @@ public class App
 				}
 			}
 			break;
+		case "5":
+			// Add or remove a new distributor
+			System.out.println("Would you like to add or remove a Distributor? (a/r)");
+
+			input = in.nextLine();
+
+			switch (input)
+			{
+				case "a":
+				case "add":
+				case "Add":
+				case "ADD":
+					System.out.println("Enter the name of the new Distributor");
+
+					String name = in.nextLine();
+					
+					System.out.println("Enter the number of papers to send to this Distributor");
+					String paperStr = in.nextLine();
+
+					int pc;
+					try
+					{
+						pc = Integer.parseInt(paperStr);
+					}
+					catch(Exception NumberFormatException)
+					{
+						System.out.println(input+" is not a valid number. Cancelling current attempt.");
+						continue;
+					}
+
+					if (dman.addDistributor(name, pc) == 0)
+					{
+						System.out.println("Distributor with ID: " + pc + " removed.");
+					}
+					break;
+				
+				case "r":
+				case "remove":
+				case "Remove":
+				case "REMOVE":
+					System.out.println("Enter the ID of the Distributor you would like to drop");
+
+					input = in.nextLine();
+
+					dman.removeDistributor(1);
+			}
+
+			break;
 		case "q":
 		case "quit":
 		case "Quit":
@@ -343,7 +393,7 @@ public class App
 		}
 
 		System.out.println("\nNow what would you like to do?");
-		System.out.println("1: Edit/Publish a Newspaper\n2: Edit/Create an Article\n3: Enter a New Ad Sale\n4: Add/Remove a Distribution Subscription\nq: Quit");
+		System.out.println("1: Edit/Publish a Newspaper\n2: Edit/Create an Article\n3: Enter a New Ad Sale\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\nq: Quit");
 		}
 	}
 }
