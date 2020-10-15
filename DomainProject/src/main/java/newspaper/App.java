@@ -32,306 +32,289 @@ public class App
 			switch(input)
 			{
 			case "1":
-				boolean going=true;
-				while(going)
-				{
-					System.out.println("NewspaperManager -- Enter 'q' to quit. Enter '1' to search for a newspaper and read it."
-							+ "\nEnter '2' to add a newspaper. Enter '3' to search for a paper and then edit it. Enter '4' to"
-							+ "\nsave your current progress. Enter '5' to search for a paper and publish it. Enter '6' to search and order"
-							+ "\na newspaper.");
-					input = in.nextLine();
-					System.out.println("Enter your clearance level.");
-					int clearance = 0;
-					String next = in.nextLine();
-					try
-					{
-						clearance = Integer.parseInt(next);
-					}
-					catch(Exception NumberFormatException)
-					{
-						System.out.println(next+" is not a valid number. Cancelling current attempt.");
-						continue;
-					}
-					switch(input)
-					{
-					case "q":
-						going = false;
-						break;
-					case "1":
-						man.search().readPaper(clearance);
-						break;
-					case "2":
-						man.addPaper(clearance);
-						break;
-					case "3":
-						Newspaper temp = man.search();
-						man.editPaper(temp, clearance);
-						break;
-					case "4":
-						man.save();
-						break;
-					case "5":
-						man.search().finalizePaper(clearance);
-						break;
-					case "6":
-						man.search().orderPaper();
-						break;
-					}
-				}
-				break;
-			case "2":
-				boolean go=true;
-				while(go)
-				{
-					System.out.println("ArticleManager -- Enter 'q' to quit. Enter '1' to search for an article, choose form a list of articles, and read one."
-							+ "\nEnter '2' to add an article. Enter '3' to search for an article and then edit it. Enter '4' to search for an article and publish it.");
-					input = in.nextLine();
-					System.out.println("Enter your clearance level.");
-					int clearance = 0;
-					String next = in.nextLine();
-					try
-					{
-						clearance = Integer.parseInt(next);
-					}
-					catch(Exception NumberFormatException)
-					{
-						System.out.println(next+" is not a valid number. Cancelling current attempt.");
-						continue;
-					}
-					switch(input)
-					{
-					case "q":
-						go = false;
-						break;
-					case "1":
-						Article[] arr= aman.search();
-						for(int i=0; i<arr.length;i++)
-						{
-							System.out.println(i+": "+arr[i].getName()+ ", "+arr[i].getDesc());
-						}
-						next=in.nextLine();
-						int num=0;
-						try
-						{
-							num = Integer.parseInt(next);
-						}
-						catch(Exception NumberFormatException)
-						{
-							System.out.println(next+" is not a valid number. Cancelling current attempt.");
-							continue;
-						}
-						arr[num].readArticle(clearance);
-						break;
-					case "2":
-						aman.addArticle();
-						break;
-					case "3":
-						Article[] Arr= aman.search();
-						for(int i=0; i<Arr.length;i++)
-						{
-							System.out.println(i+": "+Arr[i].getName()+ ", "+Arr[i].getDesc());
-						}
-						next=in.nextLine();
-						int Num=0;
-						try
-						{
-							Num = Integer.parseInt(next);
-						}
-						catch(Exception NumberFormatException)
-						{
-							System.out.println(next+" is not a valid number. Cancelling current attempt.");
-							continue;
-						}
-						Arr[Num].editArticle(clearance);
-						break;
-					case "4":
-						Article[] ARR= aman.search();
-						for(int i=0; i<ARR.length;i++)
-						{
-							System.out.println(i+": "+ARR[i].getName()+ ", "+ARR[i].getDesc());
-						}
-						next=in.nextLine();
-						int NUM=0;
-						try
-						{
-							NUM = Integer.parseInt(next);
-						}
-						catch(Exception NumberFormatException)
-						{
-							System.out.println(next+" is not a valid number. Cancelling current attempt.");
-							continue;
-						}
-						ARR[NUM].finalizeArticle(clearance);
-						break;
-					}
-				}			break;
-			case "3":
-				boolean ad = true;
-				while (ad)
-				{
-					System.out.println("AdManager -- Enter 'q' to quit. Enter '1' to enter a new Ad. Enter '2' to search for an Ad by reference number");
-					input = in.nextLine();
-
-					switch(input)
-					{
-					case "1":
-						System.out.println("Is this ad from a new Customer? (y/n)");
-						input = in.nextLine();
-
-						if (input.compareTo("y") == 0)
-						{
-							// Create a new customer
-							System.out.println("Enter the name of the Advertiser:");
-							input = in.nextLine();
-							String name = input;
-
-							System.out.println("Enter the issue of the paper for this Ad:");
-							input = in.nextLine();
-							int issue = Integer.parseInt(input);
-
-							System.out.println("Enter the volume of the paper for this Ad:");
-							input = in.nextLine();
-							int volume = Integer.parseInt(input);
-
-							// Check paper
-							int[] paperInfo = {issue, volume, 0, 0, 0};
-
-							System.out.println("Enter the Ad image filename:");
-							input = in.nextLine();
-
-							if (input.compareTo("") == 0)
-							{
-								System.out.println("Warning! You created an Ad with no image. This will appear blank on the paper.");
-							}
-
-							// Create the Ad and Advertiser, add both to db
-							int advertID = adManager.newAdvertiser(name);
-							adManager.newAd(paperInfo, input, advertID);
-						}
-						else if (input.compareTo("n") == 0)
-						{
-							// Enter the customer id
-							System.out.println("Please enter the ID of the customer to append this add to");
-
-							input = in.nextLine();
-
-							int custID=0;
-							try
-							{
-								custID = Integer.parseInt(input);
-							}
-							catch(Exception NumberFormatException)
-							{
-								System.out.println(input+" is not a valid number. Cancelling current attempt.");
-								continue;
-							}
-
-							File custRoot = new File("../Database/Customers");
-
-							if (custRoot.exists())
-							{
-								boolean found = false;
-								for (String custFile : custRoot.list())
-								{
-									if (custFile.compareTo(custID + ".txt") == 0)
-									{
-										found = true;
-										break;
-									}
-								}
-								if (!found)
-								{
-									System.out.println("Could not find an active Customer with ID: " + custID);
-								}
-							}
-							else
-							{
-								System.out.println("Fatal error, Customer database not initialized. Exiting session.");
-								continue;
-							}
-
-							System.out.println("Enter the issue of the paper for this Ad:");
-							input = in.nextLine();
-							int issue = Integer.parseInt(input);
-
-							System.out.println("Enter the volume of the paper for this Ad:");
-							input = in.nextLine();
-							int volume = Integer.parseInt(input);
-
-							// Check paper
-							int[] paperInfo = {issue, volume, 0, 0, 0};
-
-							System.out.println("Enter the Ad image filename:");
-							input = in.nextLine();
-
-							if (input.compareTo("") == 0)
-							{
-								System.out.println("Warning! You created an Ad with no image. This will appear blank on the paper.");
-							}
-
-							adManager.newAd(paperInfo, input, custID);
-						}
-						else
-						{
-							System.out.println("Not a valid response.");
-						}
-						break;
-					
-					case "2":
-						break;
-					
-					case "q":
-						ad = false;
-						break;
-					}
-				}		
-			break;
-		case "4":
-			boolean end=false;
-			while(!end)
-			{
-				System.out.println("SubscriptionManager -- Enter 'q' to quit. Enter '1' to print all current subscriptions."
-						+ "\nEnter '2' to add a new subscription. Enter '3' to remove a subscription.");
+				System.out.println("NewspaperManager -- Enter 'q' to quit. Enter '1' to search for a newspaper and read it."
+						+ "\nEnter '2' to add a newspaper. Enter '3' to search for a paper and then edit it. Enter '4' to"
+						+ "\nsave your current progress. Enter '5' to search for a paper and publish it. Enter '6' to search and order"
+						+ "\na newspaper.");
 				input = in.nextLine();
+				if (input.compareTo("q") == 0) break;
+				System.out.println("Enter your clearance level.");
+				int clearance = 0;
+				String next = in.nextLine();
+				try
+				{
+					clearance = Integer.parseInt(next);
+				}
+				catch(Exception NumberFormatException)
+				{
+					System.out.println(next+" is not a valid number. Cancelling current attempt.");
+					break;
+				}
 				switch(input)
 				{
 				case "q":
-				case "quit":
-				case "Quit":
-				case "exit":
-				case "Exit":
-					end=true;
 					break;
 				case "1":
-					Collection<Subscription> subs = subManager.getAllSubs();
-					if(subs.size() > 0) {
-						for(Subscription sub: subs) {
-							System.out.println(sub.toString());
-						}
-						System.out.println();
-					}
-					else
-						System.out.println("There are no currently active subscriptions.");
-
+					man.search().readPaper(clearance);
 					break;
 				case "2":
-					if (subManager.addSubscription()) {
-						System.out.println("Subscription successfully added");
-					}
-					else {
-						System.out.println("No subscription was added");
-					}
-
+					man.addPaper(clearance);
 					break;
 				case "3":
-					if(subManager.removeSubscription()) {
-						System.out.println("Subscription successfully removed");
-					}
-					else {
-						System.out.println("No subscription was removed");
-					}
+					Newspaper temp = man.search();
+					man.editPaper(temp, clearance);
+					break;
+				case "4":
+					man.save();
+					break;
+				case "5":
+					man.search().finalizePaper(clearance);
+					break;
+				case "6":
+					man.search().orderPaper();
 					break;
 				}
+				break;
+			case "2":
+				System.out.println("ArticleManager -- Enter 'q' to quit. Enter '1' to search for an article, choose form a list of articles, and read one."
+						+ "\nEnter '2' to add an article. Enter '3' to search for an article and then edit it. Enter '4' to search for an article and publish it.");
+				input = in.nextLine();
+				if (input.compareTo("q") == 0) break;
+				System.out.println("Enter your clearance level.");
+				clearance = 0;
+				next = in.nextLine();
+				try
+				{
+					clearance = Integer.parseInt(next);
+				}
+				catch(Exception NumberFormatException)
+				{
+					System.out.println(next+" is not a valid number. Cancelling current attempt.");
+					continue;
+				}
+				switch(input)
+				{
+				case "q":
+					break;
+				case "1":
+					Article[] arr= aman.search();
+					for(int i=0; i<arr.length;i++)
+					{
+						System.out.println(i+": "+arr[i].getName()+ ", "+arr[i].getDesc());
+					}
+					next=in.nextLine();
+					int num=0;
+					try
+					{
+						num = Integer.parseInt(next);
+					}
+					catch(Exception NumberFormatException)
+					{
+						System.out.println(next+" is not a valid number. Cancelling current attempt.");
+						continue;
+					}
+					arr[num].readArticle(clearance);
+					break;
+				case "2":
+					aman.addArticle();
+					break;
+				case "3":
+					Article[] Arr= aman.search();
+					for(int i=0; i<Arr.length;i++)
+					{
+						System.out.println(i+": "+Arr[i].getName()+ ", "+Arr[i].getDesc());
+					}
+					next=in.nextLine();
+					int Num=0;
+					try
+					{
+						Num = Integer.parseInt(next);
+					}
+					catch(Exception NumberFormatException)
+					{
+						System.out.println(next+" is not a valid number. Cancelling current attempt.");
+						continue;
+					}
+					Arr[Num].editArticle(clearance);
+					break;
+				case "4":
+					Article[] ARR= aman.search();
+					for(int i=0; i<ARR.length;i++)
+					{
+						System.out.println(i+": "+ARR[i].getName()+ ", "+ARR[i].getDesc());
+					}
+					next=in.nextLine();
+					int NUM=0;
+					try
+					{
+						NUM = Integer.parseInt(next);
+					}
+					catch(Exception NumberFormatException)
+					{
+						System.out.println(next+" is not a valid number. Cancelling current attempt.");
+						continue;
+					}
+					ARR[NUM].finalizeArticle(clearance);
+					break;
+				}
+				break;
+			case "3":
+				System.out.println("AdManager -- Enter 'q' to quit. Enter '1' to enter a new Ad. Enter '2' to search for an Ad by reference number");
+				input = in.nextLine();
+
+				switch(input)
+				{
+				case "1":
+					System.out.println("Is this ad from a new Customer? (y/n)");
+					input = in.nextLine();
+
+					if (input.compareTo("y") == 0)
+					{
+						// Create a new customer
+						System.out.println("Enter the name of the Advertiser:");
+						input = in.nextLine();
+						String name = input;
+
+						System.out.println("Enter the issue of the paper for this Ad:");
+						input = in.nextLine();
+						int issue = Integer.parseInt(input);
+
+						System.out.println("Enter the volume of the paper for this Ad:");
+						input = in.nextLine();
+						int volume = Integer.parseInt(input);
+
+						// Check paper
+						int[] paperInfo = {issue, volume, 0, 0, 0};
+
+						System.out.println("Enter the Ad image filename:");
+						input = in.nextLine();
+
+						if (input.compareTo("") == 0)
+						{
+							System.out.println("Warning! You created an Ad with no image. This will appear blank on the paper.");
+						}
+
+						// Create the Ad and Advertiser, add both to db
+						int advertID = adManager.newAdvertiser(name);
+						adManager.newAd(paperInfo, input, advertID);
+					}
+					else if (input.compareTo("n") == 0)
+					{
+						// Enter the customer id
+						System.out.println("Please enter the ID of the customer to append this add to");
+
+						input = in.nextLine();
+
+						int custID=0;
+						try
+						{
+							custID = Integer.parseInt(input);
+						}
+						catch(Exception NumberFormatException)
+						{
+							System.out.println(input+" is not a valid number. Cancelling current attempt.");
+							continue;
+						}
+
+						File custRoot = new File("../Database/Customers");
+
+						if (custRoot.exists())
+						{
+							boolean found = false;
+							for (String custFile : custRoot.list())
+							{
+								if (custFile.compareTo(custID + ".txt") == 0)
+								{
+									found = true;
+									break;
+								}
+							}
+							if (!found)
+							{
+								System.out.println("Could not find an active Customer with ID: " + custID);
+							}
+						}
+						else
+						{
+							System.out.println("Fatal error, Customer database not initialized. Exiting session.");
+							continue;
+						}
+
+						System.out.println("Enter the issue of the paper for this Ad:");
+						input = in.nextLine();
+						int issue = Integer.parseInt(input);
+
+						System.out.println("Enter the volume of the paper for this Ad:");
+						input = in.nextLine();
+						int volume = Integer.parseInt(input);
+
+						// Check paper
+						int[] paperInfo = {issue, volume, 0, 0, 0};
+
+						System.out.println("Enter the Ad image filename:");
+						input = in.nextLine();
+
+						if (input.compareTo("") == 0)
+						{
+							System.out.println("Warning! You created an Ad with no image. This will appear blank on the paper.");
+						}
+
+						adManager.newAd(paperInfo, input, custID);
+					}
+					else
+					{
+						System.out.println("Not a valid response.");
+					}
+					break;
+				
+				case "2":
+					break;
+				
+				case "q":
+					break;
+				}		
+			break;
+		case "4":
+			System.out.println("SubscriptionManager -- Enter 'q' to quit. Enter '1' to print all current subscriptions."
+					+ "\nEnter '2' to add a new subscription. Enter '3' to remove a subscription.");
+			input = in.nextLine();
+			switch(input)
+			{
+			case "q":
+			case "quit":
+			case "Quit":
+			case "exit":
+			case "Exit":
+				break;
+			case "1":
+				Collection<Subscription> subs = subManager.getAllSubs();
+				if(subs.size() > 0) {
+					for(Subscription sub: subs) {
+						System.out.println(sub.toString());
+					}
+					System.out.println();
+				}
+				else
+					System.out.println("There are no currently active subscriptions.");
+
+				break;
+			case "2":
+				if (subManager.addSubscription()) {
+					System.out.println("Subscription successfully added");
+				}
+				else {
+					System.out.println("No subscription was added");
+				}
+
+				break;
+			case "3":
+				if(subManager.removeSubscription()) {
+					System.out.println("Subscription successfully removed");
+				}
+				else {
+					System.out.println("No subscription was removed");
+				}
+				break;
 			}
 			break;
 		case "5":

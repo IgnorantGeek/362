@@ -1,2 +1,2 @@
-Advertiser1
+Test
 type=advertiser
