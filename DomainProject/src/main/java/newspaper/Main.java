@@ -1,4 +1,4 @@
-package main.java.newspaper;
+package newspaper;
 
 import java.awt.Desktop;
 import java.io.File;

@@ -1,6 +1,6 @@
-package test.java.newspaper;
+package newspaper;
 
-import main.java.newspaper.ArticleManager;
+import newspaper.ArticleManager;
 
 public class Alex_Maunual_Testing<E> {
 	public static void main(String args[])

@@ -1,4 +1,4 @@
-package main.java.newspaper;
+package newspaper;
 
 public abstract class PaymentInformation {
 	

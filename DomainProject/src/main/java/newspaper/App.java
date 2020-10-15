@@ -1,4 +1,4 @@
-package main.java.newspaper;
+package newspaper;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -221,12 +221,8 @@ public class App
 							// default case
 						}
 					}
-				}
-			}			break;
-		case "3":
-			adManager.run();
+				}		
 			break;
-
 		case "4":
 			boolean end=false;
 			while(!end)
@@ -284,22 +280,9 @@ public class App
 			in.close();
 			return;
 		}
-		break;
-	case "4":
-		// distributor manager
-		break;
-	case "q":
-	case "quit":
-	case "Quit":
-	case "exit":
-	case "Exit":
-		System.out.println("Goodbye.");
-		in.close();
-		return;
-	}
 
-	System.out.println("\nNow what would you like to do?");
-	System.out.println("1: Edit/Publish a Newspaper\n2: Edit/Create an Article\n3: Enter a New Ad Sale\n4: Add/Remove a Distribution Subscription\nq: Quit");
-}
-}
+		System.out.println("\nNow what would you like to do?");
+		System.out.println("1: Edit/Publish a Newspaper\n2: Edit/Create an Article\n3: Enter a New Ad Sale\n4: Add/Remove a Distribution Subscription\nq: Quit");
+		}
+	}
 }

@@ -1,4 +1,4 @@
-package main.java.newspaper;
+package newspaper;
 
 /**
  * Abstract class holds information for all article types, and gives some basic functions for them.

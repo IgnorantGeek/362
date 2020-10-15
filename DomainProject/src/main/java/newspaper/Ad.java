@@ -1,4 +1,4 @@
-package main.java.newspaper;
+package newspaper;
 
 /**
  * An ad that will appear in a given newspaper

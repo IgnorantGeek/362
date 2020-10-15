@@ -1,4 +1,4 @@
-package main.java.newspaper;
+package newspaper;
 
 /**
  * An interface for Objects that get written to the database

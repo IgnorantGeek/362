@@ -1,4 +1,4 @@
-package main.java.newspaper;
+package newspaper;
 
 /**
  * A simple class that basically returns true no matter what method is called.

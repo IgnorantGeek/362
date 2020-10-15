@@ -1,5 +1,5 @@
 
-package main.java.newspaper;
+package newspaper;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

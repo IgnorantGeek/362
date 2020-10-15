@@ -1,4 +1,4 @@
-package main.java.newspaper;
+package newspaper;
 
 public class Subscription {
 	public String Firstname;
