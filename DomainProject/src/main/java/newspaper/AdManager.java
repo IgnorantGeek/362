@@ -52,9 +52,9 @@ public class AdManager
         return 0;
     }
 
-    public int newAdvertiser(String name)
+    public int newAdvertiser(String name, Ad ad)
     {
-        Advertiser insert = new Advertiser(name, customerCount++);
+        Advertiser insert = new Advertiser(name, customerCount++, ad);
 
         return insert.write();
     }
@@ -86,6 +86,21 @@ public class AdManager
         this.ads.add(in);
 
         // Success
-        return in.write();
+        return 0;
+    }
+
+    public int newAd(Ad ad)
+    {
+        if (ad.write() < 0)
+        {
+            // error writing ad to database (file)
+            return -3;
+        }
+
+        // Insert Ad into list
+        this.ads.add(ad);
+
+        // Success
+        return 0;
     }
 }
