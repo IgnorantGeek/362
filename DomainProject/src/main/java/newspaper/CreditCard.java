@@ -1,5 +1,10 @@
 package newspaper;
 
+/**
+ * Represents a way to collect payment from subscribers via credit card
+ * Doesn't actually charge anything for this project. Just stores relevent information  
+ * @author Jonah Armstrong
+ */
 public class CreditCard extends PaymentInformation{
 	private String name;
 	private String number;
@@ -13,11 +18,19 @@ public class CreditCard extends PaymentInformation{
 		this.name = name;
 		this.setType("CreditCard");
 	}
-	
+	/**
+	 * Validates that the credit card works
+	 * Unlikely to be implemented, just returns true
+	 */
 	@Override
 	public boolean validate() {
 		return true;
 	}
+	/**
+	 * Charges an amount to the credit card
+	 * Unlikely to be implemented, just returns true
+	 * @param dollars amount to be charged
+	 */
 	@Override
 	public boolean charge(double dollars) {
 		return true;

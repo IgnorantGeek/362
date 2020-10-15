@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 
 /**
- * An ad that will appear in a given newspaper
+ * @author Jonah Armstrong
  */
 public class SubscriptionManager {
 	

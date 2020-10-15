@@ -1,5 +1,9 @@
 package newspaper;
 
+/**
+ * Represents a way to collect payment from subscribers  
+ * @author Jonah Armstrong
+ */
 public abstract class PaymentInformation {
 	
 	private String type;
