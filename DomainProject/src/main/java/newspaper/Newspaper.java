@@ -150,7 +150,7 @@ public class Newspaper {
 		@SuppressWarnings("resource")//System.in should not be closed before the program has finished.
 		Scanner scan = new Scanner(System.in);
 		String in=scan.nextLine();
-		Sales sale=new Sales();
+		Sale sale=new Sale();
 		if(in.compareTo("CC")==0)
 		{
 			System.out.println("Credit Card selected. Please input your full name, credit card number, CVV, and expiration date all seperated by hitting enter.");

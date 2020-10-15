@@ -32,6 +32,8 @@ public class AdManager
         {
             return -2;
         }
+
+        System.out.println("ADMANAGER BUILD SUCCESSFUL");
         
         initialized = true;
         return 0;
