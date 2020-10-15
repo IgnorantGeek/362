@@ -12,7 +12,7 @@ public class App
 	{
 		NewspaperManager man = new NewspaperManager();
 		ArticleManager aman = new ArticleManager();
-		AdManager adManager = new AdManager("../Database", man);
+		AdManager adManager = new AdManager("../Database");
 
 		// Intialize adManager 
 		adManager.init();
@@ -178,7 +178,36 @@ public class App
 							if (input.compareTo("y") == 0)
 							{
 								// Create a new customer
-								System.out.println("");
+								System.out.println("Enter the name of the Advertiser:");
+								input = in.nextLine();
+								String name = input;
+
+								System.out.println("Enter the issue of the paper for this Ad:");
+								input = in.nextLine();
+								int issue = Integer.parseInt(input);
+
+								System.out.println("Enter the volume of the paper for this Ad:");
+								input = in.nextLine();
+								int volume = Integer.parseInt(input);
+
+								// Check paper
+								int[] paperInfo = {issue, volume, 0, 0, 0};
+								if (man.findPaper(paperInfo) == null)
+								{
+									System.out.println("Could not find a paper with that issue and volume.");
+									break;
+								}
+
+								System.out.println("Enter the Ad image filename:");
+								input = in.nextLine();
+
+								if (input.compareTo("") == 0)
+								{
+									System.out.println("Warning! You created an Ad with no image. This will appear blank on the paper.");
+								}
+
+								adManager.newAd(paperInfo, input);
+								adManager.newAdvertiser(name);
 							}
 							else if (input.compareTo("n") == 0)
 							{

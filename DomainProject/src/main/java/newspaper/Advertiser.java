@@ -1,9 +1,21 @@
 package newspaper;
 
-public class Advertiser extends Customer
+public class Advertiser extends Customer implements Writeable
 {
-    public Advertiser(String id)
+    private String name;
+
+    public Advertiser(String name, int id)
     {
         super(id);
+        this.name = name;
+    }
+
+    public String Name() { return name; }
+
+    @Override
+    public int write()
+    {
+        // TODO
+        return 0;
     }
 }

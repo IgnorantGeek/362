@@ -1,28 +1,18 @@
 package newspaper;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
-
-import org.json.simple.JSONObject;
 
 public class AdManager
 {
-    ArrayList<Ad> ads;
-    String databasePath;
-    int customerCount;
-    NewspaperManager paperRef;
+    private ArrayList<Ad> ads;
+    private String databasePath;
+    private int customerCount;
 
-    public AdManager(String rootDir, NewspaperManager manager)
+    public AdManager(String rootDir)
     {
         ads = new ArrayList<Ad>();
-        databasePath = new String(rootDir + "/Ads/");
-        paperRef = manager;
+        databasePath = new String(rootDir);
     }
 
 
@@ -34,7 +24,7 @@ public class AdManager
     public int init()
     {
         // main method (CLI)
-        File root = new File(databasePath);
+        File root = new File(databasePath + "/Ads");
 
         // If there is no root dir, build
         if (!root.exists())
@@ -46,63 +36,38 @@ public class AdManager
             }
 
             // Create files
-            File root_dir = new File(this.databasePath);
-            if (!root_dir.mkdir()) return -2;
-
-            // Create/Update the system config file
+            if (!root.mkdir()) return -2;
         }
-        // Else read the config file
-        else
+
+        // Create the customers database folder if it does not exist
+        File cust = new File(databasePath + "/Customers");
+
+        if (!cust.exists())
         {
-            File sysConfig = new File(databasePath + "/adman.json");
-
-            if (!sysConfig.exists())
-            {
-                return writeConfig();
-            }
-            // Set customer count
-            else
-            {
-                try 
-                {
-                    Scanner sysScan = new Scanner(sysConfig);
-
-                    String whole = new String();
-
-                    while (sysScan.hasNextLine())
-                    {
-                        whole += sysScan.nextLine();
-                    }
-
-                    sysScan.close();
-
-                    System.out.println("CONFIG READ: " + whole);
-                } catch (FileNotFoundException e)
-                {
-                    System.out.println("ADMAN: FATAL ERROR - NO SYSTEM CONFIG FOUND. EXITING.");
-                    return -1;
-                }
-            }
+            if (!cust.mkdir()) return -2;
+            customerCount = 0;
         }
+        else customerCount = cust.list().length;
 
         return 0;
     }
 
-    private int newAd(int[] paper_identifer, String imageName)
+    public int newAdvertiser(String name)
+    {
+        Advertiser insert = new Advertiser(name, customerCount++);
+
+        return insert.write();
+    }
+
+    public int newAd(int[] paper_identifer, String imageName)
     {
         // Locals
         Ad in;
 
         // Validate class
-        if (paperRef == null || databasePath == null || databasePath == "")
+        if (databasePath == null || databasePath == "")
         {
             return -1;
-        }
-        
-        // Validate params
-        if (paperRef.findPaper(paper_identifer) == null)
-        {
-            return -2;
         }
 
         if (imageName == null || imageName == "")
@@ -121,32 +86,6 @@ public class AdManager
         this.ads.add(in);
 
         // Success
-        return 0;
-    }
-
-    // hold on
-    private int writeConfig()
-    {
-        try 
-        {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(this.databasePath + "adman.json"));
-
-            HashMap<String, Object> sysConfigHash = new HashMap<String, Object>();
-
-            sysConfigHash.put("CustCount", this.customerCount);
-
-            JSONObject sysConfigJSON = new JSONObject(sysConfigHash);
-
-            writer.write(sysConfigJSON.toJSONString());
-
-            System.out.println(sysConfigJSON.toJSONString());
-
-            writer.close();
-        } catch (IOException e) {
-            System.out.println("ADMAN: BUILD FAILED - COULD NOT CREATE CONFIG FILE");
-            return -3;
-        }
-
         return 0;
     }
 }
