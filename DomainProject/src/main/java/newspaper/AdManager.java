@@ -5,69 +5,69 @@ import java.util.ArrayList;
 
 public class AdManager
 {
-    ArrayList<Ad> ads;
-    String databasePath;
-    NewspaperManager paperRef;
-    boolean initialized;
+    private ArrayList<Ad> ads;
+    private String databasePath;
+    private int customerCount;
 
-    public AdManager(String rootDir, NewspaperManager manager)
+    public AdManager(String rootDir)
     {
         ads = new ArrayList<Ad>();
-        databasePath = new String(rootDir + "/Ads");
-        paperRef = manager;
-        initialized = false;
+        databasePath = new String(rootDir);
     }
 
-    public int build()
-    {
-        // Validate database path
-        if (databasePath == null || databasePath == "")
-        {
-            return -1;
-        }
 
-        // Create files
-        File root_dir = new File(this.databasePath);
-        if (!root_dir.mkdir())
-        {
-            return -2;
-        }
-        
-        initialized = true;
-        return 0;
-    }
-
-    public int run()
+    /**
+     * init - Initializes the AdManager, loads the system config
+     * @return - 0:  Success
+     *         - -1: Error
+     */
+    public int init()
     {
         // main method (CLI)
-        File root = new File(databasePath);
+        File root = new File(databasePath + "/Ads");
 
         // If there is no root dir, build
-        if (!root.exists()) build();
+        if (!root.exists())
+        {
+            // Validate database path
+            if (databasePath == null || databasePath == "")
+            {
+                return -1;
+            }
 
+            // Create files
+            if (!root.mkdir()) return -2;
+        }
 
-        // TODO
+        // Create the customers database folder if it does not exist
+        File cust = new File(databasePath + "/Customers");
 
-        System.out.println("ALL GOOD");
+        if (!cust.exists())
+        {
+            if (!cust.mkdir()) return -2;
+            customerCount = 0;
+        }
+        else customerCount = cust.list().length;
 
         return 0;
     }
 
-    private int newAd(int[] paper_identifer, String imageName)
+    public int newAdvertiser(String name)
+    {
+        Advertiser insert = new Advertiser(name, customerCount++);
+
+        return insert.write();
+    }
+
+    public int newAd(int[] paper_identifer, String imageName)
     {
         // Locals
         Ad in;
 
         // Validate class
-        if (paperRef == null || databasePath == null || databasePath == "")
+        if (databasePath == null || databasePath == "")
         {
             return -1;
-        }
-        
-        // Validate params
-        if (paperRef.findPaper(paper_identifer) == null)
-        {
-            return -2;
         }
 
         if (imageName == null || imageName == "")

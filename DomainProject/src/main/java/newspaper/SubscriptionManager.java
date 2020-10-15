@@ -229,4 +229,4 @@ public class SubscriptionManager {
 		}
 		return false;
 	}
-}
+

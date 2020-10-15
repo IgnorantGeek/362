@@ -8,6 +8,7 @@ public class Ad
     private String advertID;  // Unique id for this ad
     private int[]  paperID;   // Paper identifier
     private String img_name;  // Name of the image file
+    private int    type = 0;
 
     public Ad(String advertID, int[] paperID)
     {
@@ -23,6 +24,14 @@ public class Ad
         this.img_name = img_name;
     }
 
+    public Ad(String advertID, int[] paperID, String img_name, int location_code)
+    {
+        this.advertID = advertID;
+        this.paperID = paperID;
+        this.img_name = img_name;
+        this.type = location_code;
+    }
+
     public int[] getPaper()
     {
         return paperID;
@@ -36,6 +45,11 @@ public class Ad
     public String getImagePath()
     {
         return img_name;
+    }
+
+    public int getType()
+    {
+        return type;
     }
 
     // TODO
