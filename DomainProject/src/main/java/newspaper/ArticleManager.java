@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 /**
- * 
+ * A class that manages all articles in the database.
  * @authors Alexander Irlbeck and Jonah Armstrong.
- *
+ * **Works as of 10/15/20
  */
 public class ArticleManager 
 {
@@ -31,6 +31,10 @@ public class ArticleManager
 	 * A list of all articles in the database.
 	 */
 	private ArrayList<Article> articles;
+	/**
+	 * Initializes an instance of Article manager.
+	 * **Works as of 10/14/20
+	 */
 	public ArticleManager()
 	{
 		nameToAll=new HashMap<String, Article>();
@@ -39,6 +43,11 @@ public class ArticleManager
 		articles = new ArrayList<Article>();
 		init();
 	}
+	/**
+	 * Searches for an article (or articles) in the database and returns them in an array.
+	 * @return The found articles.
+	 * **Works as of 10/15/20
+	 */
 	public Article[] search()
 	{
 		System.out.println("Enter '1' to look for an article by its title, '2' to look for an article by its description,");
@@ -168,6 +177,11 @@ public class ArticleManager
 		}
 		return null;
 	}
+	/**
+	 * Allows the user to add an article to the system.
+	 * @return whether or not the article was added successfully or not
+	 * **Works as of 10/14/20
+	 */
 	public boolean addArticle()
 	{
 		System.out.println("Please enter your the path to the article you want to add.");
@@ -321,6 +335,11 @@ public class ArticleManager
 		fileCopy.close();
 		return true;
 	}
+	/**
+	 * Initializes the class from its init file.
+	 * @return whether or not the method was successful or not.
+	 * **Works as of 10/15/20
+	 */
 	private boolean init()
 	{
 		File f = new File("../Database/Articles/ArticlesInit.txt");
@@ -382,9 +401,20 @@ public class ArticleManager
 		scan.close();
 		return true;
 	}
+	/**
+	 * Helper method used by developers to get the articles.
+	 * @return the articles
+	 * **Works as of 10/15/20
+	 */
 	public  ArrayList<Article> getArticles() {
 		return articles;
 	}
+	/**
+	 * Developer use only, find the article with the given name.
+	 * @param name the name of the article
+	 * @return The article with that name
+	 * **Works as of 10/14/20
+	 */
 	public Article getArticle(String name) {
 		return nameToAll.get(name);
 	}
