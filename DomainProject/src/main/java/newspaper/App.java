@@ -14,6 +14,9 @@ public class App
 		ArticleManager aman = new ArticleManager();
 		AdManager adManager = new AdManager("../Database", man);
 
+		// Intialize adManager 
+		adManager.init();
+
 		Scanner in = new Scanner(System.in);
 
 		System.out.println("Welcome to the FakeNews Newspaper Management System. What would you like to do?");
@@ -29,7 +32,7 @@ public class App
 				boolean going=true;
 				while(going)
 				{
-					System.out.println("NewspaperManager selected. Enter 'q' to quit. Enter '1' to search for a newspaper and read it."
+					System.out.println("NewspaperManager -- Enter 'q' to quit. Enter '1' to search for a newspaper and read it."
 							+ "\nEnter '2' to add a newspaper. Enter '3' to search for a paper and then edit it. Enter '4' to"
 							+ "\nsave your current progress. Enter '5' to search for a paper and publish it. Enter '6' to search and order"
 							+ "\na newspaper.");
@@ -77,7 +80,7 @@ public class App
 				boolean go=true;
 				while(go)
 				{
-					System.out.println("ArticleManager selected. Enter 'q' to quit. Enter '1' to search for an article, choose form a list of articles, and read one."
+					System.out.println("ArticleManager -- Enter 'q' to quit. Enter '1' to search for an article, choose form a list of articles, and read one."
 							+ "\nEnter '2' to add an article. Enter '3' to search for an article and then edit it. Enter '4' to search for an article and publish it.");
 					input = in.nextLine();
 					System.out.println("Enter your clearance level.");
@@ -160,7 +163,34 @@ public class App
 					}
 				}			break;
 			case "3":
-				adManager.run();
+				boolean ad = true;
+				while (ad)
+				{
+					System.out.println("AdManager -- Enter 'q' to quit. Enter '1' to enter a new Ad. Enter '2' to search for an Ad by reference number");
+					input = in.nextLine();
+
+					switch(input)
+					{
+						case "1":
+							System.out.println("Is this ad from a new Customer? (y/n)");
+							input = in.nextLine();
+							
+							if (input.compareTo("y") == 0)
+							{
+								// Create a new customer
+								System.out.println("");
+							}
+							else if (input.compareTo("n") == 0)
+							{
+								// Enter the customer id
+
+							}
+							else
+							{
+								// default case
+							}
+					}
+				}
 				break;
 			case "4":
 				// distributor manager
