@@ -1,5 +1,9 @@
 package newspaper;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 /**
  * An ad that will appear in a given newspaper
  */
@@ -55,7 +59,23 @@ public class Ad
     // TODO
     public int write()
     {
+        // Write this ad out to a config file
+        String build = "";
+        build += paperID[0] + ", " + paperID[1] + ", " + paperID[2] + ", " + paperID[3] + ", " + paperID[4] + "\n";
+        build += img_name + "\n";
+        String fileName = paperID[0] + paperID[1] + paperID[2] + paperID[3] + paperID[4] + "_" + advertID + ".txt";
 
+        // try to write to file
+        try {
+            BufferedWriter write = new BufferedWriter(new FileWriter("../Database/Ads/" + fileName));
+
+            write.write(build);
+
+            write.close();
+        } catch (IOException e) {
+            System.out.println("ERROR WRITING AD");
+            return -1;
+        }
         return 0;
     }
 }

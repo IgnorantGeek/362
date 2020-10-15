@@ -86,6 +86,6 @@ public class AdManager
         this.ads.add(in);
 
         // Success
-        return 0;
+        return in.write();
     }
 }

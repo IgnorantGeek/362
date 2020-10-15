@@ -193,12 +193,6 @@ public class App
 
 							// Check paper
 							int[] paperInfo = {issue, volume, 0, 0, 0};
-							if (man.findPaper(paperInfo) == null)
-							{
-								System.out.println(paperInfo);
-								System.out.println("Could not find a paper with that issue and volume.");
-								break;
-							}
 
 							System.out.println("Enter the Ad image filename:");
 							input = in.nextLine();
@@ -208,6 +202,7 @@ public class App
 								System.out.println("Warning! You created an Ad with no image. This will appear blank on the paper.");
 							}
 
+							// Create the Ad and Advertiser, add both to db
 							adManager.newAd(paperInfo, input);
 							adManager.newAdvertiser(name);
 						}
@@ -227,7 +222,7 @@ public class App
 			boolean end=false;
 			while(!end)
 			{
-				System.out.println("SubscriptionManager selected. Enter 'q' to quit. Enter '1' to print all current subscriptions."
+				System.out.println("SubscriptionManager -- Enter 'q' to quit. Enter '1' to print all current subscriptions."
 						+ "\nEnter '2' to add a new subscription. Enter '3' to remove a subscription.");
 				input = in.nextLine();
 				switch(input)
