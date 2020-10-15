@@ -15,18 +15,23 @@ public class UnfinishedArticle extends Article
     
     @Override
 	public boolean readArticle(int clearance) {
-		File f = new File(path());
-		try {
-			Scanner scan = new Scanner(f);
-			while (scan.hasNextLine());
+    	if(clearance>1)
+		{
+			File f = new File(path());
+			try 
 			{
-				System.out.println(scan.nextLine());
+				Scanner scan = new Scanner(f);
+				while (scan.hasNextLine())
+				{
+					System.out.println(scan.nextLine());
+				}
+				scan.close();
+				return true;
+			} 
+			catch (FileNotFoundException e) 
+			{
+				System.out.println("Unknown error occured. Please contact us at newspaperHelp@gmail.com");
 			}
-			scan.close();
-			return true;
-		} 
-		catch (FileNotFoundException e) {
-			System.out.println("Unknown error occured. Please contact us at newspaperHelp@gmail.com");
 		}
 		return false;
 	}
