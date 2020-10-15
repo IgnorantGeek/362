@@ -57,6 +57,7 @@ public class SubscriptionManager {
 	/**
 	 * Adds a subscription to file and memory
 	 * @param s Subscription to be added
+	 * *@return True if save was succesful, false if not.
 	 */
 	public boolean addSub(Subscription s) {
 		if(s != null && getSub(s.email) == null) {
@@ -69,6 +70,7 @@ public class SubscriptionManager {
 	/**
 	 * Adds a subscription to file
 	 * @param s Subscription to be added
+	 *@return True if save was succesful, false if not.
 	 */
 	private boolean writeSub(Subscription s) {
 		PrintWriter out = null;
