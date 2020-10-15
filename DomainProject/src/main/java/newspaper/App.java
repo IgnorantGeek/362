@@ -203,18 +203,27 @@ public class App
 							}
 
 							// Create the Ad and Advertiser, add both to db
-							adManager.newAd(paperInfo, input);
-							adManager.newAdvertiser(name);
+							Ad insert = new Ad(Global.generateID(), paperInfo, input);
+							adManager.newAd(insert);
+							adManager.newAdvertiser(name, insert);
 						}
 						else if (input.compareTo("n") == 0)
 						{
 							// Enter the customer id
-
+							System.out.println("Please enter the ID of the customer to append this add to");
 						}
 						else
 						{
-							// default case
+							System.out.println("Not a valid response.");
 						}
+						break;
+					
+					case "2":
+						break;
+					
+					case "q":
+						ad = false;
+						break;
 					}
 				}		
 			break;

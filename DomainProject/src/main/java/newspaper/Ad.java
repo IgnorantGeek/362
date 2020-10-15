@@ -63,7 +63,7 @@ public class Ad
         String build = "";
         build += paperID[0] + ", " + paperID[1] + ", " + paperID[2] + ", " + paperID[3] + ", " + paperID[4] + "\n";
         build += img_name + "\n";
-        String fileName = paperID[0] + paperID[1] + paperID[2] + paperID[3] + paperID[4] + "_" + advertID + ".txt";
+        String fileName = paperID[0] + "" + paperID[1] + "" + paperID[2] + "" + paperID[3] + "" + paperID[4] + "_" + advertID + ".txt";
 
         // try to write to file
         try {

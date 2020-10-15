@@ -3,18 +3,35 @@ package newspaper;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Advertiser extends Customer implements Writeable
 {
     private String name;
+    private ArrayList<Ad> ads;
 
     public Advertiser(String name, int id)
     {
         super(id);
         this.name = name;
+
+    }
+
+    public Advertiser(String name, int id, Ad ad)
+    {
+        super(id);
+        this.name = name;
+        this.ads.add(ad);
     }
 
     public String Name() { return name; }
+
+    public ArrayList<Ad> Ads() { return ads; }
+
+    public void insertAd(Ad ad)
+    {
+        this.ads.add(ad);
+    }
 
     @Override
     public int write()
