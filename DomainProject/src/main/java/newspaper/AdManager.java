@@ -38,6 +38,16 @@ public class AdManager
             // Create files
             if (!root.mkdir()) return -2;
         }
+        else
+        {
+            // Initialize the ad structure, read all ads in /Ads/
+            for (String fName : root.list())
+            {
+                File adFile = new File(fName);
+
+                this.ads.add(new Ad(adFile));
+            }
+        }
 
         // Create the customers database folder if it does not exist
         File cust = new File(databasePath + "/Customers");
@@ -52,14 +62,16 @@ public class AdManager
         return 0;
     }
 
-    public int newAdvertiser(String name, Ad ad)
+    public int newAdvertiser(String name)
     {
-        Advertiser insert = new Advertiser(name, customerCount++, ad);
+        Advertiser insert = new Advertiser(name, customerCount++);
 
-        return insert.write();
+        if (insert.write() < 0) return -1;
+
+        return insert.id();
     }
 
-    public int newAd(int[] paper_identifer, String imageName)
+    public int newAd(int[] paper_identifer, String imageName, int advertiserID)
     {
         // Locals
         Ad in;
@@ -72,9 +84,9 @@ public class AdManager
 
         if (imageName == null || imageName == "")
         {
-            in = new Ad(Global.generateID(), paper_identifer);
+            in = new Ad(Global.generateID(), paper_identifer, advertiserID);
         }
-        else in = new Ad(Global.generateID(), paper_identifer, imageName);
+        else in = new Ad(Global.generateID(), paper_identifer, advertiserID, imageName);
         
         if (in.write() < 0)
         {

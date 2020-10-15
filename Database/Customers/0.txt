@@ -1,0 +1,2 @@
+Advertiser1
+type=advertiser

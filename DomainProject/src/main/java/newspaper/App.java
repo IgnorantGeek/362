@@ -1,5 +1,6 @@
 package newspaper;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Scanner;
@@ -203,14 +204,71 @@ public class App
 							}
 
 							// Create the Ad and Advertiser, add both to db
-							Ad insert = new Ad(Global.generateID(), paperInfo, input);
-							adManager.newAd(insert);
-							adManager.newAdvertiser(name, insert);
+							int advertID = adManager.newAdvertiser(name);
+							adManager.newAd(paperInfo, input, advertID);
 						}
 						else if (input.compareTo("n") == 0)
 						{
 							// Enter the customer id
 							System.out.println("Please enter the ID of the customer to append this add to");
+
+							input = in.nextLine();
+
+							int custID=0;
+							try
+							{
+								custID = Integer.parseInt(input);
+							}
+							catch(Exception NumberFormatException)
+							{
+								System.out.println(input+" is not a valid number. Cancelling current attempt.");
+								continue;
+							}
+
+							File custRoot = new File("../Database/Customers");
+
+							if (custRoot.exists())
+							{
+								boolean found = false;
+								for (String custFile : custRoot.list())
+								{
+									if (custFile.compareTo(custID + ".txt") == 0)
+									{
+										found = true;
+										break;
+									}
+								}
+								if (!found)
+								{
+									System.out.println("Could not find an active Customer with ID: " + custID);
+								}
+							}
+							else
+							{
+								System.out.println("Fatal error, Customer database not initialized. Exiting session.");
+								continue;
+							}
+
+							System.out.println("Enter the issue of the paper for this Ad:");
+							input = in.nextLine();
+							int issue = Integer.parseInt(input);
+
+							System.out.println("Enter the volume of the paper for this Ad:");
+							input = in.nextLine();
+							int volume = Integer.parseInt(input);
+
+							// Check paper
+							int[] paperInfo = {issue, volume, 0, 0, 0};
+
+							System.out.println("Enter the Ad image filename:");
+							input = in.nextLine();
+
+							if (input.compareTo("") == 0)
+							{
+								System.out.println("Warning! You created an Ad with no image. This will appear blank on the paper.");
+							}
+
+							adManager.newAd(paperInfo, input, custID);
 						}
 						else
 						{

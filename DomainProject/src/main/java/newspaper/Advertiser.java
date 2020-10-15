@@ -14,7 +14,6 @@ public class Advertiser extends Customer implements Writeable
     {
         super(id);
         this.name = name;
-
     }
 
     public Advertiser(String name, int id, Ad ad)
