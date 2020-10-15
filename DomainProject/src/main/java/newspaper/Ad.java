@@ -1,8 +1,11 @@
 package newspaper;
 
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Scanner;
 
 /**
  * An ad that will appear in a given newspaper
@@ -12,28 +15,53 @@ public class Ad
     private String advertID;  // Unique id for this ad
     private int[]  paperID;   // Paper identifier
     private String img_name;  // Name of the image file
+    private int    advertiserID;
     private int    type = 0;
 
-    public Ad(String advertID, int[] paperID)
+    public Ad(String advertID, int[] paperID, int advertiserID)
     {
         this.advertID = advertID;
         this.paperID = paperID;
         this.img_name = advertID + "_img.png";
+        this.advertiserID = advertiserID;
     }
 
-    public Ad(String advertID, int[] paperID, String img_name)
+    public Ad(String advertID, int[] paperID, int advertiserID, String img_name)
     {
         this.advertID = advertID;
         this.paperID = paperID;
         this.img_name = img_name;
+        this.advertiserID = advertiserID;
     }
 
-    public Ad(String advertID, int[] paperID, String img_name, int location_code)
+    public Ad(String advertID, int[] paperID, int advertiserID, String img_name, int location_code)
     {
         this.advertID = advertID;
         this.paperID = paperID;
         this.img_name = img_name;
         this.type = location_code;
+        this.advertiserID = advertiserID;
+    }
+
+    public Ad(File adFile)
+    {
+        // Build from file
+        Scanner scan;
+        try {
+            scan = new Scanner(adFile);
+            String line = scan.nextLine();
+            String[] in = line.split(", ");
+            int volume = Integer.parseInt(in[0]);
+            int issue = Integer.parseInt(in[1]);
+            int day = Integer.parseInt(in[2]);
+            int month = Integer.parseInt(in[3]);
+            int year = Integer.parseInt(in[4]);
+
+            this.advertID = adFile.getName();
+        } catch (FileNotFoundException e) {
+            System.out.println("Could not local ad file");
+        }
+        
     }
 
     public int[] getPaper()
@@ -56,13 +84,11 @@ public class Ad
         return type;
     }
 
-    // TODO
     public int write()
     {
         // Write this ad out to a config file
         String build = "";
-        build += paperID[0] + ", " + paperID[1] + ", " + paperID[2] + ", " + paperID[3] + ", " + paperID[4] + "\n";
-        build += img_name + "\n";
+        build += type + "\n" + img_name + "\n" + advertiserID + "\n";
         String fileName = paperID[0] + "" + paperID[1] + "" + paperID[2] + "" + paperID[3] + "" + paperID[4] + "_" + advertID + ".txt";
 
         // try to write to file
