@@ -10,6 +10,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Scanner;
 
+
+/**
+ * An ad that will appear in a given newspaper
+ */
 public class SubscriptionManager {
 	
 	private HashMap<String,Subscription> Subscriptions;
@@ -75,15 +79,44 @@ public class SubscriptionManager {
 	}
 	
 	public boolean removeSub(String email) {
-		if(getSub(email) != null) {
-			Subscriptions.remove(email);
-			return true;
+		if(getSub(email) == null) {
+			return false;
 		}
-		return false;
+		Subscriptions.remove(email);
+		Collection<Subscription> subs = Subscriptions.values();
+		PrintWriter out = null;
+		try {
+		    out = new PrintWriter(new BufferedWriter(new FileWriter(directory, false))); int i = 0;
+		    for(Subscription sub : subs) {
+		    	if(i > 0)
+		    		out.print("\n");
+		    	out.print(sub.toString());
+		    	i++;
+			}
+		} catch (IOException e) {
+		    System.out.println("Subscription File system corrupted. Seek IT help.");
+		    return false;
+		} finally {
+		    if (out != null) {
+		        out.close();
+		    }
+		} 
+		return true;
+		
 	}
 
 	public boolean validateEmail(String email) {
-		return true;
+		int i = 0;
+		while(i < email.length() && email.charAt(i) != '@') {
+			i++;
+		}
+		while(i < email.length() && email.charAt(i) != '.') {
+			i++;
+		}
+		if (i < email.length() - 1) {
+			return true;
+		}
+		return false;
 	}
 
 	public Subscription getSub(String email) {
@@ -217,9 +250,10 @@ public class SubscriptionManager {
 
 	public boolean removeSubscription() {
 		Scanner in = new Scanner(System.in);
-		System.out.println("Enter email for subscription to be removed.");
-		String email = in.nextLine();
+		String email = "";
 		while(!email.equals("quit")) {
+			System.out.println("Enter email for subscription to be removed.");
+			email = in.nextLine();
 			if(removeSub(email)) {
 				return true;
 			}
