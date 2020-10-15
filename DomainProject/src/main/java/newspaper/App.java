@@ -19,7 +19,6 @@ public class App
 
 		// Intialize adManager 
 		adManager.init();
-		System.out.println(man.init());
 
 		System.out.println("Welcome to the FakeNews Newspaper Management System. What would you like to do?");
 		System.out.println("1: Edit/Publish a Newspaper\n2: Edit/Create an Article\n3: Enter a New Ad Sale\n4: Add/Remove a Distribution Subscription\nq: Quit");

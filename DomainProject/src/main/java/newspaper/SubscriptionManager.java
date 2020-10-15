@@ -12,13 +12,19 @@ import java.util.Scanner;
 
 
 /**
+ * Manages methods for interacting with the subscriber file system.
  * @author Jonah Armstrong
  */
 public class SubscriptionManager {
-	
+	/**
+	 * Stores the Subscriptions in memory
+	 */
 	private HashMap<String,Subscription> Subscriptions;
+	//path to the Subscriptions.txt file
 	private String directory;
-	
+	/**
+	 * Loads the subscriptions from file into memory and initializes vairiables
+	 */
 	public SubscriptionManager() {
 		Subscriptions = new HashMap<String,Subscription>();
 		directory = "../Database/Subscribers/Subscribers.txt";
@@ -48,7 +54,10 @@ public class SubscriptionManager {
 			System.out.println("Subscribtion file is inaccessible.");
 		} 		
 	}
-	
+	/**
+	 * Adds a subscription to file and memory
+	 * @param s Subscription to be added
+	 */
 	public boolean addSub(Subscription s) {
 		if(s != null && getSub(s.email) == null) {
 			Subscriptions.put(s.email, s);
@@ -57,7 +66,10 @@ public class SubscriptionManager {
 		}
 		return false;
 	}
-	
+	/**
+	 * Adds a subscription to file
+	 * @param s Subscription to be added
+	 */
 	private boolean writeSub(Subscription s) {
 		PrintWriter out = null;
 		try {
@@ -78,6 +90,10 @@ public class SubscriptionManager {
 		return Subscriptions.values();
 	}
 	
+	/**
+	 * Removes a Subscription from file and memory
+	 * @param email email address of subscription to be removed
+	 */
 	public boolean removeSub(String email) {
 		if(getSub(email) == null) {
 			return false;
@@ -105,6 +121,11 @@ public class SubscriptionManager {
 		
 	}
 
+	/**
+	 * Returns true if email is formatted correctly
+	 * @param email email address to be validated
+	 * @return True if correct, False if not.
+	 */
 	public boolean validateEmail(String email) {
 		int i = 0;
 		while(i < email.length() && email.charAt(i) != '@') {
@@ -119,6 +140,11 @@ public class SubscriptionManager {
 		return false;
 	}
 
+	/**
+	 * Returns a sub that matches the given email. Null if the email isn't in memory.
+	 * @param email email address to be validated
+	 * @return True if correct, False if not.
+	 */
 	public Subscription getSub(String email) {
 		if(email == null) {
 			return null;
@@ -126,6 +152,11 @@ public class SubscriptionManager {
 		return Subscriptions.get(email);
 	}
 
+	/**
+	 * Validates that a credit card number is formatted correctly
+	 * @param ccn Credit card number to be validated
+	 * @return True if correct, False if not.
+	 */
 	public boolean validateCcn(String ccn) {
 		if (ccn.length() != 16)
 			return false;
@@ -135,7 +166,12 @@ public class SubscriptionManager {
 		}
 		return true;
 	}
-
+	
+	/**
+	 * Validates that a date is formatted correctly
+	 * @param date date to be validated
+	 * @return True if correct, False if not.
+	 */
 	public boolean validateDate(String date) {
 		if(date.length() != 5) 
 			return false;
@@ -151,7 +187,11 @@ public class SubscriptionManager {
 			return false;	
 		return true;
 	}
-
+	
+	/**
+	 * Gets input from the user in order to add a subscription to file and memory.
+	 * @return true if add was successful
+	 */
 	public boolean addSubscription() {
 		Scanner in = new Scanner(System.in);
 		System.out.println("Enter first name.");
@@ -247,6 +287,10 @@ public class SubscriptionManager {
 		sub.addPaymentInformation(payment);
 		return addSub(sub);
 	}
+	/**
+	 * Gets input from the user in order to remove a subscription from file and memory.
+	 * @return true if add was successful
+	 */
 
 	public boolean removeSubscription() {
 		Scanner in = new Scanner(System.in);
