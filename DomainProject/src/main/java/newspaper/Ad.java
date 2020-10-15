@@ -49,17 +49,37 @@ public class Ad
         Scanner scan;
         try {
             scan = new Scanner(adFile);
-            String line = scan.nextLine();
-            String[] in = line.split(", ");
-            int volume = Integer.parseInt(in[0]);
-            int issue = Integer.parseInt(in[1]);
-            int day = Integer.parseInt(in[2]);
-            int month = Integer.parseInt(in[3]);
-            int year = Integer.parseInt(in[4]);
 
-            this.advertID = adFile.getName();
+            String[] whole = adFile.getName().split("_");
+
+            String advertString = whole[0];
+
+            System.out.println(advertString.charAt(0));
+            System.out.println(advertString.length());
+
+            this.paperID = new int[5];
+            for (int i = 0; i < 5; i++)
+            {
+                paperID[i] = 0;
+            }
+
+            String id = "";
+            for (int i = 0; i < 16; i++)
+            {
+                id += whole[1].charAt(i);
+            }
+
+            this.advertID = id;
+
+            this.type = Integer.parseInt(scan.nextLine());
+
+            this.img_name = scan.nextLine();
+
+            this.advertiserID = Integer.parseInt(scan.nextLine());
+
+            System.out.println("BUILD AD FILE WITH ID: " + this.advertID);
         } catch (FileNotFoundException e) {
-            System.out.println("Could not local ad file");
+            System.out.println("Could not locate ad file");
         }
         
     }

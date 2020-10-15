@@ -43,7 +43,7 @@ public class AdManager
             // Initialize the ad structure, read all ads in /Ads/
             for (String fName : root.list())
             {
-                File adFile = new File(fName);
+                File adFile = new File(databasePath + "/Ads/" + fName);
 
                 this.ads.add(new Ad(adFile));
             }
