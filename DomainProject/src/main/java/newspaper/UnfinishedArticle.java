@@ -1,7 +1,9 @@
 package newspaper;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class UnfinishedArticle extends Article
@@ -31,13 +33,17 @@ public class UnfinishedArticle extends Article
 
 	@Override
 	public boolean finalizeArticle(int clearance) {
-		System.out.println("This article has already been published.");
-		return false;
+		this.finalized = true;
+		return true;
 	}
 
 	@Override
 	public boolean editArticle(int clearance) {
-		System.out.println("This article has already been published. No further edits may be made.");
+		try {
+			Desktop.getDesktop().edit(new File(this.path()));
+		} catch (IOException e) {
+			System.out.println("File could not be eddited. Please contact us at newspaperHelp@gmail.com.");
+		}
 		return false;
 	}
 }

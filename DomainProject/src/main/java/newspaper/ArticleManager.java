@@ -382,4 +382,10 @@ public class ArticleManager
 		scan.close();
 		return true;
 	}
+	public  ArrayList<Article> getArticles() {
+		return articles;
+	}
+	public Article getArticle(String name) {
+		return nameToAll.get(name);
+	}
 }

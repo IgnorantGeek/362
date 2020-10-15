@@ -1,6 +1,7 @@
 package newspaper;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Scanner;
 
 /**
@@ -13,11 +14,12 @@ public class App
 		NewspaperManager man = new NewspaperManager();
 		ArticleManager aman = new ArticleManager();
 		AdManager adManager = new AdManager("../Database", man);
+		SubscriptionManager subManager = new SubscriptionManager();
 
 		Scanner in = new Scanner(System.in);
 
 		System.out.println("Welcome. Enter the number of the sytem to work with:");
-		System.out.println("1: NewspaperManager\n2: ArticleManager\n3: AdManager");
+		System.out.println("1: NewspaperManager\n2: ArticleManager\n3: AdManager\n4: SubscriptionManager");
 
 		String input = in.nextLine();
 
@@ -159,6 +161,55 @@ public class App
 			}			break;
 		case "3":
 			adManager.run();
+			break;
+			
+		case "4":
+			boolean end=false;
+			while(!end)
+			{
+				System.out.println("SubscriptionManager selected. Enter 'q' to quit. Enter '1' to print all current subscriptions."
+						+ "\nEnter '2' to add a new subscription. Enter '3' to remove a subscription.");
+				input = in.nextLine();
+				switch(input)
+				{
+				case "q":
+				case "quit":
+				case "Quit":
+				case "exit":
+				case "Exit":
+					end=true;
+					break;
+				case "1":
+					Collection<Subscription> subs = subManager.getAllSubs();
+					if(subs.size() > 0) {
+						for(Subscription sub: subs) {
+							System.out.println(sub.toString());
+						}
+						System.out.println();
+					}
+					else
+						System.out.println("There are no currently active subscriptions.");
+				
+					break;
+				case "2":
+					if (subManager.addSubscription()) {
+						System.out.println("Subscription successfully added");
+					}
+					else {
+						System.out.println("No subscription was added");
+					}
+					
+					break;
+				case "3":
+					if(subManager.removeSubscription()) {
+						System.out.println("Subscription successfully removed");
+					}
+					else {
+						System.out.println("No subscription was removed");
+					}
+					break;
+				}
+			}
 			break;
 		case "q":
 		case "quit":
