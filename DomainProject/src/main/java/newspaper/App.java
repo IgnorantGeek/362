@@ -1,4 +1,4 @@
-package newspaper;
+package main.java.newspaper;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -13,7 +13,7 @@ public class App
 	{
 		NewspaperManager man = new NewspaperManager();
 		ArticleManager aman = new ArticleManager();
-		AdManager adManager = new AdManager("../Database", man);
+		AdManager adManager = new AdManager("../Database");
 		SubscriptionManager subManager = new SubscriptionManager();
 
 		// Intialize adManager 
@@ -22,7 +22,7 @@ public class App
 
 		System.out.println("Welcome to the FakeNews Newspaper Management System. What would you like to do?");
 		System.out.println("1: Edit/Publish a Newspaper\n2: Edit/Create an Article\n3: Enter a New Ad Sale\n4: Add/Remove a Distribution Subscription\nq: Quit");
-
+		Scanner in = new Scanner(System.in);
 		while (true)
 		{
 			String input = in.nextLine();
@@ -172,61 +172,61 @@ public class App
 
 					switch(input)
 					{
-						case "1":
-							System.out.println("Is this ad from a new Customer? (y/n)");
+					case "1":
+						System.out.println("Is this ad from a new Customer? (y/n)");
+						input = in.nextLine();
+
+						if (input.compareTo("y") == 0)
+						{
+							// Create a new customer
+							System.out.println("Enter the name of the Advertiser:");
 							input = in.nextLine();
-							
-							if (input.compareTo("y") == 0)
+							String name = input;
+
+							System.out.println("Enter the issue of the paper for this Ad:");
+							input = in.nextLine();
+							int issue = Integer.parseInt(input);
+
+							System.out.println("Enter the volume of the paper for this Ad:");
+							input = in.nextLine();
+							int volume = Integer.parseInt(input);
+
+							// Check paper
+							int[] paperInfo = {issue, volume, 0, 0, 0};
+							if (man.findPaper(paperInfo) == null)
 							{
-								// Create a new customer
-								System.out.println("Enter the name of the Advertiser:");
-								input = in.nextLine();
-								String name = input;
-
-								System.out.println("Enter the issue of the paper for this Ad:");
-								input = in.nextLine();
-								int issue = Integer.parseInt(input);
-
-								System.out.println("Enter the volume of the paper for this Ad:");
-								input = in.nextLine();
-								int volume = Integer.parseInt(input);
-
-								// Check paper
-								int[] paperInfo = {issue, volume, 0, 0, 0};
-								if (man.findPaper(paperInfo) == null)
-								{
-									System.out.println(paperInfo);
-									System.out.println("Could not find a paper with that issue and volume.");
-									break;
-								}
-
-								System.out.println("Enter the Ad image filename:");
-								input = in.nextLine();
-
-								if (input.compareTo("") == 0)
-								{
-									System.out.println("Warning! You created an Ad with no image. This will appear blank on the paper.");
-								}
-
-								adManager.newAd(paperInfo, input);
-								adManager.newAdvertiser(name);
+								System.out.println(paperInfo);
+								System.out.println("Could not find a paper with that issue and volume.");
+								break;
 							}
-							else if (input.compareTo("n") == 0)
+
+							System.out.println("Enter the Ad image filename:");
+							input = in.nextLine();
+
+							if (input.compareTo("") == 0)
 							{
-								// Enter the customer id
+								System.out.println("Warning! You created an Ad with no image. This will appear blank on the paper.");
+							}
 
-							}
-							else
-							{
-								// default case
-							}
+							adManager.newAd(paperInfo, input);
+							adManager.newAdvertiser(name);
+						}
+						else if (input.compareTo("n") == 0)
+						{
+							// Enter the customer id
+
+						}
+						else
+						{
+							// default case
+						}
 					}
 				}
 			}			break;
 		case "3":
 			adManager.run();
 			break;
-			
+
 		case "4":
 			boolean end=false;
 			while(!end)
@@ -253,7 +253,7 @@ public class App
 					}
 					else
 						System.out.println("There are no currently active subscriptions.");
-				
+
 					break;
 				case "2":
 					if (subManager.addSubscription()) {
@@ -262,7 +262,7 @@ public class App
 					else {
 						System.out.println("No subscription was added");
 					}
-					
+
 					break;
 				case "3":
 					if(subManager.removeSubscription()) {
@@ -284,22 +284,22 @@ public class App
 			in.close();
 			return;
 		}
-				break;
-			case "4":
-				// distributor manager
-				break;
-			case "q":
-			case "quit":
-			case "Quit":
-			case "exit":
-			case "Exit":
-				System.out.println("Goodbye.");
-				in.close();
-				return;
-			}
-
-		System.out.println("\nNow what would you like to do?");
-		System.out.println("1: Edit/Publish a Newspaper\n2: Edit/Create an Article\n3: Enter a New Ad Sale\n4: Add/Remove a Distribution Subscription\nq: Quit");
-		}
+		break;
+	case "4":
+		// distributor manager
+		break;
+	case "q":
+	case "quit":
+	case "Quit":
+	case "exit":
+	case "Exit":
+		System.out.println("Goodbye.");
+		in.close();
+		return;
 	}
+
+	System.out.println("\nNow what would you like to do?");
+	System.out.println("1: Edit/Publish a Newspaper\n2: Edit/Create an Article\n3: Enter a New Ad Sale\n4: Add/Remove a Distribution Subscription\nq: Quit");
+}
+}
 }

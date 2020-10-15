@@ -1,4 +1,4 @@
-package newspaper;
+package main.java.newspaper;
 
 import java.awt.Graphics2D;
 import java.awt.Image;

@@ -1,4 +1,4 @@
-package newspaper;
+package main.java.newspaper;
 
 public class CreditCard extends PaymentInformation{
 	private String name;

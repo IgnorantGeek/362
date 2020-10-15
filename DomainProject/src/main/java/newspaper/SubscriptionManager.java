@@ -1,4 +1,4 @@
-package newspaper;
+package main.java.newspaper;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -229,4 +229,4 @@ public class SubscriptionManager {
 		}
 		return false;
 	}
-
+}

@@ -1,4 +1,4 @@
-package newspaper;
+package main.java.newspaper;
 
 import java.io.File;
 import java.util.ArrayList;

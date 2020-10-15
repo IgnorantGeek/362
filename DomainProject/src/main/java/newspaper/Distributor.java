@@ -1,4 +1,4 @@
-package newspaper;
+package main.java.newspaper;
 
 public class Distributor extends Customer implements Writeable
 {

@@ -1,4 +1,4 @@
-package newspaper;
+package test.java.newspaper;
 
 import static org.junit.Assert.assertTrue;
 

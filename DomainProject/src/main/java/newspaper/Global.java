@@ -1,4 +1,4 @@
-package newspaper;
+package main.java.newspaper;
 
 import java.lang.StringBuilder;
 import java.util.Random;
