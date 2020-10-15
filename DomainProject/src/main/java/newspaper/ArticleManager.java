@@ -8,21 +8,34 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
-
+/**
+ * 
+ * @authors Alexander Irlbeck and Jonah Armstrong.
+ *
+ */
 public class ArticleManager 
 {
 	/**
 	 * Key is the name of the article.
 	 */
 	private HashMap<String,Article> nameToAll;
-	private HashMap<int[],ArrayList<Article>> volumeAndIssueToName;
-	private HashMap<int[],ArrayList<Article>> dayMonYearToName;
+	/**
+	 * Key is the "volume, issue" of the article.
+	 */
+	private HashMap<String,ArrayList<Article>> volumeAndIssueToName;
+	/**
+	 * Key is the publishing date of the article in the form of "day, month, year".
+	 */
+	private HashMap<String,ArrayList<Article>> dayMonYearToName;
+	/**
+	 * A list of all articles in the database.
+	 */
 	private ArrayList<Article> articles;
 	public ArticleManager()
 	{
 		nameToAll=new HashMap<String, Article>();
-		volumeAndIssueToName=new HashMap<int[], ArrayList<Article>>();
-		dayMonYearToName=new HashMap<int[], ArrayList<Article>>();
+		volumeAndIssueToName=new HashMap<String, ArrayList<Article>>();
+		dayMonYearToName=new HashMap<String, ArrayList<Article>>();
 		articles = new ArrayList<Article>();
 		init();
 	}
@@ -37,7 +50,17 @@ public class ArticleManager
 		while(going)
 		{
 			going=false;
-			int num = in.nextInt();
+			int num = 0;
+			String next = in.nextLine();
+			try
+			{
+				num = Integer.parseInt(next);
+			}
+			catch(Exception NumberFormatException)
+			{
+				System.out.println(next+" is not a valid number. Cancelling current search.");
+				return null;
+			}
 			if(num==1)
 			{
 				System.out.println("Please enter the article's name.");
@@ -94,10 +117,10 @@ public class ArticleManager
 			{
 				System.out.println("Please enter the article's volume and issue, seperated by a '/' with no spaces.");
 				String input = in.nextLine();
-				int[] volIss= new int[2];
+				String volIss= "";
 				String[] temp = input.split("/");
-				volIss[0] = Integer.parseInt(temp[0]);
-				volIss[1] = Integer.parseInt(temp[1]);
+				volIss = volIss+temp[0]+", ";
+				volIss = volIss+temp[1];
 				if(!volumeAndIssueToName.containsKey(volIss))
 				{
 					System.out.println("Volume and issue could not be found. Press '3' to search again or select another searching method.");
@@ -117,11 +140,11 @@ public class ArticleManager
 			{
 				System.out.println("Please enter the article's publishing date, exactly as follows: 'month/day/year'.");
 				String input = in.nextLine();
-				int[] date= new int[3];
+				String date= "";
 				String[] temp = input.split("/");
-				date[1] = Integer.parseInt(temp[1]);
-				date[0] = Integer.parseInt(temp[0]);
-				date[2] = Integer.parseInt(temp[2]);
+				date = date+temp[1]+", ";
+				date = date+temp[0]+", ";
+				date = date+temp[2]+", ";
 				if(!dayMonYearToName.containsKey(date))
 				{
 					System.out.println("The date could not be found. Press '4' to search again or select another searching method.");
@@ -150,7 +173,7 @@ public class ArticleManager
 		System.out.println("Please enter your the path to the article you want to add.");
 		@SuppressWarnings("resource")//System.in should not be closed before the program has finished.
 		Scanner scan = new Scanner(System.in);
-		String fileName = scan.next();
+		String fileName = scan.nextLine();
 		String[] split = fileName.split("/");
 		File f = new File(fileName);
 		Scanner fileCopy;
@@ -181,33 +204,112 @@ public class ArticleManager
 			System.out.println("Error in creating file occured. Contact tech support.");
 			return false;
 		}
-		System.out.println("Insert the volume.");
-		int volume = scan.nextInt();
-		System.out.println("Insert the issue.");
-		int issue = scan.nextInt();
-		System.out.println("Insert the day.");
-		int day = scan.nextInt();
-		System.out.println("Insert the month.");
-		int month = scan.nextInt();
-		System.out.println("Insert the year.");
-		int year = scan.nextInt();
 		System.out.println("Insert the name of the article.");
 		String name = scan.nextLine();
 		System.out.println("Insert the description.");
 		String desc = scan.nextLine();
+		System.out.println("Insert the volume.");
+		int volume = 0;
+		String next = scan.nextLine();
+		try
+		{
+			volume = Integer.parseInt(next);
+		}
+		catch(Exception NumberFormatException)
+		{
+			System.out.println(next+" is not a valid number. Ending add.");
+			return false;
+		}
+		System.out.println("Insert the issue.");
+		int issue = 0;
+		next=scan.nextLine();
+		try
+		{
+			issue = Integer.parseInt(next);
+		}
+		catch(Exception NumberFormatException)
+		{
+			System.out.println(next+" is not a valid number. Ending add.");
+			return false;
+		}
+		System.out.println("Insert the day.");
+		int day = 0;
+		next=scan.nextLine();
+		try
+		{
+			day = Integer.parseInt(next);
+		}
+		catch(Exception NumberFormatException)
+		{
+			System.out.println(next+" is not a valid number. Ending add.");
+			return false;
+		}
+		System.out.println("Insert the month.");
+		int month =0;
+		next=scan.nextLine();
+		try
+		{
+			month = Integer.parseInt(next);
+		}
+		catch(Exception NumberFormatException)
+		{
+			System.out.println(next+" is not a valid number. Ending add.");
+			return false;
+		}
+		System.out.println("Insert the year.");
+		int year = 0;
+		next=scan.nextLine();
+		try
+		{
+			year = Integer.parseInt(next);
+		}
+		catch(Exception NumberFormatException)
+		{
+			System.out.println(next+" is not a valid number. Ending add.");
+			return false;
+		}
 		Article toAdd = new UnfinishedArticle(name, desc, volume, issue, day, month, year, false, path);
 		articles.add(toAdd);
 		nameToAll.put(name, toAdd);
-		int[] temp = new int[2];
-		temp[0]=volume;
-		temp[1]=issue;
-		volumeAndIssueToName.get(temp).add(toAdd);
-		temp=new int[3];
-		temp[0]=day;
-		temp[1]=month;
-		temp[2]=year;
-		dayMonYearToName.get(temp).add(toAdd);
-		String builder = name + ", " + desc + ", " + volume + ", " + issue + ", " + day + ", " + month + ", " + year + ", " + false + ", " + path;
+		String temp = volume + ", " + issue;
+		if(volumeAndIssueToName.containsKey(temp))
+		{
+			if(volumeAndIssueToName.get(temp).contains(toAdd))
+			{
+				System.out.println("Article is already in the system.");
+				return false;
+			}
+			else
+			{
+				volumeAndIssueToName.get(temp).add(toAdd);
+			}
+		}
+		else
+		{
+			ArrayList<Article> tempArr = new ArrayList<Article>();
+			tempArr.add(toAdd);
+			volumeAndIssueToName.put(temp,tempArr);
+		}
+		temp=day+", "+month+", "+year;
+		if(dayMonYearToName.containsKey(temp))
+		{
+			if(dayMonYearToName.get(temp).contains(toAdd))
+			{
+				System.out.println("Article is already in the system.");
+				return false;
+			}
+			else
+			{
+				dayMonYearToName.get(temp).add(toAdd);
+			}
+		}
+		else
+		{
+			ArrayList<Article> tempArr = new ArrayList<Article>();
+			tempArr.add(toAdd);
+			dayMonYearToName.put(temp,tempArr);
+		}
+		String builder = "\n"+name + ", " + desc + ", " + volume + ", " + issue + ", " + day + ", " + month + ", " + year + ", " + false + ", " + path;
 		try {
 			BufferedWriter write = new BufferedWriter (new FileWriter("../Database/Articles/ArticlesInit.txt",true));
 			write.append(builder);		
@@ -252,13 +354,8 @@ public class ArticleManager
 				toAdd=new UnfinishedArticle(name, desc, volume, issue, day, month, year, finalized, path);
 			}
 			nameToAll.put(in[0],toAdd);
-			int[] volumeAndIssue = new int[2];
-			int[] date = new int[3];
-			volumeAndIssue[0] = volume;
-			volumeAndIssue[1] = issue;
-			date[0]=day;
-			date[1]=month;
-			date[2]=year;
+			String volumeAndIssue = volume+", "+issue;
+			String date = day+", "+month+", "+year;
 			articles.add(toAdd);
 			if(volumeAndIssueToName.containsKey(volumeAndIssue))
 			{

@@ -25,15 +25,10 @@ public class App
         {
             case "1":
                 // Alex this will be the main entry point for newspaperManager
-                Newspaper paper=man.search();
-                if (paper!=null)
+                
+            	switch(input)
                 {
-                	paper.readPaper(20);
-                }
-                paper=man.search();
-                if (paper!=null)
-                {
-                	paper.readPaper(20);
+                
                 }
                 break;
             case "2":
