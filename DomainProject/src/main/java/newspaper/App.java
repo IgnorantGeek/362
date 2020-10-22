@@ -361,7 +361,11 @@ public class App
 
 					input = in.nextLine();
 
-					dman.removeDistributor(1);
+					if (dman.removeDistributor(Integer.parseInt(input)) < 0)
+					{
+						System.out.println("Failed to remove Distributor with ID: " + input +" no entry found.");
+					}
+					else System.out.println("Successfully remove Distributor: " + input);
 			}
 
 			break;

@@ -50,6 +50,7 @@ public class DistributionManager
 
         if (custDir.exists())
         {
+            boolean found = false;
             for (int j = 0; j < custDir.list().length; j++)
             {
                 String distributor = custDir.list()[j];
@@ -76,6 +77,7 @@ public class DistributionManager
                             return -1;
                         }
                         scan.close();
+                        found = true;
                         distFile.delete();
                     } catch (Exception e) {
                         System.out.println("Could not remove distributor with ID: " + distId);
@@ -83,6 +85,7 @@ public class DistributionManager
                     }
                 }
             }
+            if (!found) return -1;
         }
         return 0;
     }
