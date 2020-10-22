@@ -349,7 +349,7 @@ public class App
 
 					if (dman.addDistributor(name, pc) == 0)
 					{
-						System.out.println("Distributor with ID: " + pc + " removed.");
+						System.out.println("Added new Distributor: " + name);
 					}
 					break;
 				
