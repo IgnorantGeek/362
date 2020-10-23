@@ -52,11 +52,6 @@ public class Ad
 
             String[] whole = adFile.getName().split("_");
 
-            String advertString = whole[0];
-
-            System.out.println(advertString.charAt(0));
-            System.out.println(advertString.length());
-
             this.paperID = new int[5];
             for (int i = 0; i < 5; i++)
             {
@@ -76,8 +71,6 @@ public class Ad
             this.img_name = scan.nextLine();
 
             this.advertiserID = Integer.parseInt(scan.nextLine());
-
-            System.out.println("BUILD AD FILE WITH ID: " + this.advertID);
         } catch (FileNotFoundException e) {
             System.out.println("Could not locate ad file");
         }

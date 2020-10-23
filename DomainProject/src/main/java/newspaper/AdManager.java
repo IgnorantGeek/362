@@ -3,6 +3,9 @@ package newspaper;
 import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * Ad Manager class
+ */
 public class AdManager
 {
     private ArrayList<Ad> ads;
