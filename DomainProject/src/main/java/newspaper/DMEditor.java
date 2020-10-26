@@ -22,6 +22,27 @@ public class DMEditor {
 		newspaperMessages = new HashMap<String,String>();
 		init();
 	}
+	
+	public boolean addArticleComment()
+	{
+		
+	}
+	
+	public boolean addPaperComment()
+	{
+		
+	}
+	
+	public boolean readAllComments(int clearance)
+	{
+		
+	}
+	
+	public boolean removeComment(int clearance)
+	{
+		
+	}
+	
 	private boolean init()
 	{
 		File f = new File("../Database/MessagesInit.txt");
@@ -66,12 +87,14 @@ public class DMEditor {
 					else
 					{
 						System.out.println("Messages initialization file corrupted. Please contact tech support.");
+						scan.close();
 						return false;
 					}
 				}
 				else
 				{
 					System.out.println("Messages initialization file corrupted. Please contact tech support.");
+					scan.close();
 					return false;
 				}
 			}
@@ -97,12 +120,14 @@ public class DMEditor {
 					else
 					{
 						System.out.println("Messages initialization file corrupted. Please contact tech support.");
+						scan.close();
 						return false;
 					}
 				}
 				else
 				{
 					System.out.println("Messages initialization file corrupted. Please contact tech support.");
+					scan.close();
 					return false;
 				}
 			}
