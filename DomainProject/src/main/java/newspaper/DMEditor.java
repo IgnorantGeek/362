@@ -25,22 +25,22 @@ public class DMEditor {
 	
 	public boolean addArticleComment()
 	{
-		
+		return true;
 	}
 	
 	public boolean addPaperComment()
 	{
-		
+		return true;
 	}
 	
 	public boolean readAllComments(int clearance)
 	{
-		
+		return true;
 	}
 	
 	public boolean removeComment(int clearance)
 	{
-		
+		return true;
 	}
 	
 	private boolean init()
