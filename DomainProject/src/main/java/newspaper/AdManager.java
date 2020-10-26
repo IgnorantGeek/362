@@ -65,13 +65,13 @@ public class AdManager
         return 0;
     }
 
-    public int newAdvertiser(String name)
+    public Advertiser newAdvertiser(String name)
     {
         Advertiser insert = new Advertiser(name, customerCount++);
 
-        if (insert.write() < 0) return -1;
+        if (insert.write() < 0) return null;
 
-        return insert.id();
+        return insert;
     }
 
     public int newAd(int[] paper_identifer, String imageName, int advertiserID)
