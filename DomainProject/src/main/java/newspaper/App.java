@@ -195,8 +195,8 @@ public class App
 						}
 
 						// Create the Ad and Advertiser, add both to db
-						int advertID = adManager.newAdvertiser(name);
-						adManager.newAd(paperInfo, input, advertID);
+						Advertiser newAdvertiser = adManager.newAdvertiser(name);
+						adManager.newAd(paperInfo, input, newAdvertiser.id());
 					}
 					else if (input.compareTo("n") == 0)
 					{
