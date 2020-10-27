@@ -6,6 +6,10 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Scanner;
 
+/**
+ * EmployeeManager - Manages Employees and Login Verification
+ * @author Nick Heisler
+ */
 public class EmployeeManager
 {
     // Variables
@@ -63,6 +67,7 @@ public class EmployeeManager
         if (find.delete() < 0) return -2;
 
         // Successful return
+        employeeCount--;
         return 0;
     }
 
@@ -126,8 +131,21 @@ public class EmployeeManager
         return out;
     }
 
+    /**
+     * Get the number of employees in the system
+     * @return The number of active employees
+     */
     public int getEmployeeCount()
     {
         return employeeCount;
+    }
+
+    public boolean validateLogin(int user_id, String password)
+    {
+        if (registry == null) return false;
+        if (!registry.containsKey(user_id)) return false;
+        if (registry.get(user_id).Password().compareTo(password) != 0) return false;
+
+        return true;
     }
 }

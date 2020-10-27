@@ -10,7 +10,7 @@ import java.util.Scanner;
 /**
  * An ad that will appear in a given newspaper
  */
-public class Ad
+public class Ad implements Writeable
 {
     private String advertID;  // Unique id for this ad
     private int[]  paperID;   // Paper identifier
@@ -116,5 +116,11 @@ public class Ad
             return -1;
         }
         return 0;
+    }
+
+    public int delete()
+    {
+        // TODO
+        return 1;
     }
 }

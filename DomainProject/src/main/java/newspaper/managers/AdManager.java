@@ -4,21 +4,22 @@ import newspaper.models.Ad;
 import newspaper.models.Advertiser;
 import newspaper.Global;
 import java.io.File;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Ad Manager class
  */
 public class AdManager
 {
-    private ArrayList<Ad> ads;
+    private HashMap<String, Ad> ads;
     private String databasePath;
     private int customerCount;
 
-    public AdManager(String rootDir)
+    public AdManager()
     {
-        ads = new ArrayList<Ad>();
-        databasePath = new String(rootDir);
+        ads = new HashMap<String, Ad>();
+        databasePath = Global.DB_PATH;
+        this.init();
     }
 
 
@@ -51,7 +52,9 @@ public class AdManager
             {
                 File adFile = new File(databasePath + "/Ads/" + fName);
 
-                this.ads.add(new Ad(adFile));
+                Ad insert = new Ad(adFile);
+
+                this.ads.put(insert.getAdvertID(), insert);
             }
         }
 
@@ -101,22 +104,7 @@ public class AdManager
         }
 
         // Insert Ad into list
-        this.ads.add(in);
-
-        // Success
-        return 0;
-    }
-
-    public int newAd(Ad ad)
-    {
-        if (ad.write() < 0)
-        {
-            // error writing ad to database (file)
-            return -3;
-        }
-
-        // Insert Ad into list
-        this.ads.add(ad);
+        this.ads.put(in.getAdvertID(), in);
 
         // Success
         return 0;

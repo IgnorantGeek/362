@@ -1,5 +1,6 @@
 package newspaper.managers;
 
+import newspaper.Global;
 import newspaper.models.Distributor;
 import java.io.File;
 import java.util.ArrayList;
@@ -11,10 +12,11 @@ public class DistributionManager
     private String databasePath;
     private ArrayList<Distributor> distributors;
 
-    public DistributionManager(String path)
+    public DistributionManager()
     {
-        this.databasePath = path;
+        this.databasePath = Global.DB_PATH;
         this.distributors = new ArrayList<Distributor>();
+        this.init();
     }
 
     /**

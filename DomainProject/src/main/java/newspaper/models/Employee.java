@@ -11,6 +11,7 @@ public class Employee implements Writeable
     private int Id;
     private int supervisorId;
     private String FullName;
+    private String Password;
 
     public Employee() { }
 
@@ -42,7 +43,11 @@ public class Employee implements Writeable
         return supervisorId;
     }
 
-    // TODO
+    public String Password()
+    {
+        return Password;
+    }
+
     @Override
     public int write()
     {
