@@ -202,16 +202,19 @@ public class SubscriptionManager {
 		System.out.println("Enter first name.");
 		String firstName = in.nextLine();
 		if(firstName.equals("quit")) {
+			in.close();
 			return false;
 		}
 		System.out.println("Enter last name.");
 		String lastName = in.nextLine();
 		if(lastName.equals("quit")) {
+			in.close();
 			return false;
 		}
 		System.out.println("Enter address.");
 		String address = in.nextLine();
 		if(address.equals("quit")) {
+			in.close();
 			return false;
 		}
 		boolean valid = false;
@@ -220,6 +223,7 @@ public class SubscriptionManager {
 			System.out.println("Enter email address");
 			email = in.nextLine();
 			if(email.equals("quit")) {
+				in.close();
 				return false;
 			}
 			valid = validateEmail(email);
@@ -249,6 +253,7 @@ public class SubscriptionManager {
 				System.out.println("Enter credit card number");
 				cardNum = in.nextLine();
 				if(cardNum.equals("quit")) {
+					in.close();
 					return false;
 				}
 				valid = validateCcn(cardNum);
@@ -262,6 +267,7 @@ public class SubscriptionManager {
 				System.out.println("Enter expiration date");
 				expDate = in.nextLine();
 				if(expDate.equals("quit")) {
+					in.close();
 					return false;
 				}
 				valid = validateDate(expDate);
@@ -275,6 +281,7 @@ public class SubscriptionManager {
 				System.out.println("Enter security code");
 				code = in.nextLine();
 				if(code.equals("quit")) {
+					in.close();
 					return false;
 				}
 				valid = code.length() == 3;
@@ -290,6 +297,7 @@ public class SubscriptionManager {
 		}
 		Subscription sub = new Subscription(firstName, lastName, address, email);
 		sub.addPaymentInformation(payment);
+		in.close();
 		return addSub(sub);
 	}
 	/**
