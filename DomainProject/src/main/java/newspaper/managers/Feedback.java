@@ -1,4 +1,4 @@
-package newspaper;
+package newspaper.managers;
 
 import java.io.BufferedWriter;
 import java.io.File;
