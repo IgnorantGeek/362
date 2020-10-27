@@ -57,4 +57,11 @@ public class Advertiser extends Customer implements Writeable
         }
         return 0;
     }
+
+    // TODO
+    @Override
+    public int delete()
+    {
+        return 0;
+    }
 }

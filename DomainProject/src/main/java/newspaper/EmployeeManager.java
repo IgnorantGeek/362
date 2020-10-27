@@ -33,10 +33,18 @@ public class EmployeeManager
         return true;
     }
 
-    public boolean dropEmployee(int ID)
+    public int dropEmployee(int ID)
     {
-        
-        return true;
+        // Search hashmap for entry, if it exists remove it and drop the database reference
+        Employee find = registry.get(ID);
+        if (find == null) return -1;
+
+        // Remove from registry and delete from db
+        registry.remove(find.Id());
+        if (find.delete() < 0) return -2;
+
+        // Successful return
+        return 0;
     }
 
     public int getEmployeeCount()

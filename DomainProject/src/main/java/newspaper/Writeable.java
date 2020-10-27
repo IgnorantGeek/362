@@ -6,5 +6,6 @@ package newspaper;
 public interface Writeable
 {
     // Write to database
-    public int write();    
+    public int write();
+    public int delete();
 }
