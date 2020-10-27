@@ -1,5 +1,8 @@
-package newspaper;
+package newspaper.managers;
 
+import newspaper.models.Article;
+import newspaper.models.UnfinishedArticle;
+import newspaper.models.FinishedArticle;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;

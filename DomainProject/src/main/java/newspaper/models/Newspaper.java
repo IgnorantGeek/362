@@ -1,5 +1,5 @@
 
-package newspaper;
+package newspaper.models;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -227,7 +227,7 @@ public class Newspaper {
 	 * Developer method that sets the newspaper to be published, in a method that a user can not see.
 	 * **Works as of 10/14/20
 	 */
-	protected void setFinal()
+	public void setFinal()
 	{
 		finalized=true;
 	}

@@ -5,6 +5,8 @@ import java.util.Random;
 
 public class Global
 {
+    public static String DB_PATH = "../Database/";
+    public static String EMPLOYEE_DB_PATH = "../Database/Employees/";
     public static String generateID()
     {
         int lowerlet  = 65;

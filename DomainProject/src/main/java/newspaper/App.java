@@ -1,5 +1,7 @@
 package newspaper;
 
+import newspaper.managers.*;
+import newspaper.models.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;

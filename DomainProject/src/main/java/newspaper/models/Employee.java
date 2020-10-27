@@ -1,5 +1,6 @@
-package newspaper;
+package newspaper.models;
 
+import newspaper.Global;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -8,15 +9,22 @@ import java.io.IOException;
 public class Employee implements Writeable
 {
     private int Id;
+    private int supervisorId;
     private String FullName;
-    private static String DB_PATH = "../Database/Employees/";
 
     public Employee() { }
 
-    public Employee(int Id, String Name)
+    public Employee(int Id, String FullName)
     {
         this.Id = Id;
-        this.FullName = Name;
+        this.FullName = FullName;
+    }
+
+    public Employee(int Id, int supervisorId, String FullName)
+    {
+        this.Id = Id;
+        this.supervisorId = supervisorId;
+        this.FullName = FullName;
     }
 
     public String FullName()
@@ -29,6 +37,11 @@ public class Employee implements Writeable
         return Id;
     }
 
+    public int supervisorId()
+    {
+        return supervisorId;
+    }
+
     // TODO
     @Override
     public int write()
@@ -36,10 +49,11 @@ public class Employee implements Writeable
         // Write the employe to the db file
         String fileName = this.Id() + ".txt";
         String build = "";
+        build += FullName + "\n" + this.supervisorId();
 
         try
         {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(DB_PATH + fileName));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(Global.EMPLOYEE_DB_PATH + fileName));
 
             writer.write(build);
 
@@ -52,11 +66,11 @@ public class Employee implements Writeable
         }
         return 0;
     }
-    
+
     @Override
     public int delete()
     {
-        File empFile = new File(DB_PATH + this.Id() + ".txt");
+        File empFile = new File(Global.EMPLOYEE_DB_PATH + this.Id() + ".txt");
 
         if (!empFile.exists()) return -1;
 

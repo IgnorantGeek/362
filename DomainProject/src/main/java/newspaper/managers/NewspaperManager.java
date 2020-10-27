@@ -1,5 +1,6 @@
-package newspaper;
+package newspaper.managers;
 
+import newspaper.models.Newspaper;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;

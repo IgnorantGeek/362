@@ -1,5 +1,8 @@
-package newspaper;
+package newspaper.managers;
 
+import newspaper.models.Subscription;
+import newspaper.models.PaymentInformation;
+import newspaper.models.CreditCard;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;

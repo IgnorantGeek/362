@@ -1,4 +1,4 @@
-package newspaper;
+package newspaper.models;
 
 /**
  * Represents a way to collect payment from subscribers  

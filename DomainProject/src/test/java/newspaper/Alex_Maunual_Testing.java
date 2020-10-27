@@ -1,6 +1,6 @@
 package newspaper;
 
-import newspaper.ArticleManager;
+import newspaper.managers.ArticleManager;
 
 public class Alex_Maunual_Testing<E> {
 	public static void main(String args[])

@@ -1,4 +1,4 @@
-package newspaper;
+package newspaper.models;
 
 /**
  * Abstract class holds information for all article types, and gives some basic functions for them.
@@ -153,17 +153,17 @@ public abstract class Article {
 	 * @param clearance Clearance level of the actor
 	 * @return whether or not the method succeeded
 	 */
-	abstract boolean readArticle(int clearance);
+	public abstract boolean readArticle(int clearance);
 	/**
 	 * Finalizes the article.
 	 * @param clearance Clearance level of the actor
 	 * @return whether or not the method succeeded
 	 */
-	abstract boolean finalizeArticle(int clearance);
+	public abstract boolean finalizeArticle(int clearance);
 	/**
 	 * Edits the article.
 	 * @param clearance Clearance level of the actor
 	 * @return whether or not the method succeeded
 	 */
-	abstract boolean editArticle(int clearance);
+	public abstract boolean editArticle(int clearance);
 }

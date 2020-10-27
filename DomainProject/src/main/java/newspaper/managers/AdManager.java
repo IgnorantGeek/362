@@ -1,5 +1,8 @@
-package newspaper;
+package newspaper.managers;
 
+import newspaper.models.Ad;
+import newspaper.models.Advertiser;
+import newspaper.Global;
 import java.io.File;
 import java.util.ArrayList;
 

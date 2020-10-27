@@ -1,4 +1,4 @@
-package newspaper;
+package newspaper.models;
 
 /**
  * An interface for Objects that get written to the database

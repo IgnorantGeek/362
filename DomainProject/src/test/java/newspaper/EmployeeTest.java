@@ -2,6 +2,7 @@ package newspaper;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import newspaper.models.Employee;
 
 import java.io.File;
 

@@ -1,4 +1,4 @@
-package newspaper;
+package newspaper.models;
 
 /**
  * A simple class that basically returns true no matter what method is called.

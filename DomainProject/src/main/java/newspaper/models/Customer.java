@@ -1,4 +1,4 @@
-package newspaper;
+package newspaper.models;
 
 
 public abstract class Customer 

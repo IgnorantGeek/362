@@ -1,4 +1,4 @@
-package newspaper;
+package newspaper.models;
 
 import java.io.BufferedWriter;
 import java.io.File;
