@@ -52,6 +52,7 @@ public class SubscriptionManager {
 				}
 				sub.addPaymentInformation(info);
 				Subscriptions.put(email, sub);
+				s.close();
 			}
 		} catch (FileNotFoundException e) {
 			System.out.println("Subscribtion file is inaccessible.");
@@ -312,12 +313,14 @@ public class SubscriptionManager {
 			System.out.println("Enter email for subscription to be removed.");
 			email = in.nextLine();
 			if(removeSub(email)) {
+				in.close();
 				return true;
 			}
 			else {
 				System.out.println("There is no subscription associated with that email. Enter a new email address or enter quit to cancel.");
 			}
 		}
+		in.close();
 		return false;
 	}
 }
