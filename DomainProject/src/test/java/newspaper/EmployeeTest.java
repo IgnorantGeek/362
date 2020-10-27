@@ -13,7 +13,6 @@ public class EmployeeTest
      @Test
      public void CheckWrite()
      {
-         // TODO
          // Test write a new employee to the database
          Employee test1 = new Employee(1, "Test User");
 

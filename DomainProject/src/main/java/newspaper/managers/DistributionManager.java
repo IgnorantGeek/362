@@ -3,19 +3,19 @@ package newspaper.managers;
 import newspaper.Global;
 import newspaper.models.Distributor;
 import java.io.File;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class DistributionManager
 {
     private int customerCount;
+    private HashMap<String, Distributor> registry;
     private String databasePath;
-    private ArrayList<Distributor> distributors;
 
     public DistributionManager()
     {
         this.databasePath = Global.DISTRIBUTOR_DB_PATH;
-        this.distributors = new ArrayList<Distributor>();
+        this.registry = new HashMap<String, Distributor>();
         this.init();
     }
 
@@ -34,7 +34,23 @@ public class DistributionManager
             if (!cust.mkdir()) return -2;
             customerCount = 0;
         }
-        else customerCount = cust.list().length;
+        else 
+        {
+            customerCount = cust.list().length;
+            for (String dFileName : cust.list())
+            {
+                Distributor build = buildFromFile(dFileName);
+                String distID = "";
+
+                for (int i = 0; i < dFileName.length(); i++)
+                {
+                    if (dFileName.charAt(i) == '.') break;
+                    else distID += dFileName.charAt(i);
+                }
+
+                registry.put(distID, build);
+            }
+        }
 
         return 0;
     }
@@ -45,6 +61,12 @@ public class DistributionManager
 
         if (dist.write() < 0) return -1;
         return 0;
+    }
+
+    public Distributor buildFromFile(String filename)
+    {
+        // TODO
+        return null;
     }
 
     public int removeDistributor(int distId)
