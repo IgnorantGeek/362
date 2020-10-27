@@ -14,7 +14,7 @@ public class DistributionManager
 
     public DistributionManager()
     {
-        this.databasePath = Global.DB_PATH;
+        this.databasePath = Global.DISTRIBUTOR_DB_PATH;
         this.distributors = new ArrayList<Distributor>();
         this.init();
     }
@@ -27,7 +27,7 @@ public class DistributionManager
     public int init()
     {
         // Create the customers database folder if it does not exist
-        File cust = new File(databasePath + "/Customers");
+        File cust = new File(databasePath);
 
         if (!cust.exists())
         {
@@ -49,7 +49,7 @@ public class DistributionManager
 
     public int removeDistributor(int distId)
     {
-        File custDir = new File(this.databasePath + "/Customers");
+        File custDir = new File(this.databasePath);
 
         if (custDir.exists())
         {
@@ -67,7 +67,7 @@ public class DistributionManager
                 if (distId == Integer.parseInt(name))
                 {
                     try {
-                        File distFile = new File(this.databasePath + "/Customers/" + custDir.list()[j]);
+                        File distFile = new File(this.databasePath + custDir.list()[j]);
 
                         Scanner scan = new Scanner(distFile);
 

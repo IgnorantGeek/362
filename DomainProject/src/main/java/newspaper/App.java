@@ -24,14 +24,20 @@ public class App
 		// Intialize adManager 
 
 		System.out.println("Welcome to the FakeNews! NewsPaper Management System.");
+		Scanner in = new Scanner(System.in);
 
 		// Login
 		while (true)
 		{
-			System.out.println("\nPlease enter your login info.");
+			System.out.println("\nPlease enter your login info. Or type 'quit' to exit the system.");
 			System.out.print("User ID: ");
-			Scanner loginScanner = new Scanner(System.in);
-			String useridString = loginScanner.nextLine();
+			String useridString = in.nextLine();
+			if (useridString.toLowerCase().compareTo("quit") == 0)
+			{
+				in.close();
+				System.out.println("Goodbye.");
+				return;
+			}
 			int user_id;
 			try
 				{
@@ -43,14 +49,14 @@ public class App
 					continue;
 				}
 			System.out.print("Password: ");
-			String password = loginScanner.nextLine();
+			String password = in.nextLine();
 			
-			if (eman.validateLogin(user_id, password))
+			Employee loggedIn = eman.validateLogin(user_id, password);
+			if (loggedIn != null)
 			{
-				loginScanner.close();
-				System.out.println("Welcome to the FakeNews Newspaper Management System. What would you like to do?");
-				System.out.println("1: Edit/Publish a Newspaper\n2: Edit/Create an Article\n3: Enter a New Ad Sale\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\nq: Quit");
-				Scanner in = new Scanner(System.in);
+				System.out.println("Welcome, " + loggedIn.FullName() + ". What would you like to do?");
+				System.out.println("1: Edit/Publish a Newspaper\n2: Edit/Create an Article\n3: Enter a New Ad Sale" +
+				"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\nq: Quit");
 				while (true)
 				{
 					String input = in.nextLine();
@@ -412,7 +418,15 @@ public class App
 			else
 			{
 				System.out.println("Login Failed! Invalid credentials.");
-				loginScanner.close();
+				System.out.println("Would you like to try to login again? (y/n)");
+				String goAgain = in.nextLine();
+
+				if (goAgain.compareTo("n") == 0)
+				{
+					in.close();
+					System.out.println("Goodbye.");
+					return;
+				}
 			}
 		}
 	}

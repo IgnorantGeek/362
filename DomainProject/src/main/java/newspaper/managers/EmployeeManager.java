@@ -23,6 +23,7 @@ public class EmployeeManager
         registry = new HashMap<Integer, Employee>();
         idCounter = 0;
         employeeCount = 0;
+        this.init();
     }
 
     public EmployeeManager(int start)
@@ -30,6 +31,7 @@ public class EmployeeManager
         this.idCounter = start;
         employeeCount = 0;
         registry = new HashMap<Integer, Employee>();
+        this.init();
     }
 
     // Methods
@@ -37,12 +39,13 @@ public class EmployeeManager
     /**
      * Adds an employee to the system
      * @param employeeName Name of the new employee
+     * @param password Password for the new employee
      * @param supervisorId ID of the employee this user will report to
      * @return True on a successful add, false otherwise
      */
-    public boolean addEmployee(String employeeName, int supervisorId)
+    public boolean addEmployee(String employeeName, String password, int supervisorId)
     {
-        Employee in = new Employee(idCounter++, supervisorId, employeeName);
+        Employee in = new Employee(idCounter++, password, supervisorId, employeeName);
         employeeCount++;
 
         registry.put(in.Id(), in);
@@ -89,9 +92,17 @@ public class EmployeeManager
 
         for (String employeeFileName : rootDir.list())
         {
+            System.out.println(employeeFileName);
             Employee employee = buildFromFile(employeeFileName);
 
-            if (employee != null) this.registry.put(employee.Id(), employee);
+            if (employee != null) 
+            {
+                registry.put(employee.Id(), employee);
+                employeeCount++;
+            }
+
+            // Prevents us from overwriting employee files that failed to add
+            idCounter++;
         }
 
         return true;
@@ -114,17 +125,26 @@ public class EmployeeManager
 
             String name = fileScanner.nextLine();
             int supIdString = Integer.parseInt(fileScanner.nextLine());
+            String password = fileScanner.nextLine();
 
-            String[] fname = Filename.split(".");
-            int id = Integer.parseInt(fname[0]);
+            String fname = "";
+            for (int i = 0; i < Filename.length(); i++)
+            {
+                if (Filename.charAt(i) == '.') break;
+                else fname += Filename.charAt(i);
+            }
+            int id = Integer.parseInt(fname);
 
-            out = new Employee(id, supIdString, name);
+            out = new Employee(id, password, supIdString, name);
 
             fileScanner.close();
+
+            System.out.println("Employee added: " + id);
         }
         catch (Exception e)
         {
             System.out.println("ERROR: Failed to add employee file: " + Filename);
+            System.out.println(e.getMessage());
             return null;
         }
 
@@ -140,12 +160,20 @@ public class EmployeeManager
         return employeeCount;
     }
 
-    public boolean validateLogin(int user_id, String password)
+    public int counter()
     {
-        if (registry == null) return false;
-        if (!registry.containsKey(user_id)) return false;
-        if (registry.get(user_id).Password().compareTo(password) != 0) return false;
+        return idCounter;
+    }
 
-        return true;
+    public Employee validateLogin(int user_id, String password)
+    {
+        if (registry == null) return null;
+        else if (!registry.containsKey(user_id)) return null;
+        else
+        {
+            Employee login = registry.get(user_id);
+            if (login.Password().compareTo(password) == 0) return login;
+            else return null;
+        }
     }
 }

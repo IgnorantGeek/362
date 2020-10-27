@@ -21,9 +21,10 @@ public class Employee implements Writeable
         this.FullName = FullName;
     }
 
-    public Employee(int Id, int supervisorId, String FullName)
+    public Employee(int Id, String password, int supervisorId, String FullName)
     {
         this.Id = Id;
+        this.Password = password;
         this.supervisorId = supervisorId;
         this.FullName = FullName;
     }
