@@ -172,6 +172,29 @@ public class Feedback
 		return true;
 	}
 	
+	public void displayFeedback()
+	{
+		float averageRating = 0;
+		String[] keys = (String[]) emailToRating.keySet().toArray();
+		for(int i = 0; i<keys.length;i++)
+		{
+			averageRating+=emailToRating.get(keys[i]);
+		}
+		if(averageRating!=0)
+		{
+			averageRating = (averageRating/keys.length);
+		}
+		System.out.println(String.format("The average rating for us is %0.2f.",averageRating));
+		System.out.println("");
+		System.out.println("Reviews:");
+		for(int i = 0; i<keys.length; i++)
+		{
+			System.out.println(keys[i]);
+			System.out.println(emailToMessage.get(keys[i]));
+			System.out.println("");
+		}
+	}
+	
 	private boolean init()
 	{
 		File f = new File("../Database/FeedbackInit.txt");
