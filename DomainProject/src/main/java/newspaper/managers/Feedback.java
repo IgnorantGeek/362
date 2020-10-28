@@ -22,7 +22,7 @@ public class Feedback
 		init();
 	}
 	
-	public boolean getFeedback(int clearance)
+	public boolean removeFeedback(int clearance)
 	{
 		if (clearance > 4)
 		{
