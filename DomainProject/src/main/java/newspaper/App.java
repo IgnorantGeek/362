@@ -19,6 +19,8 @@ public class App
 		AdManager adman = new AdManager();
 		SubscriptionManager sman = new SubscriptionManager();
 		DistributionManager dman = new DistributionManager();
+		DMEditor messageToEditor = new DMEditor();
+		Feedback feedback = new Feedback();
 		EmployeeManager eman = new EmployeeManager(10); // Reserve ids 0-9 for testing
 
 		// Intialize adManager 
@@ -55,8 +57,8 @@ public class App
 			if (loggedIn != null)
 			{
 				System.out.println("Welcome, " + loggedIn.FullName() + ". What would you like to do?");
-				System.out.println("1: Edit/Publish a Newspaper\n2: Edit/Create an Article\n3: Enter a New Ad Sale" +
-				"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\nq: Quit");
+				System.out.println("1: Edit/Publish/View a Newspaper\n2: Edit/Create/View an Article\n3: Enter a New Ad Sale" +
+				"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\nq: Quit");
 				while (true)
 				{
 					String input = in.nextLine();
@@ -73,21 +75,19 @@ public class App
 						System.out.println("Enter your clearance level.");
 						int clearance = 0;
 						String next = in.nextLine();
-						try
-						{
-							clearance = Integer.parseInt(next);
-						}
-						catch(Exception NumberFormatException)
-						{
-							System.out.println(next+" is not a valid number. Cancelling current attempt.");
-							break;
-						}
 						switch(input)
 						{
 						case "q":
 							break;
 						case "1":
-							nman.search().readPaper(clearance);
+							Newspaper paper = nman.search();
+							paper.readPaper(clearance);
+							System.out.println("Would you like to tell the editor anything about this paper? (y/n)");
+							next = in.nextLine();
+							if(next.compareToIgnoreCase("y")==0)
+							{
+								messageToEditor.addPaperComment(paper);
+							}
 							break;
 						case "2":
 							nman.addPaper(clearance);
@@ -113,17 +113,8 @@ public class App
 						input = in.nextLine();
 						if (input.compareTo("q") == 0) break;
 						System.out.println("Enter your clearance level.");
-						clearance = 0;
+						clearance = 10;
 						next = in.nextLine();
-						try
-						{
-							clearance = Integer.parseInt(next);
-						}
-						catch(Exception NumberFormatException)
-						{
-							System.out.println(next+" is not a valid number. Cancelling current attempt.");
-							continue;
-						}
 						switch(input)
 						{
 						case "q":
@@ -146,6 +137,12 @@ public class App
 								continue;
 							}
 							arr[num].readArticle(clearance);
+							System.out.println("Would you like to tell the editor anything about this article? (y/n)");
+							next = in.nextLine();
+							if(next.compareToIgnoreCase("y")==0)
+							{
+								messageToEditor.addArticleComment(arr[num]);
+							}
 							break;
 						case "2":
 							aman.addArticle();
@@ -401,6 +398,29 @@ public class App
 						}
 
 						break;
+					case "6":
+					{
+						System.out.println("Welcome to our reviews section. Would you like to see all of our reviews (enter 1), enter a new review (enter 2), or");
+						System.out.println("delete a review (enter 3).");
+						input = in.nextLine();
+						clearance = 10;
+						switch(input)
+						{
+							case "1":
+							{
+								feedback.displayFeedback();
+							}
+							case "2":
+							{
+								feedback.giveFeedback();
+							}
+							case "3":
+							{
+								feedback.removeFeedback(clearance);
+							}
+						}
+						break;
+					}
 					case "q":
 					case "quit":
 					case "Quit":
