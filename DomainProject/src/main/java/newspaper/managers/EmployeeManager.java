@@ -92,7 +92,6 @@ public class EmployeeManager
 
         for (String employeeFileName : rootDir.list())
         {
-            System.out.println(employeeFileName);
             Employee employee = buildFromFile(employeeFileName);
 
             if (employee != null) 
@@ -138,8 +137,6 @@ public class EmployeeManager
             out = new Employee(id, password, supIdString, name);
 
             fileScanner.close();
-
-            System.out.println("Employee added: " + id);
         }
         catch (Exception e)
         {
