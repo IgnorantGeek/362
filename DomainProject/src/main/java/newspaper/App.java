@@ -25,14 +25,14 @@ public class App
 
 		// Flush screen and begin outer loop
 		Global.flushConsole();
-		System.out.println("Welcome to the FakeNews! NewsPaper Management System.");
+		System.out.println("Welcome to the FakeNews! NewsPaper Management System.\n");
 		Scanner in = new Scanner(System.in);
 
 		outer:
 		// Login
 		while (true)
 		{
-			System.out.println("\nPlease enter your login info. Or type 'quit' to exit the system.");
+			System.out.println("Please enter your login info. Or type 'quit' to exit the system.");
 			System.out.print("User ID: ");
 			String useridString = in.nextLine();
 			if (useridString.toLowerCase().compareTo("quit") == 0)
@@ -83,6 +83,7 @@ public class App
 							break;
 						case "1":
 							Newspaper paper = nman.search();
+							if (paper == null) break;
 							paper.readPaper(clearance);
 							System.out.println("Would you like to tell the editor anything about this paper? (y/n)");
 							next = in.nextLine();
@@ -433,7 +434,8 @@ public class App
 						continue outer;
 					}
 
-					System.out.println("\nNow what would you like to do?");
+					Global.flushConsole();
+					System.out.println("Now what would you like to do?");
 					System.out.println("1: Edit/Publish a Newspaper\n2: Edit/Create an Article\n3: Enter a New Ad Sale\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\nq: Quit");
 				}
 			}
