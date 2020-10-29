@@ -23,11 +23,12 @@ public class App
 		Feedback feedback = new Feedback();
 		EmployeeManager eman = new EmployeeManager(10); // Reserve ids 0-9 for testing
 
-		// Intialize adManager 
-
+		// Flush screen and begin outer loop
+		Global.flushConsole();
 		System.out.println("Welcome to the FakeNews! NewsPaper Management System.");
 		Scanner in = new Scanner(System.in);
 
+		outer:
 		// Login
 		while (true)
 		{
@@ -56,9 +57,10 @@ public class App
 			Employee loggedIn = eman.validateLogin(user_id, password);
 			if (loggedIn != null)
 			{
+				Global.flushConsole();
 				System.out.println("Welcome, " + loggedIn.FullName() + ". What would you like to do?");
 				System.out.println("1: Edit/Publish/View a Newspaper\n2: Edit/Create/View an Article\n3: Enter a New Ad Sale" +
-				"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\nq: Quit");
+				"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\nq: Logout");
 				while (true)
 				{
 					String input = in.nextLine();
@@ -426,9 +428,9 @@ public class App
 					case "Quit":
 					case "exit":
 					case "Exit":
-						System.out.println("Goodbye.");
-						in.close();
-						return;
+						Global.flushConsole();
+						loggedIn = null;
+						continue outer;
 					}
 
 					System.out.println("\nNow what would you like to do?");
@@ -438,15 +440,6 @@ public class App
 			else
 			{
 				System.out.println("Login Failed! Invalid credentials.");
-				System.out.println("Would you like to try to login again? (y/n)");
-				String goAgain = in.nextLine();
-
-				if (goAgain.compareTo("n") == 0)
-				{
-					in.close();
-					System.out.println("Goodbye.");
-					return;
-				}
 			}
 		}
 	}
