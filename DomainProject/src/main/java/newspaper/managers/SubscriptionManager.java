@@ -52,8 +52,8 @@ public class SubscriptionManager {
 				}
 				sub.addPaymentInformation(info);
 				Subscriptions.put(email, sub);
-				s.close();
 			}
+			s.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("Subscribtion file is inaccessible.");
 		} 		
