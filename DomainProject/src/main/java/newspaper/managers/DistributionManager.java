@@ -65,8 +65,37 @@ public class DistributionManager
 
     public Distributor buildFromFile(String filename)
     {
-        // TODO
-        return null;
+        File distFile = new File(databasePath + filename);
+        Distributor out = null;
+        try 
+        {
+            Scanner scan = new Scanner(distFile);
+
+            String name = scan.nextLine();
+            String type = scan.nextLine();
+
+            if (type.compareTo("type=distributor") != 0) 
+            {
+                scan.close();
+                return null;
+            }
+
+            int paperCount = Integer.parseInt(scan.nextLine());
+
+            String id = "";
+            for (int i = 0; i < filename.length(); i++)
+            {
+                if (filename.charAt(i) == '.') break;
+                id += filename.charAt(i);
+            }
+
+            out = new Distributor(Integer.parseInt(id), paperCount, name);
+
+            scan.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return out;
     }
 
     public int removeDistributor(int distId)
