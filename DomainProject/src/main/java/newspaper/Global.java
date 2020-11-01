@@ -35,4 +35,10 @@ public class Global
         
         return buf.toString();
     }
+
+    public static void flushConsole()
+    {
+        System.out.print("\033[H\033[2J");  
+        System.out.flush();
+    }
 }

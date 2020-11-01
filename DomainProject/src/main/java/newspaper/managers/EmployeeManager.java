@@ -59,19 +59,51 @@ public class EmployeeManager
      * @param ID - Id of the employee to drop
      * @return 0 on success, Less than zero for error code
      */
-    public int dropEmployee(int ID)
+    public int dropEmployee(Employee loggedIn, int ID)
     {
-        // Search hashmap for entry, if it exists remove it and drop the database reference
+        // Search hashmap for entry
         Employee find = registry.get(ID);
         if (find == null) return -1;
 
+        // Check if logged in user is super user (owner)
+        if (loggedIn.Id() != -1)
+        {
+            // Check if logged in user is allowed to drop this employee
+            if (!checkPrivilege(loggedIn, find))
+            {
+                // not authorized to remove this employee
+                return -2;
+            }
+        }
+
         // Remove from registry and delete from db
         registry.remove(find.Id());
-        if (find.delete() < 0) return -2;
+        if (find.delete() < 0) return -3;
 
         // Successful return
         employeeCount--;
         return 0;
+    }
+
+    /**
+     * Checks whether some employee is authorized to make changes to some other employee
+     * @param supervisor the supervisor to check
+     * @param worker the worker whos supervisor we are checking
+     * @return true if Employee has supervisor privileges, false otherwise
+     */
+    public boolean checkPrivilege(Employee supervisor, Employee worker)
+    {
+        if (supervisor.Id() == worker.supervisorId()) return true;
+        else
+        {
+            Employee scan = registry.get(worker.supervisorId());
+            while (scan != null)
+            {
+                if (supervisor.Id() == scan.supervisorId()) return true;
+                scan = registry.get(scan.supervisorId());
+            }
+        }
+        return false;
     }
 
     /**

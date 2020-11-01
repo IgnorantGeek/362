@@ -34,7 +34,8 @@ public class SubscriptionManager {
 		File Archive = new File(directory);
 		try {
 			Scanner s = new Scanner(Archive);
-			while(s.hasNextLine()) {
+			while(s.hasNextLine())
+			{
 				String[] subInfo = s.nextLine().split(",");
 				String firstName = subInfo[0].trim();
 				String lastName = subInfo[1].trim();
