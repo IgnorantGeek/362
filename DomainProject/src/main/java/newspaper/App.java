@@ -60,7 +60,7 @@ public class App
 				Global.flushConsole();
 				System.out.println("Welcome, " + loggedIn.FullName() + ". What would you like to do?");
 				System.out.println("1: Edit/Publish/View a Newspaper\n2: Edit/Create/View an Article\n3: Enter a New Ad Sale" +
-				"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\nq: Logout");
+				"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\n7: enter messages to the editor\nq: Logout");
 				while (true)
 				{
 					String input = in.nextLine();
@@ -412,14 +412,37 @@ public class App
 							case "1":
 							{
 								feedback.displayFeedback();
+								break;
 							}
 							case "2":
 							{
 								feedback.giveFeedback();
+								break;
 							}
 							case "3":
 							{
 								feedback.removeFeedback(clearance);
+								break;
+							}
+						}
+						break;
+					}
+					case "7":
+					{
+						System.out.println("Enter 1 to view all messages to the editor. Enter 2 to delete messages to the editor.");
+						input = in.nextLine();
+						clearance = 10;
+						switch(input)
+						{
+							case "1":
+							{
+								messageToEditor.readAllComments(clearance);
+								break;
+							}
+							case "2":
+							{
+								messageToEditor.removeComments(clearance);
+								break;
 							}
 						}
 						break;
@@ -436,7 +459,8 @@ public class App
 
 					Global.flushConsole();
 					System.out.println("Now what would you like to do?");
-					System.out.println("1: Edit/Publish a Newspaper\n2: Edit/Create an Article\n3: Enter a New Ad Sale\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\nq: Quit");
+					System.out.println("1: Edit/Publish/View a Newspaper\n2: Edit/Create/View an Article\n3: Enter a New Ad Sale\n"
+							+ "4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\n7: enter messages to the editor\nq: Logout");
 				}
 			}
 			else
