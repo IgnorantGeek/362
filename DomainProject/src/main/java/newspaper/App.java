@@ -62,7 +62,7 @@ public class App
 				Global.flushConsole();
 				System.out.println("Welcome, " + loggedIn.FullName() + ". What would you like to do?");
 				System.out.println("1: Edit/Publish/View a Newspaper\n2: Edit/Create/View an Article\n3: Enter a New Ad Sale" +
-				"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\nq: Logout");
+				"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\n7: enter messages to the editor\nq: Logout");
 				while (true)
 				{
 					String input = in.nextLine();
@@ -414,7 +414,6 @@ public class App
 						switch(input)
 						{
 							case "1":
-							
 								feedback.displayFeedback();
 								break;
 							case "2":

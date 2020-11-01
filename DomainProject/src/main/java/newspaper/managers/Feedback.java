@@ -10,11 +10,26 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Random;
 
+/**
+ * Class that represents the feedback for the company.
+ * @author Alexander Irlbeck
+ * Works as of 11/1/20
+ */
 public class Feedback 
 {
+	/**
+	 * The email to rating.
+	 */
 	private HashMap<String, Integer> emailToRating;
+	/**
+	 * The email to the message
+	 */
 	private HashMap<String, String> emailToMessage;
 	
+	/**
+	 * Constructor that initializes everything.
+	 * Works as of 11/1/20
+	 */
 	public Feedback()
 	{
 		emailToRating = new HashMap<String, Integer>();
@@ -22,6 +37,12 @@ public class Feedback
 		init();
 	}
 	
+	/**
+	 * If the clearance is high enough, allows the user to delete an inappropriately worded feedback item.
+	 * @param clearance the user's clearance
+	 * @return whether or not the function succeeded.
+	 * Works as of 11/1/20
+	 */
 	public boolean removeFeedback(int clearance)
 	{
 		if (clearance > 4)
@@ -36,7 +57,11 @@ public class Feedback
 			boolean going = true;
 			while(going)
 			{
-				String[] keys = (String[]) emailToRating.keySet().toArray();
+				String[] keys = new String[emailToRating.size()];
+				for (int i=0; i<emailToRating.size();i++)
+				{
+					keys[i] = (String) emailToRating.keySet().toArray()[i];
+				}
 				System.out.println("Please pick the nubmer next to the review from the following:");
 				for (int i=0; i<emailToRating.keySet().size(); i++)
 				{
@@ -100,6 +125,11 @@ public class Feedback
 		}
 	}
 	
+	/**
+	 * Allows the user to input feedback
+	 * @return whether or not the function was successful.
+	 * Works as of 11/1/20
+	 */
 	public boolean giveFeedback()
 	{
 		@SuppressWarnings("resource")
@@ -159,7 +189,7 @@ public class Feedback
 		BufferedWriter write;
 		String builder = email + "\n" + rating + "\n" + message + "\n";
 		try {
-			write = new BufferedWriter (new FileWriter("../Database/NewspaperPages/NewspaperInit.txt",true));
+			write = new BufferedWriter (new FileWriter("../Database/FeedbackInit.txt",true));
 			write.append(builder);
 			write.close();
 		} catch (IOException e) {
@@ -172,10 +202,24 @@ public class Feedback
 		return true;
 	}
 	
-	public void displayFeedback()
+	/**
+	 * Displays all the feedback and average of ratings.
+	 * @return whether or not the function succeeded.
+	 * Works as of 11/1/20
+	 */
+	public boolean displayFeedback()
 	{
 		float averageRating = 0;
-		String[] keys = (String[]) emailToRating.keySet().toArray();
+		if(emailToRating.size()==0) 
+		{
+			System.out.println("No reviews yet. please come back later."); 
+			return false;
+		}
+		String[] keys = new String[emailToRating.size()];
+		for (int i=0; i<emailToRating.size();i++)
+		{
+			keys[i] = (String) emailToRating.keySet().toArray()[i];
+		}
 		for(int i = 0; i<keys.length;i++)
 		{
 			averageRating+=emailToRating.get(keys[i]);
@@ -184,7 +228,7 @@ public class Feedback
 		{
 			averageRating = (averageRating/keys.length);
 		}
-		System.out.println(String.format("The average rating for us is %0.2f.",averageRating));
+		System.out.println(String.format("The average rating for us is %.2f",averageRating));
 		System.out.println("");
 		System.out.println("Reviews:");
 		for(int i = 0; i<keys.length; i++)
@@ -193,8 +237,14 @@ public class Feedback
 			System.out.println(emailToMessage.get(keys[i]));
 			System.out.println("");
 		}
+		return true;
 	}
 	
+	/**
+	 * Initializes the object from the Feedback init file.
+	 * @return whether or not the function succeeded
+	 * Works as of 11/1/20
+	 */
 	private boolean init()
 	{
 		File f = new File("../Database/FeedbackInit.txt");

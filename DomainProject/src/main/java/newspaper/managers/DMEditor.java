@@ -11,6 +11,11 @@ import java.util.Scanner;
 import java.util.HashMap;
 import newspaper.models.Newspaper;
 
+/**
+ * A class that represents messages to the editor.
+ * @author Alexander Irlbeck
+ * Works as of 11/1/20
+ */
 public class DMEditor {
 	/**
 	 * The key is the name of the article, with the data portion being the message.
@@ -20,7 +25,11 @@ public class DMEditor {
 	 * The key is the "volume_issue" of the newspaper, with the data portion being the message.
 	 */
 	private HashMap<String,String> newspaperMessages;
-
+	
+	/**
+	 * Default constructor
+	 * Works as of 11/1/20
+	 */
 	public DMEditor()
 	{
 		articleMessages = new HashMap<String,String>();
@@ -28,6 +37,12 @@ public class DMEditor {
 		init();
 	}
 
+	/**
+	 * Allows the user to send a message to the editor.
+	 * @param article the article to get commented on
+	 * @return whether or not it succeeded
+	 * Works as of 11/1/20
+	 */
 	public boolean addArticleComment(Article article)
 	{
 		System.out.println("Please enter your message here. Enter 'q' without anthing else on the line to quit.");
@@ -56,7 +71,7 @@ public class DMEditor {
 				+ message;
 		BufferedWriter write;
 		try {
-			write = new BufferedWriter (new FileWriter("../Database/MessagesInit.txt"));
+			write = new BufferedWriter (new FileWriter("../Database/MessagesInit.txt",true));
 			write.append(builder);
 			write.close();
 		} catch (IOException e) {
@@ -66,7 +81,12 @@ public class DMEditor {
 		System.out.println("Thank You!");
 		return true;
 	}
-
+	/**
+	 * Adds a paper message to editor.
+	 * @param paper to add to
+	 * @return whether or not this succeeded
+	 * Works as of 11/1/20
+	 */
 	public boolean addPaperComment(Newspaper paper)
 	{
 		System.out.println("Please enter your message here. Enter 'q' without anthing else on the line to quit.");
@@ -96,7 +116,7 @@ public class DMEditor {
 				+ message;
 		BufferedWriter write;
 		try {
-			write = new BufferedWriter (new FileWriter("../Database/MessagesInit.txt"));
+			write = new BufferedWriter (new FileWriter("../Database/MessagesInit.txt",true));
 			write.append(builder);
 			write.close();
 		} catch (IOException e) {
@@ -106,18 +126,32 @@ public class DMEditor {
 		System.out.println("Thank You!");
 		return true;
 	}
-
+	
+	/**
+	 * Reads out all messages to the editor.
+	 * @param clearance the clearance of the user
+	 * @return whether or not the operation succeeded
+	 * Works as of 11/1/20
+	 */
 	public boolean readAllComments(int clearance)
 	{
 		System.out.println("Here are all comments on Articles with its name.");
-		String[] articleKeys = (String[]) articleMessages.keySet().toArray();
+		String[] articleKeys = new String[articleMessages.size()];
+		for (int i=0; i<articleMessages.size();i++)
+		{
+			articleKeys[i] = (String) articleMessages.keySet().toArray()[i];
+		}
 		for(int i = 0; i<articleKeys.length; i++)
 		{
 			System.out.println(articleKeys[i]);
 			System.out.println(articleMessages.get(articleKeys[i]));
 		}
 		System.out.println("Here are all comments on Newspapers with its volume and issue.");
-		String[] newspaperKeys = (String[]) newspaperMessages.keySet().toArray();
+		String[] newspaperKeys = new String[newspaperMessages.size()];
+		for (int i=0; i<newspaperMessages.size();i++)
+		{
+			newspaperKeys[i] = (String) newspaperMessages.keySet().toArray()[i];
+		}
 		for(int i = 0; i<newspaperKeys.length; i++)
 		{
 			System.out.println(newspaperKeys[i]);
@@ -126,6 +160,12 @@ public class DMEditor {
 		return true;
 	}
 
+	/**
+	 * Removes a message to the editor, or multiple then saves it.
+	 * @param clearance the clearance level of the user
+	 * @return whether or not the operation succeeded
+	 * Works as of 11/1/20
+	 */
 	public boolean removeComments(int clearance)
 	{
 		@SuppressWarnings("resource")
@@ -138,7 +178,11 @@ public class DMEditor {
 			if(choice.compareToIgnoreCase("a")==0)
 			{
 				System.out.println("Choose the number corresponding with the article name.");
-				String[] articleKeys = (String[]) articleMessages.keySet().toArray();
+				String[] articleKeys = new String[articleMessages.size()];
+				for (int i=0; i<articleMessages.size();i++)
+				{
+					articleKeys[i] = (String) articleMessages.keySet().toArray()[i];
+				}
 				for(int i = 0; i<articleKeys.length; i++)
 				{
 					System.out.println(i+" "+articleKeys[i]);
@@ -165,7 +209,11 @@ public class DMEditor {
 			else if(choice.compareToIgnoreCase("n")==0)
 			{
 				System.out.println("Choose the number corresponding with the newspapers volume and issue.");
-				String[] newspaperKeys = (String[]) newspaperMessages.keySet().toArray();
+				String[] newspaperKeys = new String[newspaperMessages.size()];
+				for (int i=0; i<newspaperMessages.size();i++)
+				{
+					newspaperKeys[i] = (String) newspaperMessages.keySet().toArray()[i];
+				}
 				for(int i = 0; i<newspaperKeys.length; i++)
 				{
 					System.out.println(i+" "+newspaperKeys[i]);
@@ -186,7 +234,8 @@ public class DMEditor {
 					System.out.println(spot+" is out of range of available choices. Restarting sequence.");
 					continue;
 				}
-				articleMessages.remove(newspaperKeys[spot]);
+				newspaperMessages.remove(newspaperKeys[spot]);
+				save();
 			}
 			else if(choice.compareToIgnoreCase("q")==0)
 			{
@@ -197,15 +246,26 @@ public class DMEditor {
 				System.out.println(choice+" is not recognized.");
 			}
 		}
-		save();
 		return true;
 	}
 	
+	/**
+	 * Saves the work so far to the init file.
+	 * Works as of 11/1/20
+	 */
 	private void save()
 	{
 		String builder="";
-		String[] articleKeys = (String[]) articleMessages.keySet().toArray();
-		String[] newspaperKeys = (String[]) newspaperMessages.keySet().toArray();
+		String[] articleKeys = new String[articleMessages.size()];
+		for (int i=0; i<articleMessages.size();i++)
+		{
+			articleKeys[i] = (String) articleMessages.keySet().toArray()[i];
+		}
+		String[] newspaperKeys = new String[newspaperMessages.size()];
+		for (int i=0; i<newspaperMessages.size();i++)
+		{
+			newspaperKeys[i] = (String) newspaperMessages.keySet().toArray()[i];
+		}
 		for(int i=0;i<articleKeys.length;i++)
 		{
 			builder = builder + "Article\n"
@@ -228,6 +288,11 @@ public class DMEditor {
 		}
 	}
 
+	/**
+	 * Initializes the messages to the editor from its file.
+	 * @return whether or not the operation succeeded
+	 * Works as of 11/1/20
+	 */
 	private boolean init()
 	{
 		File f = new File("../Database/MessagesInit.txt");
