@@ -57,7 +57,7 @@ public class SubscriptionManager {
 			s.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("Subscribtion file is inaccessible.");
-		} 		
+		}	
 	}
 	/**
 	 * Adds a subscription to file and memory

@@ -55,6 +55,8 @@ public class App
 			String password = in.nextLine();
 			
 			Employee loggedIn = eman.validateLogin(user_id, password);
+
+			// Main activity
 			if (loggedIn != null)
 			{
 				Global.flushConsole();
