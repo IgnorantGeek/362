@@ -52,6 +52,8 @@ public class App
 			String password = in.nextLine();
 			
 			Employee loggedIn = eman.validateLogin(user_id, password);
+
+			// Main activity
 			if (loggedIn != null)
 			{
 				System.out.println("Welcome, " + loggedIn.FullName() + ". What would you like to do?");
@@ -418,15 +420,6 @@ public class App
 			else
 			{
 				System.out.println("Login Failed! Invalid credentials.");
-				System.out.println("Would you like to try to login again? (y/n)");
-				String goAgain = in.nextLine();
-
-				if (goAgain.compareTo("n") == 0)
-				{
-					in.close();
-					System.out.println("Goodbye.");
-					return;
-				}
 			}
 		}
 	}
