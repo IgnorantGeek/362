@@ -55,7 +55,7 @@ public class Employee implements Writeable
         // Write the employe to the db file
         String fileName = this.Id() + ".txt";
         String build = "";
-        build += FullName + "\n" + this.supervisorId();
+        build += FullName + "\n" + this.supervisorId() + Password;
 
         try
         {

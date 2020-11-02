@@ -106,6 +106,16 @@ public class EmployeeManager
     }
 
     /**
+     * Function to check for the presence of some employee ID in the registry
+     * @param userID the ID of the user to check for
+     * @return true if the user exists, false otherwise
+     */
+    public boolean checkID(int userID)
+    {
+        return registry.containsKey(userID);
+    }
+
+    /**
      * Initializes the Employees Database and builds any present
      * Employee files into memory
      * @return true on success, false otherwise
@@ -191,13 +201,13 @@ public class EmployeeManager
         return idCounter;
     }
 
-    public Employee validateLogin(int user_id, String password)
+    public Employee validateLogin(int userID, String password)
     {
         if (registry == null) return null;
-        else if (!registry.containsKey(user_id)) return null;
+        else if (!registry.containsKey(userID)) return null;
         else
         {
-            Employee login = registry.get(user_id);
+            Employee login = registry.get(userID);
             if (login.Password().compareTo(password) == 0) return login;
             else return null;
         }

@@ -62,7 +62,7 @@ public class App
 				Global.flushConsole();
 				System.out.println("Welcome, " + loggedIn.FullName() + ". What would you like to do?");
 				System.out.println("1: Edit/Publish/View a Newspaper\n2: Edit/Create/View an Article\n3: Enter a New Ad Sale" +
-				"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\n7: enter messages to the editor\nq: Logout");
+				"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\n7: Add/Remove/Update an Employee\nq: Logout");
 				while (true)
 				{
 					String input = in.nextLine();
@@ -447,10 +447,11 @@ public class App
 
 								if (input.compareTo("y") == 0)
 								{
+									String newPassword;
 									while (true)
 									{
 										System.out.println("Please enter the password for the new user:");
-										String newPassword = in.nextLine();
+										newPassword = in.nextLine();
 
 										System.out.println("Please re-enter your password:");
 										input = in.nextLine();
@@ -464,10 +465,48 @@ public class App
 											System.out.println("The passwords you entered did not match!\n");
 										}
 									}
+
+									// Add the employee using the logged in user as the supervisor
+									eman.addEmployee(name, password, loggedIn.Id());
 								}
 								else if (input.compareTo("n") == 0)
 								{
-									// Enter the id of the supervisor for the new employee
+									int supervisorID = -1;
+									while (true)
+									{
+										System.out.println("Please enter the ID of the employee who will be the supervisor for this employee:");
+										String idString = in.nextLine();
+
+										// Search the employee db for this employee
+										if (!eman.checkID(Integer.parseInt(idString)))
+										{
+											System.out.println("The ID that you entered is not a valid ID.\n");
+											supervisorID = Integer.parseInt(idString);
+										}
+										else break;
+									}
+
+									// Get password
+									String newPassword;
+									while (true)
+									{
+										System.out.println("Please enter the password for the new user:");
+										newPassword = in.nextLine();
+
+										System.out.println("Please re-enter your password:");
+										input = in.nextLine();
+
+										if (newPassword.compareTo(input) == 0)
+										{
+											break;
+										}
+										else
+										{
+											System.out.println("The passwords you entered did not match!\n");
+										}
+									}
+
+									eman.addEmployee(name, password, supervisorID);
 								}
 								else
 								{
@@ -483,6 +522,7 @@ public class App
 								// Remove an employee
 								break;
 							default:
+								System.out.println("The choice you entered is not a valid response. All you had to do was type in an 'a' or 'r'!");
 								break;
 						}
 
@@ -502,7 +542,7 @@ public class App
 					Global.flushConsole();
 					System.out.println("Now what would you like to do?");
 					System.out.println("1: Edit/Publish/View a Newspaper\n2: Edit/Create/View an Article\n3: Enter a New Ad Sale" +
-					"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\n7: Add/Remove an Employee\nq: Logout");
+					"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\n7: Add/Remove/Update an Employee\nq: Logout");
 				}
 			}
 			else
