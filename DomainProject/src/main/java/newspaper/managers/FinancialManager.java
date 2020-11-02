@@ -16,8 +16,13 @@ public class FinancialManager {
 		String result = "Payroll should be payed as follows:";
 		Collection<Employee> vals = employeeRegistry.values();
 		for(Employee e: vals) {
+			double val =  e.getPaycheckValue();
+			val = val*100;
+			val = Math.round(val);
+			val = val /100;
+			
 			result += "\n";
-			result += e.FullName() + ": "  + e.getPaycheckValue();
+			result += e.FullName() + ": "  + val;
 		}
 		return result;
 	}

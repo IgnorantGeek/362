@@ -22,7 +22,7 @@ public class App
 		DMEditor messageToEditor = new DMEditor();
 		Feedback feedback = new Feedback();
 		EmployeeManager eman = new EmployeeManager(10); // Reserve ids 0-9 for testing
-
+		FinancialManager fman = new FinancialManager(eman);
 		// Flush screen and begin outer loop
 		Global.flushConsole();
 		System.out.println("Welcome to the FakeNews! NewsPaper Management System.\n");
@@ -62,7 +62,7 @@ public class App
 				Global.flushConsole();
 				System.out.println("Welcome, " + loggedIn.FullName() + ". What would you like to do?");
 				System.out.println("1: Edit/Publish/View a Newspaper\n2: Edit/Create/View an Article\n3: Enter a New Ad Sale" +
-				"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\n7: enter messages to the editor\nq: Logout");
+				"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\n7: enter messages to the editor\n8: review financial records\nq: Logout");
 				while (true)
 				{
 					String input = in.nextLine();
@@ -485,8 +485,58 @@ public class App
 							default:
 								break;
 						}
-
 						break;
+						
+					case "8":
+						System.out.println("Financial reports avaliable: 1 for Payroll, 2 for monthly financial report.");
+						input = in.nextLine();
+						switch (input)
+						{
+						case "1":
+							System.out.println("Payroll so far for this month:");
+							System.out.println(fman.payRoll());
+							boolean answered = false;
+							while(!answered) {
+								System.out.println("Reset hours for monthly workers? y for yes, n for no.");
+								input = in.nextLine();
+									
+								switch (input)
+								{
+								case "y":
+								case "Y":
+								case "yes":
+								case "Yes":
+								case "YES":
+									answered = true;
+									fman.resetEmployeeHours();
+									System.out.println("Hours reset.");
+									break;
+								case "n":
+								case "N":
+								case "no":
+								case "No":
+								case "NO":
+									answered = true;
+									System.out.println("Hours not reset.");
+								default:
+									System.out.println("Not a valid input");
+								}
+							}
+							break;
+						case "2":
+							System.out.println(fman.FinancialReport());
+							System.out.println("Press enter to return to main menu");
+							input = in.nextLine();
+							break;
+						case "q":
+						case "quit":
+						case "Quit":
+						case "exit":
+						case "Exit":
+							break;
+						}
+						break;
+						
 					case "q":
 					case "quit":
 					case "Quit":
