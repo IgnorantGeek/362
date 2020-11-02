@@ -20,7 +20,7 @@ public class EmployeeManager
     // Constructors
     public EmployeeManager()
     {
-        registry = new HashMap<Integer, Employee>();
+        registry = new HashMap<>();
         idCounter = 0;
         employeeCount = 0;
         this.init();
@@ -30,7 +30,7 @@ public class EmployeeManager
     {
         this.idCounter = start;
         employeeCount = 0;
-        registry = new HashMap<Integer, Employee>();
+        registry = new HashMap<>();
         this.init();
     }
 
@@ -70,8 +70,7 @@ public class EmployeeManager
 
         registry.put(in.Id(), in);
 
-        if (in.write() < 0) return false;
-        return true;
+        return (in.write() > 0) ? true : false;
     }
 
     /**
@@ -131,7 +130,7 @@ public class EmployeeManager
      * Employee files into memory
      * @return true on success, false otherwise
      */
-    public boolean init()
+    public void init()
     {
         // Check for presence of Employee DB entry, build if not present
         File rootDir = new File(Global.EMPLOYEE_DB_PATH);
@@ -139,7 +138,7 @@ public class EmployeeManager
         if (!rootDir.exists())
         {
             rootDir.mkdir();
-            return true;
+            return;
         }
 
         for (String employeeFileName : rootDir.list())
@@ -155,19 +154,17 @@ public class EmployeeManager
             // Prevents us from overwriting employee files that failed to add
             idCounter++;
         }
-
-        return true;
     }
 
     /**
      * Builds an Employee class from a filename
-     * @param Filename - Name of file (relative path)
+     * @param fileName - Name of file (relative path)
      * @return New Employee class, null if build failed
      */
-    public Employee buildFromFile(String Filename)
+    public Employee buildFromFile(String fileName)
     {
         Employee out = null;
-        File employeeFile = new File(Global.EMPLOYEE_DB_PATH + Filename);
+        File employeeFile = new File(Global.EMPLOYEE_DB_PATH + fileName);
         Scanner fileScanner;
 
         try 
@@ -180,10 +177,10 @@ public class EmployeeManager
             int type = Integer.parseInt(fileScanner.nextLine());
 
             String fname = "";
-            for (int i = 0; i < Filename.length(); i++)
+            for (int i = 0; i < fileName.length(); i++)
             {
-                if (Filename.charAt(i) == '.') break;
-                else fname += Filename.charAt(i);
+                if (fileName.charAt(i) == '.') break;
+                else fname += fileName.charAt(i);
             }
             int id = Integer.parseInt(fname);
             
@@ -204,7 +201,7 @@ public class EmployeeManager
         }
         catch (Exception e)
         {
-            System.out.println("ERROR: Failed to add employee file: " + Filename);
+            System.out.println("ERROR: Failed to add employee file: " + fileName);
             System.out.println(e.getMessage());
             return null;
         }

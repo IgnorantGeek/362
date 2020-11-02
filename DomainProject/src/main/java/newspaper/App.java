@@ -400,11 +400,13 @@ public class App
 									System.out.println("Failed to remove Distributor with ID: " + input +" no entry found.");
 								}
 								else System.out.println("Successfully remove Distributor: " + input);
+								break;
+							default:
+								System.out.println("Seriously?");
 						}
 
 						break;
 					case "6":
-					{
 						System.out.println("Welcome to our reviews section. Would you like to see all of our reviews (enter 1), enter a new review (enter 2), or");
 						System.out.println("delete a review (enter 3).");
 						input = in.nextLine();
@@ -412,43 +414,79 @@ public class App
 						switch(input)
 						{
 							case "1":
-							{
 								feedback.displayFeedback();
 								break;
-							}
 							case "2":
-							{
 								feedback.giveFeedback();
 								break;
-							}
 							case "3":
-							{
 								feedback.removeFeedback(clearance);
 								break;
-							}
+							default:
+								System.out.println("Not a valid option. Exiting.");
 						}
 						break;
-					}
 					case "7":
-					{
-						System.out.println("Enter 1 to view all messages to the editor. Enter 2 to delete messages to the editor.");
+						// Add or remove an employee
+						System.out.println("Would you like to add or remove an employee? (a/r)");
+
 						input = in.nextLine();
-						clearance = 10;
-						switch(input)
+
+						switch (input)
 						{
-							case "1":
-							{
-								messageToEditor.readAllComments(clearance);
+							case "a":
+							case "add":
+							case "ADD":
+							case "Add":
+								// Add an employee
+								System.out.println("Please enter the full name of the new employee:");
+								String name = in.nextLine();
+								
+								System.out.println("Are you the supervisor for this employee? (y/n)");
+								input = in.nextLine();
+
+								if (input.compareTo("y") == 0)
+								{
+									while (true)
+									{
+										System.out.println("Please enter the password for the new user:");
+										String newPassword = in.nextLine();
+
+										System.out.println("Please re-enter your password:");
+										input = in.nextLine();
+
+										if (newPassword.compareTo(input) == 0)
+										{
+											break;
+										}
+										else
+										{
+											System.out.println("The passwords you entered did not match!\n");
+										}
+									}
+								}
+								else if (input.compareTo("n") == 0)
+								{
+
+								}
+								else
+								{
+									System.out.println("You had the option to enter a 'y' or an 'n'. You chose to answer '" +
+									input +"'. Why are you like this?");
+								}
+								
 								break;
-							}
-							case "2":
-							{
-								messageToEditor.removeComments(clearance);
+							case "r":
+							case "remove":
+							case "Remove":
+							case "REMOVE":
+								// Remove an employee
 								break;
-							}
+							default:
+								break;
 						}
+
 						break;
-					}
 					case "q":
 					case "quit":
 					case "Quit":
@@ -457,12 +495,14 @@ public class App
 						Global.flushConsole();
 						loggedIn = null;
 						continue outer;
+					default:
+						System.out.println("No binding for input: " + input);
 					}
 
 					Global.flushConsole();
 					System.out.println("Now what would you like to do?");
-					System.out.println("1: Edit/Publish/View a Newspaper\n2: Edit/Create/View an Article\n3: Enter a New Ad Sale\n"
-							+ "4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\n7: enter messages to the editor\nq: Logout");
+					System.out.println("1: Edit/Publish/View a Newspaper\n2: Edit/Create/View an Article\n3: Enter a New Ad Sale" +
+					"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\n7: Add/Remove an Employee\nq: Logout");
 				}
 			}
 			else
