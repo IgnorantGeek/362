@@ -2,6 +2,8 @@ package newspaper;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import newspaper.managers.SalaryEmployee;
 import newspaper.models.Employee;
 
 import java.io.File;
@@ -14,7 +16,7 @@ public class EmployeeTest
      public void CheckWrite()
      {
          // Test write a new employee to the database
-         Employee test1 = new Employee(1, "Test User");
+         Employee test1 = new SalaryEmployee(1, "Test User");
 
          test1.write();
 
@@ -29,7 +31,7 @@ public class EmployeeTest
      public void CheckDelete()
      {
         // Test write a new employee to the database
-        Employee test1 = new Employee(1, "Test User");
+        Employee test1 = new SalaryEmployee(1, "Test User");
 
         test1.write();
 

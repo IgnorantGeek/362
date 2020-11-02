@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 /**
  * EmployeeManager - Manages Employees and Login Verification
- * @author Nick Heisler
+ * @author Nick Heisler and Jonah Armstrong
  */
 public class EmployeeManager
 {
@@ -37,15 +37,35 @@ public class EmployeeManager
     // Methods
 
     /**
-     * Adds an employee to the system
+     * Adds a salaried employee to the system
      * @param employeeName Name of the new employee
      * @param password Password for the new employee
      * @param supervisorId ID of the employee this user will report to
+     * @param hourlyRate Hourly pay rate of the employee
      * @return True on a successful add, false otherwise
      */
-    public boolean addEmployee(String employeeName, String password, int supervisorId)
+    public boolean addHourlyEmployee(String employeeName, String password, int supervisorId, double hourlyRate)
     {
-        Employee in = new Employee(idCounter++, password, supervisorId, employeeName);
+        Employee in = new SalaryEmployee(idCounter++, password, supervisorId, employeeName, hourlyRate);
+        employeeCount++;
+
+        registry.put(in.Id(), in);
+
+        if (in.write() < 0) return false;
+        return true;
+    }
+    
+    /**
+     * Adds a salaried employee to the system
+     * @param employeeName Name of the new employee
+     * @param password Password for the new employee
+     * @param supervisorId ID of the employee this user will report to
+     * @param salary Yearly salary of the employee
+     * @return True on a successful add, false otherwise
+     */
+    public boolean addSalariedEmployee(String employeeName, String password, int supervisorId, double salary)
+    {
+        Employee in = new SalaryEmployee(idCounter++, password, supervisorId, employeeName,salary);
         employeeCount++;
 
         registry.put(in.Id(), in);
@@ -157,6 +177,7 @@ public class EmployeeManager
             String name = fileScanner.nextLine();
             int supIdString = Integer.parseInt(fileScanner.nextLine());
             String password = fileScanner.nextLine();
+            int type = Integer.parseInt(fileScanner.nextLine());
 
             String fname = "";
             for (int i = 0; i < Filename.length(); i++)
@@ -165,8 +186,19 @@ public class EmployeeManager
                 else fname += Filename.charAt(i);
             }
             int id = Integer.parseInt(fname);
-
-            out = new Employee(id, password, supIdString, name);
+            
+            if(type == 0) {
+            	double salary = Double.parseDouble(fileScanner.nextLine());
+            	out = new SalaryEmployee(id, password, supIdString, name, salary);
+            }
+            
+            else {
+            	double rate = Double.parseDouble(fileScanner.nextLine());
+            	double hours = Double.parseDouble(fileScanner.nextLine());
+            	out = new HourlyEmployee(id, password, supIdString, name, rate, hours);
+            	
+            }
+            
 
             fileScanner.close();
         }
@@ -204,5 +236,9 @@ public class EmployeeManager
             if (login.Password().compareTo(password) == 0) return login;
             else return null;
         }
+    }
+    
+    public HashMap<Integer, Employee> allEmployees() {
+    	return registry;
     }
 }

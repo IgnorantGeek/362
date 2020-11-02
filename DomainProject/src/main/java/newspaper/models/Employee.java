@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class Employee implements Writeable
+public abstract class Employee implements Writeable
 {
     private int Id;
     private int supervisorId;
@@ -52,7 +52,7 @@ public class Employee implements Writeable
     @Override
     public int write()
     {
-        // Write the employe to the db file
+        // Write the employee to the db file
         String fileName = this.Id() + ".txt";
         String build = "";
         build += FullName + "\n" + this.supervisorId();
@@ -84,4 +84,6 @@ public class Employee implements Writeable
 
         return 0;
     }
+    
+    public abstract double getPaycheckValue();
 }
