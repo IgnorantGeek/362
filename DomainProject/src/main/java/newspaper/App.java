@@ -467,7 +467,7 @@ public class App
 								}
 								else if (input.compareTo("n") == 0)
 								{
-
+									// Enter the id of the supervisor for the new employee
 								}
 								else
 								{
