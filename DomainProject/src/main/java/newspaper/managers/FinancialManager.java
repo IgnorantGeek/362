@@ -38,10 +38,7 @@ public class FinancialManager {
 		Collection<Employee> vals = employeeRegistry.values();
 		for(Employee e: vals) {
 			double val =  e.getPaycheckValue();
-			val = val*100;
-			val = Math.round(val);
-			val = val /100;
-			
+			val = round(val);		
 			result += "\n";
 			result += e.FullName() + ": "  + val;
 		}
