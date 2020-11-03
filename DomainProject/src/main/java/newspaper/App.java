@@ -62,7 +62,9 @@ public class App
 				Global.flushConsole();
 				System.out.println("Welcome, " + loggedIn.FullName() + ". What would you like to do?");
 				System.out.println("1: Edit/Publish/View a Newspaper\n2: Edit/Create/View an Article\n3: Enter a New Ad Sale" +
+
 				"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\n7: enter messages to the editor\n8: review financial records\nq: Logout");
+
 				while (true)
 				{
 					String input = in.nextLine();
@@ -442,6 +444,8 @@ public class App
 								System.out.println("Please enter the full name of the new employee:");
 								String name = in.nextLine();
 								
+								int supervisorID = loggedIn.Id();
+								String newPassword = "";
 								System.out.println("Are you the supervisor for this employee? (y/n)");
 								input = in.nextLine();
 
@@ -450,7 +454,7 @@ public class App
 									while (true)
 									{
 										System.out.println("Please enter the password for the new user:");
-										String newPassword = in.nextLine();
+										newPassword = in.nextLine();
 
 										System.out.println("Please re-enter your password:");
 										input = in.nextLine();
@@ -467,12 +471,67 @@ public class App
 								}
 								else if (input.compareTo("n") == 0)
 								{
+									while (true)
+									{
+										System.out.println("Please enter the ID of the employee who will be the supervisor for this employee:");
+										String idString = in.nextLine();
+
+										// Search the employee db for this employee
+										if (!eman.checkID(Integer.parseInt(idString)))
+										{
+											System.out.println("The ID that you entered is not a valid ID.\n");
+											supervisorID = Integer.parseInt(idString);
+										}
+										else break;
+									}
+
+									// Get password
+									
+									while (true)
+									{
+										System.out.println("Please enter the password for the new user:");
+										newPassword = in.nextLine();
+
+										System.out.println("Please re-enter your password:");
+										input = in.nextLine();
+
+										if (newPassword.compareTo(input) == 0)
+										{
+											break;
+										}
+										else
+										{
+											System.out.println("The passwords you entered did not match!\n");
+										}
+									}
 
 								}
 								else
 								{
 									System.out.println("You had the option to enter a 'y' or an 'n'. You chose to answer '" +
 									input +"'. Why are you like this?");
+									break;
+								}
+								System.out.println("Hourly or Salary employee?: 1 for Hourly, 2 for Salary.");
+								input = in.nextLine();
+
+								if (input.compareTo("1") == 0)
+								{
+									System.out.println("Enter hourly rate:");
+									double hourlyRate = in.nextDouble();
+									eman.addHourlyEmployee(name, newPassword, supervisorID, hourlyRate);
+								}
+								else if (input.compareTo("0") == 0)
+								{
+									System.out.println("Enter hourly rate:");
+									double salary = in.nextDouble();
+									eman.addSalariedEmployee(name, newPassword, supervisorID, salary);
+								}
+								else
+								{
+									System.out.println("You had the option to enter a 'y' or an 'n'. You chose to answer '" +
+									input +"'. Why are you like this?");
+									break;
 								}
 								
 								break;
@@ -483,6 +542,7 @@ public class App
 								// Remove an employee
 								break;
 							default:
+								System.out.println("The choice you entered is not a valid response. All you had to do was type in an 'a' or 'r'!");
 								break;
 						}
 						break;
@@ -552,7 +612,7 @@ public class App
 					Global.flushConsole();
 					System.out.println("Now what would you like to do?");
 					System.out.println("1: Edit/Publish/View a Newspaper\n2: Edit/Create/View an Article\n3: Enter a New Ad Sale" +
-					"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\n7: Add/Remove an Employee\nq: Logout");
+					"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\n7: Add/Remove/Update an Employee\nq: Logout");
 				}
 			}
 			else
