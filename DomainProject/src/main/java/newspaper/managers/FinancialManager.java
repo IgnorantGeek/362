@@ -72,6 +72,7 @@ public class FinancialManager {
 	}
 
 	private String getExpences() {
+		expenses = 0;
 		String result = "";
 		double printCost = 0;
 		double payrollCost = 0;
@@ -106,6 +107,7 @@ public class FinancialManager {
 
 	private String getRevenue() {
 		String result = "";
+		revenue = 0;
 		double adRev = 0;
 		double subRev = 0;
 		double dstRev = 0;
