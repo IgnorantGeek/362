@@ -22,7 +22,7 @@ public class App
 		DMEditor messageToEditor = new DMEditor();
 		Feedback feedback = new Feedback();
 		EmployeeManager eman = new EmployeeManager(10); // Reserve ids 0-9 for testing
-
+		FinancialManager fman = new FinancialManager(eman,adman,sman,dman);
 		// Flush screen and begin outer loop
 		Global.flushConsole();
 		System.out.println("Welcome to the FakeNews! NewsPaper Management System.\n");
@@ -63,7 +63,8 @@ public class App
 				Global.flushConsole();
 				System.out.println("Welcome, " + loggedIn.FullName() + ". What would you like to do?");
 				System.out.println("1: Edit/Publish/View a Newspaper\n2: Edit/Create/View an Article\n3: Enter a New Ad Sale" +
-				"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\n7: Add/Remove/Update an Employee\nq: Logout");
+				"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\n7: enter messages to the editor\n8: review financial records\nq: Logout");
+
 				while (true)
 				{
 					String input = in.nextLine();
@@ -441,12 +442,13 @@ public class App
 								System.out.println("Please enter the full name of the new employee:");
 								String name = in.nextLine();
 								
+								int supervisorID = loggedIn.Id();
+								String newPassword = "";
 								System.out.println("Are you the supervisor for this employee? (y/n)");
 								input = in.nextLine();
 
 								if (input.compareTo("y") == 0)
 								{
-									String newPassword;
 									while (true)
 									{
 										System.out.println("Please enter the password for the new user:");
@@ -464,13 +466,9 @@ public class App
 											System.out.println("The passwords you entered did not match!\n");
 										}
 									}
-
-									// Add the employee using the logged in user as the supervisor
-									eman.addEmployee(name, password, loggedIn.Id());
 								}
 								else if (input.compareTo("n") == 0)
 								{
-									int supervisorID = -1;
 									while (true)
 									{
 										System.out.println("Please enter the ID of the employee who will be the supervisor for this employee:");
@@ -486,17 +484,17 @@ public class App
 									}
 
 									// Get password
-									String newPassword;
+									String newEmpPassword = "";
 									boolean run = true;
 									while (run)
 									{
 										System.out.println("Please enter the password for the new user:");
-										newPassword = in.nextLine();
+										newEmpPassword = in.nextLine();
 
 										System.out.println("Please re-enter your password:");
 										input = in.nextLine();
 
-										if (newPassword.compareTo(input) == 0)
+										if (newEmpPassword.compareTo(input) == 0)
 										{
 											run = false;
 										}
@@ -506,7 +504,7 @@ public class App
 										}
 									}
 
-									int id = eman.addEmployee(name, password, supervisorID);
+									int id = eman.addHourlyEmployee(name, newEmpPassword, supervisorID, 10);
 
 									// This isn't working and I don't know why. Still adds the employee
 									// But the output message does not work
@@ -575,8 +573,58 @@ public class App
 								outMsg = "The choice you entered is not a valid response";
 								break;
 						}
-
 						break;
+						
+					case "8":
+						System.out.println("Financial reports avaliable: 1 for Payroll, 2 for monthly financial report.");
+						input = in.nextLine();
+						switch (input)
+						{
+						case "1":
+							System.out.println("Payroll so far for this month:");
+							System.out.println(fman.payRoll());
+							boolean answered = false;
+							while(!answered) {
+								System.out.println("Reset hours for monthly workers? y for yes, n for no.");
+								input = in.nextLine();
+									
+								switch (input)
+								{
+								case "y":
+								case "Y":
+								case "yes":
+								case "Yes":
+								case "YES":
+									answered = true;
+									fman.resetEmployeeHours();
+									System.out.println("Hours reset.");
+									break;
+								case "n":
+								case "N":
+								case "no":
+								case "No":
+								case "NO":
+									answered = true;
+									System.out.println("Hours not reset.");
+								default:
+									System.out.println("Not a valid input");
+								}
+							}
+							break;
+						case "2":
+							System.out.println(fman.FinancialReport());
+							System.out.println("Press enter to return to main menu");
+							input = in.nextLine();
+							break;
+						case "q":
+						case "quit":
+						case "Quit":
+						case "exit":
+						case "Exit":
+							break;
+						}
+						break;
+						
 					case "q":
 					case "quit":
 					case "Quit":
@@ -597,7 +645,7 @@ public class App
 					}
 					System.out.println("Now what would you like to do?");
 					System.out.println("1: Edit/Publish/View a Newspaper\n2: Edit/Create/View an Article\n3: Enter a New Ad Sale" +
-					"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\n7: Add/Remove/Update an Employee\nq: Logout");
+					"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\n7: Add/Remove/Update an Employee\n8: review financial records\nq: Logout");
 				}
 			}
 			else

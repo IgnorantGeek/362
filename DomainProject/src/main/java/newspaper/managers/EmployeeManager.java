@@ -1,6 +1,8 @@
 package newspaper.managers;
 
 import newspaper.models.Employee;
+import newspaper.models.SalaryEmployee;
+import newspaper.models.HourlyEmployee;
 import newspaper.Global;
 import java.io.File;
 import java.util.HashMap;
@@ -8,7 +10,7 @@ import java.util.Scanner;
 
 /**
  * EmployeeManager - Manages Employees and Login Verification
- * @author Nick Heisler
+ * @author Nick Heisler and Jonah Armstrong
  */
 public class EmployeeManager
 {
@@ -37,15 +39,35 @@ public class EmployeeManager
     // Methods
 
     /**
-     * Adds an employee to the system
+     * Adds a salaried employee to the system
      * @param employeeName Name of the new employee
      * @param password Password for the new employee
      * @param supervisorId ID of the employee this user will report to
-     * @return True on a successful add, false otherwise
+     * @param hourlyRate Hourly pay rate of the employee
+     * @return The ID of the new employee, -1 on error
      */
-    public int addEmployee(String employeeName, String password, int supervisorId)
+    public int addHourlyEmployee(String employeeName, String password, int supervisorId, int hourlyRate)
     {
-        Employee in = new Employee(idCounter++, password, supervisorId, employeeName);
+        Employee in = new HourlyEmployee(idCounter++, password, supervisorId, employeeName, hourlyRate);
+        employeeCount++;
+
+        registry.put(in.Id(), in);
+
+        if (in.write() < 0) return -1;
+        return in.Id();
+    }
+    
+    /**
+     * Adds a salaried employee to the system
+     * @param employeeName Name of the new employee
+     * @param password Password for the new employee
+     * @param supervisorId ID of the employee this user will report to
+     * @param salary Yearly salary of the employee
+     * @return The ID of the new employee, -1 on error
+     */
+    public int addSalariedEmployee(String employeeName, String password, int supervisorId, double salary)
+    {
+        Employee in = new SalaryEmployee(idCounter++, password, supervisorId, employeeName,salary);
         employeeCount++;
 
         registry.put(in.Id(), in);
@@ -188,6 +210,7 @@ public class EmployeeManager
             String name = fileScanner.nextLine();
             int supIdString = Integer.parseInt(fileScanner.nextLine());
             String password = fileScanner.nextLine();
+            int type = Integer.parseInt(fileScanner.nextLine());
 
             String fname = "";
             for (int i = 0; i < fileName.length(); i++)
@@ -196,8 +219,19 @@ public class EmployeeManager
                 else fname += fileName.charAt(i);
             }
             int id = Integer.parseInt(fname);
-
-            out = new Employee(id, password, supIdString, name);
+            
+            if(type == 0) {
+            	double salary = Double.parseDouble(fileScanner.nextLine());
+            	out = new SalaryEmployee(id, password, supIdString, name, salary);
+            }
+            
+            else {
+            	double rate = Double.parseDouble(fileScanner.nextLine());
+            	double hours = Double.parseDouble(fileScanner.nextLine());
+            	out = new HourlyEmployee(id, password, supIdString, name, rate, hours);
+            	
+            }
+            
 
             fileScanner.close();
         }
@@ -245,5 +279,9 @@ public class EmployeeManager
             if (login.Password().compareTo(password) == 0) return login;
             else return null;
         }
+    }
+    
+    public HashMap<Integer, Employee> allEmployees() {
+    	return registry;
     }
 }
