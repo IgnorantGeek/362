@@ -23,7 +23,7 @@ public class FinancialManager {
 	double expenses;
 	
 	public FinancialManager(EmployeeManager eman, AdManager adman, SubscriptionManager sman, DistributionManager dman) { 
-		employeeRegistry = eman.allEmployees();
+		employeeRegistry = eman.getRegistry();
 		subs = sman.getAll();
 		ads = adman.getAll();
 		distributers = dman.getAll();

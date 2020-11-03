@@ -293,7 +293,8 @@ public class EmployeeManager
         }
     }
     
-    public HashMap<Integer, Employee> allEmployees() {
+    public HashMap<Integer, Employee> getRegistry()
+    {
     	return registry;
     }
 }
