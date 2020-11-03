@@ -523,7 +523,7 @@ public class App
 								}
 								else if (input.compareTo("0") == 0)
 								{
-									System.out.println("Enter hourly rate:");
+									System.out.println("Enter yearly Salary:");
 									double salary = in.nextDouble();
 									eman.addSalariedEmployee(name, newPassword, supervisorID, salary);
 								}
