@@ -107,21 +107,33 @@ public class EmployeeManager
         return 0;
     }
 
-    public boolean updateSupervisorId(Employee updateEmployee, int supervisorId)
+    public boolean updateSupervisorId(int updateEmployeeID, int supervisorId)
     {
-        
+        Employee update = registry.get(updateEmployeeID);
+
+        if (update == null) return false;
+
+        update.setSupervisorId(supervisorId);
         return true;
     }
 
-    public boolean updateFullName(Employee updateEmployee, String fullName)
+    public boolean updateFullName(int updateEmployeeID, String fullName)
     {
+        Employee update = registry.get(updateEmployeeID);
 
+        if (update == null) return false;
+
+        update.setFullName(fullName);
         return true;
     }
 
-    public boolean updatePassword(Employee updatEmployee, String password)
+    public boolean updatePassword(int updateEmployeeID, String password)
     {
+        Employee update = registry.get(updateEmployeeID);
 
+        if (update == null) return false;
+
+        update.setPassword(password);
         return true;
     }
 

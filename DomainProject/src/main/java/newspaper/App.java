@@ -63,7 +63,7 @@ public class App
 				Global.flushConsole();
 				System.out.println("Welcome, " + loggedIn.FullName() + ". What would you like to do?");
 				System.out.println("1: Edit/Publish/View a Newspaper\n2: Edit/Create/View an Article\n3: Enter a New Ad Sale" +
-				"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\n7: enter messages to the editor\n8: review financial records\nq: Logout");
+				"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\n7: Add/Remove/Update an Employee\n8: review financial records\nq: Logout");
 
 				while (true)
 				{
@@ -431,7 +431,7 @@ public class App
 						break;
 					case "7":
 						// Add or remove an employee
-						System.out.println("Would you like to (1) add, (2) remove, or (3) update an employee? (a/r)");
+						System.out.println("Would you like to (1) add, (2) remove, or (3) update an employee?");
 
 						input = in.nextLine();
 
@@ -558,6 +558,63 @@ public class App
 										System.out.println("Would you like to update (1) Name, (2) Password, or (3) Supervisor?");
 
 										input = in.nextLine();
+
+										int updateChoice = Integer.parseInt(input);
+
+										switch (updateChoice)
+										{
+											case 1:
+												System.out.println("Enter the new name for this Employee");
+
+												String newEmployeeName = in.nextLine();
+
+												if (eman.updateFullName(updateID, newEmployeeName)) outMsg = "Successfully updated Employee information";
+												else outMsg = "Error updating Employee";
+												break;
+											
+											case 2:
+												System.out.println("Enter the new password for this Employee");
+
+												String updatePassword = in.nextLine();
+
+												boolean run = true;
+												while (run)
+												{
+													System.out.println("Please re-enter the same password");
+
+													String checkPw = in.nextLine();
+
+													if (checkPw.compareTo(updatePassword) == 0) run = false;
+													else
+													{
+														System.out.println("Error! Passwords did not match. Enter the new password again");
+
+														updatePassword = in.nextLine();
+													}
+												}
+
+												if (eman.updatePassword(updateID, updatePassword)) outMsg = "Successfully updated Employee information";
+												else outMsg = "Error updating Employee";
+												break;
+											
+											case 3:
+												System.out.println("Enter the ID of the new supervisor for this user");
+
+												String idString = in.nextLine();
+
+												int updateSupervisorID = Integer.parseInt(idString);
+
+												if (eman.checkID(updateSupervisorID))
+												{
+													if (eman.updateSupervisorId(updateID, updateSupervisorID)) outMsg = "Successfully updated Employee information";
+													else outMsg = "Error updating Employee";
+												}
+												else outMsg = "No supervisor found with ID " + idString;
+												break;
+											default:
+												outMsg = "Error, not a valid choice for Update Employee";
+												break;
+										}
 									}
 									else
 									{
@@ -641,7 +698,7 @@ public class App
 					// Print an output message that can be read after flushing the screen
 					if (outMsg != null)
 					{
-						System.out.println(outMsg);
+						System.out.println(outMsg + '\n');
 					}
 					System.out.println("Now what would you like to do?");
 					System.out.println("1: Edit/Publish/View a Newspaper\n2: Edit/Create/View an Article\n3: Enter a New Ad Sale" +
