@@ -22,7 +22,7 @@ public class App
 		DMEditor messageToEditor = new DMEditor();
 		Feedback feedback = new Feedback();
 		EmployeeManager eman = new EmployeeManager(10); // Reserve ids 0-9 for testing
-		FinancialManager fman = new FinancialManager(eman);
+		FinancialManager fman = new FinancialManager(eman,adman,sman,dman);
 		// Flush screen and begin outer loop
 		Global.flushConsole();
 		System.out.println("Welcome to the FakeNews! NewsPaper Management System.\n");
@@ -62,7 +62,6 @@ public class App
 				Global.flushConsole();
 				System.out.println("Welcome, " + loggedIn.FullName() + ". What would you like to do?");
 				System.out.println("1: Edit/Publish/View a Newspaper\n2: Edit/Create/View an Article\n3: Enter a New Ad Sale" +
-
 				"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\n7: enter messages to the editor\n8: review financial records\nq: Logout");
 
 				while (true)
@@ -612,7 +611,7 @@ public class App
 					Global.flushConsole();
 					System.out.println("Now what would you like to do?");
 					System.out.println("1: Edit/Publish/View a Newspaper\n2: Edit/Create/View an Article\n3: Enter a New Ad Sale" +
-					"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\n7: Add/Remove/Update an Employee\nq: Logout");
+					"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\n7: Add/Remove/Update an Employee\n8: review financial records\nq: Logout");
 				}
 			}
 			else

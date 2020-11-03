@@ -143,4 +143,7 @@ public class DistributionManager
         }
         return 0;
     }
+    public HashMap<String, Distributor> getAll() {
+    	return registry;
+    }
 }

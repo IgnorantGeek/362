@@ -109,4 +109,8 @@ public class AdManager
         // Success
         return 0;
     }
+    
+    public HashMap<String, Ad> getAll() {
+    	return ads;
+    }
 }

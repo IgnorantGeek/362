@@ -324,4 +324,8 @@ public class SubscriptionManager {
 		in.close();
 		return false;
 	}
+	
+	public HashMap<String,Subscription> getAll() {
+		return Subscriptions;
+	}
 }

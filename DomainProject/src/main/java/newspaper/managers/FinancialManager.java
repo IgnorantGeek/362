@@ -3,13 +3,34 @@ package newspaper.managers;
 import java.util.Collection;
 import java.util.HashMap;
 
+import newspaper.models.Ad;
+import newspaper.models.Distributor;
 import newspaper.models.Employee;
+import newspaper.models.Subscription;
 
 public class FinancialManager {
 	HashMap<Integer, Employee> employeeRegistry;
+	HashMap<String, Subscription> subs;
+	HashMap<String, Ad> ads;
+	HashMap<String, Distributor> distributers;
 	
-	public FinancialManager(EmployeeManager eman) { 
+	double subPrice;
+	double paperPrice;
+	double adPrice;
+	double printCost;
+	double revenue;
+	double expenses;
+	
+	public FinancialManager(EmployeeManager eman, AdManager adman, SubscriptionManager sman, DistributionManager dman) { 
 		employeeRegistry = eman.allEmployees();
+		subs = sman.getAll();
+		ads = adman.getAll();
+		distributers = dman.getAll();
+		
+		subPrice = 12.00;
+		paperPrice = 3.00;
+		adPrice = 600.00;
+		printCost = 0.50;
 	}
 	
 	public String payRoll() {
@@ -47,18 +68,81 @@ public class FinancialManager {
 	}
 
 	private String getProfit() {
-		// TODO Auto-generated method stub
-		return null;
+		String result = "";
+		double profit = revenue - expenses;
+		result += profit;
+		return result;
 	}
 
 	private String getExpences() {
-		// TODO Auto-generated method stub
-		return null;
+		String result = "";
+		double printCost = 0;
+		double payrollCost = 0;
+		
+		Collection<Employee> eVals = employeeRegistry.values();
+		for(Employee e: eVals) {
+			double val =  e.getPaycheckValue();
+			payrollCost += val;
+		}
+		
+		Collection<Distributor> dVals = distributers.values();
+		for(Distributor d:dVals) {
+			int papers = d.paperCount();
+			double val =  papers * this.printCost;
+			printCost += val;
+		}
+		
+		Collection<Subscription> sVals = subs.values();		
+		int subCount = sVals.size();
+		double val =  subCount * this.printCost * 4;
+		printCost += val;		
+		
+		printCost = round(printCost);
+		payrollCost = round(payrollCost);
+		
+		result += "printing costs: " + printCost + "\n";
+		result += "payroll expences: " + payrollCost + "\n";
+		expenses += printCost + payrollCost;
+		result += "total: " + expenses + "\n";
+		return result;
 	}
 
 	private String getRevenue() {
-		// TODO Auto-generated method stub
-		return null;
+		String result = "";
+		double adRev = 0;
+		double subRev = 0;
+		double dstRev = 0;
+		
+
+		Collection<Ad> aVals = ads.values();
+		adRev += aVals.size() * adPrice;
+		adRev = round(adRev);
+		
+		Collection<Subscription> sVals = subs.values();		
+		int subCount = sVals.size();
+		subRev =  subCount * subPrice;
+		subRev = round(subRev);
+		
+		Collection<Distributor> dVals = distributers.values();
+		for(Distributor d:dVals) {
+			int papers = d.paperCount();
+			double val =  papers * paperPrice;
+			dstRev += val;
+		}
+		dstRev = round(dstRev);
+		
+		result += "income from ads: " + adRev + "\n";
+		result += "income from subscriptions: " + subRev + "\n";
+		result += "income from distributers: " + dstRev + "\n";
+		revenue += adRev + subRev + dstRev;
+		return result;
+	}
+
+	private double round(double a) {
+		a = a*100;
+		a = Math.round(a);
+		a = a /100;
+		return a;		
 	}
 	
 	
