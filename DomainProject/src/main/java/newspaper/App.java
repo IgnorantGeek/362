@@ -35,7 +35,8 @@ public class App
 			System.out.println("Please enter your login info. Or type 'quit' to exit the system.");
 			System.out.print("User ID: ");
 			String useridString = in.nextLine();
-			if (useridString.toLowerCase().compareTo("quit") == 0)
+			if (useridString.toLowerCase().compareTo("quit") == 0
+			||  useridString.toLowerCase().compareTo("q") == 0)
 			{
 				in.close();
 				System.out.println("Goodbye.");
@@ -66,6 +67,7 @@ public class App
 				while (true)
 				{
 					String input = in.nextLine();
+					String outMsg = null;
 
 					switch(input)
 					{
@@ -428,16 +430,13 @@ public class App
 						break;
 					case "7":
 						// Add or remove an employee
-						System.out.println("Would you like to add or remove an employee? (a/r)");
+						System.out.println("Would you like to (1) add, (2) remove, or (3) update an employee? (a/r)");
 
 						input = in.nextLine();
 
 						switch (input)
 						{
-							case "a":
-							case "add":
-							case "ADD":
-							case "Add":
+							case "1":
 								// Add an employee
 								System.out.println("Please enter the full name of the new employee:");
 								String name = in.nextLine();
@@ -481,14 +480,15 @@ public class App
 										if (!eman.checkID(Integer.parseInt(idString)))
 										{
 											System.out.println("The ID that you entered is not a valid ID.\n");
-											supervisorID = Integer.parseInt(idString);
+											break;
 										}
-										else break;
+										else supervisorID = Integer.parseInt(idString);
 									}
 
 									// Get password
 									String newPassword;
-									while (true)
+									boolean run = true;
+									while (run)
 									{
 										System.out.println("Please enter the password for the new user:");
 										newPassword = in.nextLine();
@@ -498,7 +498,7 @@ public class App
 
 										if (newPassword.compareTo(input) == 0)
 										{
-											break;
+											run = false;
 										}
 										else
 										{
@@ -506,23 +506,73 @@ public class App
 										}
 									}
 
-									eman.addEmployee(name, password, supervisorID);
+									int id = eman.addEmployee(name, password, supervisorID);
+
+									// This isn't working and I don't know why. Still adds the employee
+									// But the output message does not work
+									if (id < 0)
+									{
+										outMsg = "Warning! There was an error writing the new employee to the database";
+									}
+									else
+									{
+										outMsg = "Successfully added new Employee with ID: " + id;
+									}
+								}								
+								break;
+							case "2":
+								System.out.println("Enter the ID of the employee to remove");
+
+								input = in.nextLine();
+
+								int dropID = Integer.parseInt(input);
+
+								if (eman.checkID(dropID))
+								{
+									// Check the authorization for the logged in user
+									if (eman.checkPrivilege(loggedIn, dropID))
+									{
+										if (eman.dropEmployee(loggedIn, dropID) == 0) outMsg = "Successfully dropped Employee with ID " + dropID;
+										else outMsg = "An internal error occurred";
+									}
+									else
+									{
+										outMsg = "You are not authorized to remove this Employee";
+									}
 								}
 								else
 								{
-									System.out.println("You had the option to enter a 'y' or an 'n'. You chose to answer '" +
-									input +"'. Why are you like this?");
+									outMsg = "Could not find Employee with ID: " + input;
 								}
-								
 								break;
-							case "r":
-							case "remove":
-							case "Remove":
-							case "REMOVE":
-								// Remove an employee
+							case "3":
+								System.out.println("Enter the ID of the employee to update");
+
+								input = in.nextLine();
+
+								int updateID = Integer.parseInt(input);
+
+								if (eman.checkID(updateID))
+								{
+									// Check the authorization for the logged in user
+									if (eman.checkPrivilege(loggedIn, updateID))
+									{
+										System.out.println("Would you like to update (1) Name, (2) Password, or (3) Supervisor?");
+
+										input = in.nextLine();
+									}
+									else
+									{
+										outMsg = "You are not authorized to update this Employee";
+									}
+								}
+								else
+								{
+									outMsg = "Could not find Employee with ID: " + input;
+								}
 								break;
 							default:
-								System.out.println("The choice you entered is not a valid response. All you had to do was type in an 'a' or 'r'!");
+								outMsg = "The choice you entered is not a valid response";
 								break;
 						}
 
@@ -536,10 +586,15 @@ public class App
 						loggedIn = null;
 						continue outer;
 					default:
-						System.out.println("No binding for input: " + input);
+						outMsg = "No binding for input: " + input;
 					}
 
 					Global.flushConsole();
+					// Print an output message that can be read after flushing the screen
+					if (outMsg != null)
+					{
+						System.out.println(outMsg);
+					}
 					System.out.println("Now what would you like to do?");
 					System.out.println("1: Edit/Publish/View a Newspaper\n2: Edit/Create/View an Article\n3: Enter a New Ad Sale" +
 					"\n4: Add/Remove a Subscription\n5: Add/Remove a Distributor\n6: To see our reviews\n7: Add/Remove/Update an Employee\nq: Logout");

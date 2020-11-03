@@ -43,14 +43,15 @@ public class EmployeeManager
      * @param supervisorId ID of the employee this user will report to
      * @return True on a successful add, false otherwise
      */
-    public boolean addEmployee(String employeeName, String password, int supervisorId)
+    public int addEmployee(String employeeName, String password, int supervisorId)
     {
         Employee in = new Employee(idCounter++, password, supervisorId, employeeName);
         employeeCount++;
 
         registry.put(in.Id(), in);
 
-        return (in.write() > 0) ? true : false;
+        if (in.write() == 0) return in.Id();
+        else return -1;
     }
 
     /**
@@ -68,7 +69,7 @@ public class EmployeeManager
         if (loggedIn.Id() != -1)
         {
             // Check if logged in user is allowed to drop this employee
-            if (!checkPrivilege(loggedIn, find))
+            if (!checkPrivilege(loggedIn, ID))
             {
                 // not authorized to remove this employee
                 return -2;
@@ -76,7 +77,7 @@ public class EmployeeManager
         }
 
         // Remove from registry and delete from db
-        registry.remove(find.Id());
+        registry.remove(ID);
         if (find.delete() < 0) return -3;
 
         // Successful return
@@ -84,14 +85,37 @@ public class EmployeeManager
         return 0;
     }
 
+    public boolean updateSupervisorId(Employee updateEmployee, int supervisorId)
+    {
+        
+        return true;
+    }
+
+    public boolean updateFullName(Employee updateEmployee, String fullName)
+    {
+
+        return true;
+    }
+
+    public boolean updatePassword(Employee updatEmployee, String password)
+    {
+
+        return true;
+    }
+
+
+
     /**
      * Checks whether some employee is authorized to make changes to some other employee
      * @param supervisor the supervisor to check
      * @param worker the worker whos supervisor we are checking
      * @return true if Employee has supervisor privileges, false otherwise
      */
-    public boolean checkPrivilege(Employee supervisor, Employee worker)
+    public boolean checkPrivilege(Employee supervisor, int workerID)
     {
+        Employee worker = registry.get(workerID);
+
+        if (worker == null) return false;
         if (supervisor.Id() == worker.supervisorId()) return true;
         else
         {
@@ -196,11 +220,21 @@ public class EmployeeManager
         return employeeCount;
     }
 
+    /**
+     * Returns the current value of the ID count
+     * @return
+     */
     public int counter()
     {
         return idCounter;
     }
 
+    /**
+     * Validates the login and returns the logged in Employee
+     * @param userID
+     * @param password
+     * @return Employee object of the matching user, or Null
+     */
     public Employee validateLogin(int userID, String password)
     {
         if (registry == null) return null;

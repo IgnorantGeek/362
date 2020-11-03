@@ -49,13 +49,28 @@ public class Employee implements Writeable
         return Password;
     }
 
+    public void setFullName(String fullName)
+    {
+        FullName = fullName;
+    }
+
+    public void setPassword(String password)
+    {
+        Password = password;
+    }
+
+    public void setSupervisorId(int supervisorId)
+    {
+        this.supervisorId = supervisorId;
+    }
+
     @Override
     public int write()
     {
         // Write the employe to the db file
         String fileName = this.Id() + ".txt";
         String build = "";
-        build += FullName + "\n" + this.supervisorId() + Password;
+        build += FullName + "\n" + this.supervisorId() + "\n" + Password;
 
         try
         {
