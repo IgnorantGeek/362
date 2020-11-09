@@ -8,18 +8,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.Random;
 import newspaper.models.Article;
 import newspaper.models.Newspaper;
 
 public class Retract {
 	private HashMap<String,Article> articleRetractions;
 	private HashMap<String,Newspaper> newspaperRetractions;
-	public Retract()
+	public Retract(NewspaperManager papers, ArticleManager arts)
 	{
 		articleRetractions = new HashMap<String,Article>();
 		newspaperRetractions = new HashMap<String,Newspaper>();
-		init();
+		init(papers,arts);
 	}
 	public boolean retract(int clearance, NewspaperManager papers, ArticleManager arts)
 	{
@@ -103,7 +102,6 @@ public class Retract {
 			}
 			in = scan.nextLine();
 		}
-		//TODO
 		return true;
 	}
 	public ArrayList<Article> getArticles()
@@ -134,9 +132,84 @@ public class Retract {
 		}
 		return retual;
 	}
-	private boolean init()
+	private boolean save()
 	{
-		//TODO
-		return false;
+		String builder="";
+		for(int i=0;i<articleRetractions.keySet().size();i++)
+		{
+			String cur = (String) articleRetractions.keySet().toArray()[i];
+			builder = builder+cur+"\n"+"Article"+"\n"+articleRetractions.get(cur).getName()+"\n";
+		}
+		for(int i=0;i<newspaperRetractions.keySet().size();i++)
+		{
+			String cur = (String) newspaperRetractions.keySet().toArray()[i];
+			builder = builder+cur+"\n"+"Newspaper"+"\n"+newspaperRetractions.get(cur).getInfo()[0]+", "+newspaperRetractions.get(cur).getInfo()[1]+"\n";
+		}
+		BufferedWriter write;
+		try {
+			write = new BufferedWriter (new FileWriter("../Database/Retractions.txt"));
+			write.write(builder);
+			write.close();
+		} catch (IOException e) {
+			System.out.println("Retractions initialization file corrupted or missing. Please contact tech support.");
+			return false;
+		}
+		return true;
+	}
+	private boolean init(NewspaperManager papers, ArticleManager arts)
+	{
+		File f = new File("../Database/Retractions.txt");
+		Scanner scan;
+		try {
+			scan = new Scanner(f);
+		} catch (FileNotFoundException e) {
+			System.out.println("Retraction initialization file corrupted or missing. Please contact tech support.");
+			return false;
+		}
+		ArrayList<String> lines = new ArrayList<String>();
+		while(scan.hasNextLine())
+		{
+			String line = scan.nextLine();
+			lines.add(line);
+		}
+		while(lines.size()>0)
+		{
+			String type = lines.remove(0);
+			String id;
+			if(lines.size()>0)
+			{
+				id = lines.remove(0);
+				if(type.compareToIgnoreCase("article")==0)
+				{
+					Article a = arts.getArticle(id);
+					if(a!=null)
+					{
+						articleRetractions.put(id,a);
+					}
+				}
+				else if(type.compareToIgnoreCase("newspaper")==0)
+				{
+					Newspaper n = papers.getVolIss().get(id);
+					if(n!=null)
+					{
+						newspaperRetractions.put(id,n);
+					}
+				}
+				else
+				{
+					System.out.println("Retraction initialization file corrupted. Please contact tech support.");
+					scan.close();
+					return false;
+				}
+			}
+			else
+			{
+				System.out.println("Retraction initialization file corrupted. Please contact tech support.");
+				scan.close();
+				return false;
+			}
+		}
+		scan.close();
+		return true;
 	}
 }
