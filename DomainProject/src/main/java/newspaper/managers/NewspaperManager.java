@@ -515,4 +515,11 @@ public class NewspaperManager
 		}
 		return true;
 	}
+	/**
+	 * Returns the volume and issue list of newspapers.
+	 */
+	public HashMap<String,Newspaper> getVolIss()
+	{
+		return volumeAndIssue;
+	}
 }
