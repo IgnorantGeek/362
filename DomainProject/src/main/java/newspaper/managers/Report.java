@@ -8,15 +8,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.Random;
 import newspaper.models.Employee;
 
 public class Report {
 	private HashMap<Employee, String> employeeToMessage;
-	public Report()
+	public Report(EmployeeManager e)
 	{
 		employeeToMessage = new HashMap<Employee, String>();
-		init();
+		init(e);
 	}
 	public boolean readReports(int clearance)
 	{
@@ -89,9 +88,80 @@ public class Report {
 		save();
 		return true;
 	}
-	private boolean init()
+	private boolean save()
 	{
-		//TODO
-		return false;
+		String builder="";
+		for(int i=0;i<employeeToMessage.keySet().size();i++)
+		{
+			Employee cur = (Employee) employeeToMessage.keySet().toArray()[i];
+			builder = builder+cur.FullName()+"\n"+employeeToMessage.get(cur)+"\n"+"q"+"\n";
+		}
+		BufferedWriter write;
+		try {
+			write = new BufferedWriter (new FileWriter("../Database/Complaints.txt"));
+			write.write(builder);
+			write.close();
+		} catch (IOException e) {
+			System.out.println("Complaints initialization file corrupted or missing. Please contact tech support.");
+			return false;
+		}
+		return true;
+	}
+	private boolean init(EmployeeManager a)
+	{
+		File f = new File("../Database/Complaints.txt");
+		Scanner scan;
+		try {
+			scan = new Scanner(f);
+		} catch (FileNotFoundException e) {
+			System.out.println("Complaints initialization file corrupted or missing. Please contact tech support.");
+			return false;
+		}
+		ArrayList<String> lines = new ArrayList<String>();
+		while(scan.hasNextLine())
+		{
+			String line = scan.nextLine();
+			lines.add(line);
+		}
+		while(lines.size()>0)
+		{
+			String name = lines.remove(0);
+			String message = "";
+			if(lines.size()>0)
+			{
+				String in = lines.remove(0);
+				while(in.compareToIgnoreCase("q")!=0)
+				{
+					message = message + "\n" + in;
+					if(lines.size()<1)
+					{
+						System.out.println("Complaints initialization file corrupted. Please contact tech support.");
+						scan.close();
+						return false;
+					}
+				}
+				int toggle = 0;
+				for(int i = 0; i < a.getEmployeeCount();i++)
+				{
+					if(a.getRegistry().get(a.getRegistry().keySet().toArray()[i]).FullName().compareTo(name)==0)
+					{
+						toggle = 1;
+						employeeToMessage.put(a.getRegistry().get(a.getRegistry().keySet().toArray()[i]), message);
+					}
+				}
+				if(toggle==0)
+				{
+					System.out.println(name+" was not found. Continuing like normal.");
+				}
+			}
+			else
+			{
+				System.out.println("Complaints initialization file corrupted. Please contact tech support.");
+				scan.close();
+				return false;
+			}
+		}
+		scan.close();
+		return true;
 	}
 }
