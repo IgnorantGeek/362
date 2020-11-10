@@ -10,13 +10,32 @@ import java.util.HashMap;
 import java.util.Scanner;
 import newspaper.models.Employee;
 
+/**
+ * A class that handles all employee reports.
+ * @author Alexander Irlbeck
+ * Works as of 11/10/20
+ */
 public class Report {
+	/**
+	 * A hashmap of all employee reports with their corresponding messages.
+	 */
 	private HashMap<Employee, String> employeeToMessage;
+	/**
+	 * The constructor for the Report class.
+	 * @param e the employee manager to get used.
+	 * Works as of 11/10/20
+	 */
 	public Report(EmployeeManager e)
 	{
 		employeeToMessage = new HashMap<Employee, String>();
 		init(e);
 	}
+	/**
+	 * Prints out all employees reported, prompts for a choice, then it prints out that employees report message.
+	 * @param clearance The user's clearance level
+	 * @return Returns whether or not the operation was successful
+	 * Works as of 11/10/20
+	 */
 	public boolean readReports(int clearance)
 	{
 		@SuppressWarnings("resource")
@@ -43,6 +62,12 @@ public class Report {
 		System.out.println(list.get(index)+":\n"+employeeToMessage.get(list.get(index)));
 		return true;
 	}
+	/**
+	 * Allows the user to report another employee or themselves.
+	 * @param e The employee manager to be used in APP.java
+	 * @return Whether or not the operation was successful.
+	 * Works as of 11/10/20
+	 */
 	public boolean addReport(EmployeeManager e)
 	{
 		@SuppressWarnings("resource")
@@ -51,7 +76,7 @@ public class Report {
 		ArrayList<Employee> list = new ArrayList<Employee>();
 		for(int i = 0; i < e.getEmployeeCount(); i++)
 		{
-			list.add((Employee) e.getRegistry().keySet().toArray()[i]);
+			list.add(e.getRegistry().get((int)e.getRegistry().keySet().toArray()[i]));
 			System.out.println(i+": "+list.get(i).FullName());
 		}
 		System.out.println("Select a number from above to report them.");
@@ -71,12 +96,20 @@ public class Report {
 		String message = "";
 		while(cur.compareToIgnoreCase("q")!=0)
 		{
-			message = message + in.nextLine() + "\n";
+			message = message + cur + "\n";
+			cur = in.nextLine();
 		}
 		employeeToMessage.put(list.get(index),message);
 		save();
 		return true;
 	}
+	/**
+	 * Allows the user to remove an employee report, only if it is not themselves.
+	 * @param e The employee to get removed
+	 * @param me The current user
+	 * @return Whether or not the operation was successful
+	 * Works as of 11/10/20
+	 */
 	public boolean removeReport(Employee e, Employee me)
 	{
 		if(e.FullName().compareToIgnoreCase(me.FullName())==0)
@@ -88,6 +121,11 @@ public class Report {
 		save();
 		return true;
 	}
+	/**
+	 * Saves current progress made in the class.
+	 * @return Whether or not the operation was successful
+	 * Works as of 11/10/20
+	 */
 	private boolean save()
 	{
 		String builder="";
@@ -107,6 +145,12 @@ public class Report {
 		}
 		return true;
 	}
+	/**
+	 * Initializes the class.
+	 * @param a The employee manager from app.java
+	 * @return Whether or not the operation was successful
+	 * Works as of 11/10/20
+	 */
 	private boolean init(EmployeeManager a)
 	{
 		File f = new File("../Database/Complaints.txt");
@@ -139,6 +183,7 @@ public class Report {
 						scan.close();
 						return false;
 					}
+					in = lines.remove(0);
 				}
 				int toggle = 0;
 				for(int i = 0; i < a.getEmployeeCount();i++)
@@ -163,5 +208,14 @@ public class Report {
 		}
 		scan.close();
 		return true;
+	}
+	/**
+	 * Returns the hashmap (only used for background operations.
+	 * @return The hashmap
+	 * Works as of 11/10/20
+	 */
+	public HashMap<Employee, String> getReports()
+	{
+		return employeeToMessage;
 	}
 }

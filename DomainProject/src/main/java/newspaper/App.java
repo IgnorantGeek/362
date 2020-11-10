@@ -83,9 +83,8 @@ public class App
 									+ "\na newspaper. Enter '7' to retract a newspaper.");
 							input = in.nextLine();
 							if (input.compareTo("q") == 0) break;
-							System.out.println("Enter your clearance level.");
-							int clearance = 0;
-							String next = in.nextLine();
+							int clearance = 10;
+							String next;
 							switch(input)
 							{
 							case "q":
@@ -732,9 +731,9 @@ public class App
 							break;
 						case "10":
 							ArrayList<Employee> list = new ArrayList<Employee>();
-							for(int i = 0; i < eman.getEmployeeCount(); i++)
+							for(int i = 0; i < rport.getReports().size(); i++)
 							{
-								list.add((Employee) eman.getRegistry().keySet().toArray()[i]);
+								list.add((Employee)rport.getReports().keySet().toArray()[i]);
 								System.out.println(i+": "+list.get(i).FullName());
 							}
 							System.out.println("Select a number from above to report them.");

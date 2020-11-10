@@ -11,15 +11,40 @@ import java.util.Scanner;
 import newspaper.models.Article;
 import newspaper.models.Newspaper;
 
+/**
+ * The class that handles retractions of articles and newspapers.
+ * @author Alexander Irlbeck
+ * Works as of 11/10/20
+ */
 public class Retract {
+	/**
+	 * The list of all retracted articles.
+	 */
 	private HashMap<String,Article> articleRetractions;
+	/**
+	 * The list of all retracted newspapers.
+	 */
 	private HashMap<String,Newspaper> newspaperRetractions;
+	/**
+	 * Constructor for the retract class.
+	 * @param papers The app.java's newspaper manager
+	 * @param arts The app.java's article manager
+	 * Works as of 11/10/20
+	 */
 	public Retract(NewspaperManager papers, ArticleManager arts)
 	{
 		articleRetractions = new HashMap<String,Article>();
 		newspaperRetractions = new HashMap<String,Newspaper>();
 		init(papers,arts);
 	}
+	/**
+	 * Allows the user to retract an article or newspaper.
+	 * @param clearance The user's clearance level
+	 * @param papers The app.java's newspaper manager
+	 * @param arts The app.java's article manager
+	 * @return Whether or not the functions succeeded.
+	 * Works as of 11/10/20
+	 */
 	public boolean retract(int clearance, NewspaperManager papers, ArticleManager arts)
 	{
 		if(clearance < 8)
@@ -104,6 +129,11 @@ public class Retract {
 		}
 		return true;
 	}
+	/**
+	 * Returns the list of retracted articles.
+	 * @return The list of retracted articles.
+	 * Works as of 11/10/20
+	 */
 	public ArrayList<Article> getArticles()
 	{
 		ArrayList<Article> retual = new ArrayList<Article>();
@@ -118,6 +148,11 @@ public class Retract {
 		}
 		return retual;
 	}
+	/**
+	 * Returns the list of retracted newspapers.
+	 * @return The list of retracted newspapers.
+	 * Works as of 11/10/20
+	 */
 	public ArrayList<Newspaper> getPapers()
 	{
 		ArrayList<Newspaper> retual = new ArrayList<Newspaper>();
@@ -132,18 +167,23 @@ public class Retract {
 		}
 		return retual;
 	}
+	/**
+	 * Saves the current changes to the retractions.
+	 * @return Whether or not the functions succeeded.
+	 * Works as of 11/10/20
+	 */
 	private boolean save()
 	{
 		String builder="";
 		for(int i=0;i<articleRetractions.keySet().size();i++)
 		{
 			String cur = (String) articleRetractions.keySet().toArray()[i];
-			builder = builder+cur+"\n"+"Article"+"\n"+articleRetractions.get(cur).getName()+"\n";
+			builder = builder+"\n"+"Article"+"\n"+cur+"\n";
 		}
 		for(int i=0;i<newspaperRetractions.keySet().size();i++)
 		{
 			String cur = (String) newspaperRetractions.keySet().toArray()[i];
-			builder = builder+cur+"\n"+"Newspaper"+"\n"+newspaperRetractions.get(cur).getInfo()[0]+", "+newspaperRetractions.get(cur).getInfo()[1]+"\n";
+			builder = builder+"\n"+"Newspaper"+"\n"+cur+"\n";
 		}
 		BufferedWriter write;
 		try {
@@ -156,6 +196,13 @@ public class Retract {
 		}
 		return true;
 	}
+	/**
+	 * Initializes the class from the retractions init file.
+	 * @param papers The app.java's newspaper manager
+	 * @param arts The app.java's article manager
+	 * @return Whether or not the functions succeeded.
+	 * Works as of 11/10/20
+	 */
 	private boolean init(NewspaperManager papers, ArticleManager arts)
 	{
 		File f = new File("../Database/Retractions.txt");
