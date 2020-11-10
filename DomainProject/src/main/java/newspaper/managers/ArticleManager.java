@@ -3,6 +3,8 @@ package newspaper.managers;
 import newspaper.models.Article;
 import newspaper.models.UnfinishedArticle;
 import newspaper.models.FinishedArticle;
+import newspaper.ui.Command;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,7 +18,7 @@ import java.util.Scanner;
  * @authors Alexander Irlbeck and Jonah Armstrong.
  * **Works as of 10/15/20
  */
-public class ArticleManager 
+public class ArticleManager implements Commandable
 {
 	/**
 	 * Key is the name of the article.
@@ -420,5 +422,12 @@ public class ArticleManager
 	 */
 	public Article getArticle(String name) {
 		return nameToAll.get(name);
+	}
+
+	@Override
+	public String executeCommand(Command command)
+	{
+		// TODO
+		return null;
 	}
 }

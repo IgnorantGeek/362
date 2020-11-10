@@ -1,6 +1,8 @@
 package newspaper.managers;
 
 import newspaper.models.Newspaper;
+import newspaper.ui.Command;
+
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -21,7 +23,7 @@ import javax.swing.ImageIcon;
  * @author Alexander Irlbeck
  * **Works as of 10/14/20
  */
-public class NewspaperManager 
+public class NewspaperManager implements Commandable
 {
 	/**
 	 * Input is in the format of "volume, issue" for the key, and the newspaper corresponds with that key.
@@ -521,5 +523,12 @@ public class NewspaperManager
 	public HashMap<String,Newspaper> getVolIss()
 	{
 		return volumeAndIssue;
+	}
+
+	@Override
+	public String executeCommand(Command command)
+	{
+		// TODO
+		return null;
 	}
 }

@@ -4,6 +4,8 @@ import newspaper.models.Employee;
 import newspaper.models.SalaryEmployee;
 import newspaper.models.HourlyEmployee;
 import newspaper.Global;
+import newspaper.ui.Command;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -12,7 +14,7 @@ import java.util.Scanner;
  * EmployeeManager - Manages Employees and Login Verification
  * @author Nick Heisler and Jonah Armstrong
  */
-public class EmployeeManager
+public class EmployeeManager implements Commandable
 {
     // Variables
     private int idCounter;
@@ -296,5 +298,12 @@ public class EmployeeManager
     public HashMap<Integer, Employee> getRegistry()
     {
     	return registry;
+    }
+
+    @Override
+    public String executeCommand(Command command)
+    {
+        // TODO
+        return null;
     }
 }

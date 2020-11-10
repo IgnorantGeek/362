@@ -1,28 +1,21 @@
 package newspaper.ui;
 
-import java.util.ArrayList;
-
 public class Command
 {
-    private String command;
-    private ArrayList<String> options;
+    private final String command;
+    private final String[] options;
 
-    public Command(String command, ArrayList<String> options)
+    public Command(String command, String[] options)
     {
         this.command = command;
-        this.options = new ArrayList<>(options);
+        this.options = options;
     }
 
-    public ArrayList<String> getOptions() {
+    public String[] getOptions() {
         return options;
     }
 
     public String getCommand() {
         return command;
-    }
-
-    public void addOption(String opt)
-    {
-        this.options.add(opt);
     }
 }

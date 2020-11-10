@@ -8,8 +8,10 @@ import newspaper.models.Distributor;
 import newspaper.models.Employee;
 import newspaper.models.HourlyEmployee;
 import newspaper.models.Subscription;
+import newspaper.ui.Command;
 
-public class FinancialManager {
+public class FinancialManager implements Commandable
+{
 	HashMap<Integer, Employee> employeeRegistry;
 	HashMap<String, Subscription> subs;
 	HashMap<String, Ad> ads;
@@ -144,7 +146,11 @@ public class FinancialManager {
 		a = a /100;
 		return a;		
 	}
-	
-	
 
+	@Override
+	public String executeCommand(Command command)
+	{
+		// TODO
+		return null;
+	}
 }

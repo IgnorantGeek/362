@@ -7,5 +7,5 @@ import newspaper.ui.Command;
  */
 public interface Commandable
 {
-    public int executeCommand(Command command);
+    String executeCommand(Command command);
 }

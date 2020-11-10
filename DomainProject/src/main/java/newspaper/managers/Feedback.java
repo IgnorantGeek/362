@@ -1,5 +1,8 @@
 package newspaper.managers;
 
+import newspaper.ui.Command;
+import org.omg.CORBA.COMM_FAILURE;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,7 +18,7 @@ import java.util.Random;
  * @author Alexander Irlbeck
  * Works as of 11/1/20
  */
-public class Feedback 
+public class Feedback implements Commandable
 {
 	/**
 	 * The email to rating.
@@ -315,5 +318,12 @@ public class Feedback
 		}
 		scan.close();
 		return true;
+	}
+
+	@Override
+	public String executeCommand(Command command)
+	{
+		// TODO
+		return null;
 	}
 }

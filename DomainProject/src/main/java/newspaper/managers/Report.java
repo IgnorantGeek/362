@@ -9,13 +9,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 import newspaper.models.Employee;
+import newspaper.ui.Command;
 
 /**
  * A class that handles all employee reports.
  * @author Alexander Irlbeck
  * Works as of 11/10/20
  */
-public class Report {
+public class Report implements  Commandable
+{
 	/**
 	 * A hashmap of all employee reports with their corresponding messages.
 	 */
@@ -217,5 +219,12 @@ public class Report {
 	public HashMap<Employee, String> getReports()
 	{
 		return employeeToMessage;
+	}
+
+	@Override
+	public String executeCommand(Command command)
+	{
+		// TODO
+		return null;
 	}
 }

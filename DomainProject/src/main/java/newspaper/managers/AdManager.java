@@ -117,8 +117,18 @@ public class AdManager implements Commandable
     }
 
     @Override
-    public int executeCommand(Command command)
+    public String executeCommand(Command command)
     {
-        return 0;
+        // Get the command
+        switch (command.getCommand())
+        {
+            case "test":
+                break;
+            default:
+                return null;
+        }
+
+        // Good return
+        return null;
     }
 }
