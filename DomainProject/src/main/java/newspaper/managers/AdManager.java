@@ -3,16 +3,18 @@ package newspaper.managers;
 import newspaper.models.Ad;
 import newspaper.models.Advertiser;
 import newspaper.Global;
+import newspaper.ui.Command;
+
 import java.io.File;
 import java.util.HashMap;
 
 /**
  * Ad Manager class
  */
-public class AdManager
+public class AdManager implements Commandable
 {
     private HashMap<String, Ad> ads;
-    private String databasePath;
+    private final String databasePath;
     private int customerCount;
 
     public AdManager()
@@ -80,7 +82,7 @@ public class AdManager
         return insert;
     }
 
-    public int newAd(int[] paper_identifer, String imageName, int advertiserID)
+    public int newAd(int[] paperIdentifier, String imageName, int advertiserID)
     {
         // Locals
         Ad in;
@@ -93,9 +95,9 @@ public class AdManager
 
         if (imageName == null || imageName == "")
         {
-            in = new Ad(Global.generateID(), paper_identifer, advertiserID);
+            in = new Ad(Global.generateID(), paperIdentifier, advertiserID);
         }
-        else in = new Ad(Global.generateID(), paper_identifer, advertiserID, imageName);
+        else in = new Ad(Global.generateID(), paperIdentifier, advertiserID, imageName);
         
         if (in.write() < 0)
         {
@@ -112,5 +114,11 @@ public class AdManager
     
     public HashMap<String, Ad> getAll() {
     	return ads;
+    }
+
+    @Override
+    public int executeCommand(Command command)
+    {
+        return 0;
     }
 }
