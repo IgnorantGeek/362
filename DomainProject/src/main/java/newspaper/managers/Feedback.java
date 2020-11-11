@@ -1,7 +1,6 @@
 package newspaper.managers;
 
 import newspaper.ui.Command;
-import org.omg.CORBA.COMM_FAILURE;
 
 import java.io.BufferedWriter;
 import java.io.File;

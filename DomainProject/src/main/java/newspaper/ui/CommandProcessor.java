@@ -13,7 +13,7 @@ public class CommandProcessor
     private DistributionManager dman = new DistributionManager();
     private DMEditor dme = new DMEditor();
     private Feedback fback = new Feedback();
-    private EmployeeManager eman = new EmployeeManager(10); // Reserve ids 0-9 for testing
+    public EmployeeManager eman = new EmployeeManager(10); // Reserve ids 0-9 for testing, public for login
     private FinancialManager fman = new FinancialManager(eman,adman,sman,dman);
     private Report rport = new Report(eman);
     private Retract ract = new Retract(nman, aman);
@@ -30,7 +30,7 @@ public class CommandProcessor
         }
         // Split the strings by spaces
         String[] cmdArr = commandStr.split(" ");
-        String out = "";
+        String out;
 
         // Check for required manager and command input
         if (cmdArr.length < 2)
