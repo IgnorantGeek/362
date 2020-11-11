@@ -93,12 +93,14 @@ public class CommandProcessor
 
         for (int i = 0; i < commandStr.length(); i++)
         {
-            if (commandStr.charAt(i) == '"')
+            // Check for double or single quotes
+            // Break by space except inside quotes
+            if (commandStr.charAt(i) == '"'
+            ||  commandStr.charAt(i) == '\'')
             {
-                // Toggle quote Open
                 quoteOpen = !quoteOpen;
             }
-            if (commandStr.charAt(i) == ' ')
+            else if (commandStr.charAt(i) == ' ')
             {
                 if (quoteOpen) build.append(commandStr.charAt(i));
                 else

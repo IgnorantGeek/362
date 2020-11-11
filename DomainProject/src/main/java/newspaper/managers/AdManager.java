@@ -122,7 +122,11 @@ public class AdManager implements Commandable
         // Get the command
         switch (command.getCommand())
         {
-            case "test":
+            case "new-ad":
+                // Process a new ad
+
+                break;
+            case "drop-ad":
                 break;
             default:
                 return null;
