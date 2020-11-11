@@ -524,7 +524,18 @@ public class NewspaperManager implements Commandable
 	{
 		return volumeAndIssue;
 	}
-
+	
+	/**
+	 * Publishes newspaper n if it is possible.
+	 * @param n The paper to be published
+	 * @param clearance The clearance of the actor
+	 * @return Whether or not the function succeeded
+	 */
+	public boolean publishPaper(Newspaper n, int clearance)
+	{
+		return n.finalizePaper(clearance);
+	}
+	
 	@Override
 	public String executeCommand(Command command)
 	{
