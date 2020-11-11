@@ -225,6 +225,10 @@ public class Retract implements Commandable
 		{
 			String type = lines.remove(0);
 			String id;
+			if(type.compareTo("")==0)
+			{
+				continue;
+			}
 			if(lines.size()>0)
 			{
 				id = lines.remove(0);
