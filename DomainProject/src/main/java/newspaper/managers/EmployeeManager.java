@@ -597,7 +597,7 @@ public class EmployeeManager implements Commandable
 
                     if (dropStatus == 0)
                     {
-                        build.append("Successfully dropped Employee: ").append(ID);
+                        build.append("Successfully dropped Employee: ").append(ID).append('\n');
                     }
                     else if (dropStatus == -1)
                     {
