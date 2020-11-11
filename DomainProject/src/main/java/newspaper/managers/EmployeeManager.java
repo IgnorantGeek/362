@@ -310,7 +310,8 @@ public class EmployeeManager implements Commandable
                 if (command.getOptions().size() < 2)
                 {
                     build.append("Employee cmd Error: Not enough arguments\n");
-                    build.append("\nExpected - add <name> <password> ");
+                    build.append("Expected - add <name> <password> [-i <supervisorId>] [-s <salary>]");
+                    build.append(" || [-h <hourlyRate>]");
                     break;
                 }
                 if (command.getOptions().size() == 2)
@@ -592,7 +593,24 @@ public class EmployeeManager implements Commandable
                         continue;
                     }
 
+                    int dropStatus = dropEmployee(loggedIn, ID);
 
+                    if (dropStatus == 0)
+                    {
+                        build.append("Successfully dropped Employee: ").append(ID);
+                    }
+                    else if (dropStatus == -1)
+                    {
+                        build.append("Employee internal Error: No Employee found with ID ").append(ID).append(". Skipped\n");
+                    }
+                    else if (dropStatus == -2)
+                    {
+                        build.append("Employee internal Error: User not authorized to drop Employee ").append(ID).append(". Skipped\n");
+                    }
+                    else if (dropStatus == -3)
+                    {
+                        build.append("Employee internal Error: Error writing Employee ").append(ID).append(" to database. Skipped\n");
+                    }
                 }
                 break;
             case "update":
