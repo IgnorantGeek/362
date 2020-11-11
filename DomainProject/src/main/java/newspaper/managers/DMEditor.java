@@ -10,13 +10,15 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.HashMap;
 import newspaper.models.Newspaper;
+import newspaper.ui.Command;
 
 /**
  * A class that represents messages to the editor.
  * @author Alexander Irlbeck
  * Works as of 11/1/20
  */
-public class DMEditor {
+public class DMEditor implements Commandable
+{
 	/**
 	 * The key is the name of the article, with the data portion being the message.
 	 */
@@ -398,5 +400,12 @@ public class DMEditor {
 		}
 		scan.close();
 		return true;
+	}
+
+	@Override
+	public String executeCommand(Command command)
+	{
+		// TODO
+		return null;
 	}
 }

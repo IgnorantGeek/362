@@ -10,13 +10,15 @@ import java.util.HashMap;
 import java.util.Scanner;
 import newspaper.models.Article;
 import newspaper.models.Newspaper;
+import newspaper.ui.Command;
 
 /**
  * The class that handles retractions of articles and newspapers.
  * @author Alexander Irlbeck
  * Works as of 11/10/20
  */
-public class Retract {
+public class Retract implements Commandable
+{
 	/**
 	 * The list of all retracted articles.
 	 */
@@ -262,5 +264,12 @@ public class Retract {
 		}
 		scan.close();
 		return true;
+	}
+
+	@Override
+	public String executeCommand(Command command)
+	{
+		// TODO
+		return null;
 	}
 }

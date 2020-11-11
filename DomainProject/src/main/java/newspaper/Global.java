@@ -36,6 +36,9 @@ public class Global
         return buf.toString();
     }
 
+    /**
+     * Flushes the console (only works in a terminal)
+     */
     public static void flushConsole()
     {
         System.out.print("\033[H\033[2J");  

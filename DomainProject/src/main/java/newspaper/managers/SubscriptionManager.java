@@ -3,6 +3,8 @@ package newspaper.managers;
 import newspaper.models.Subscription;
 import newspaper.models.PaymentInformation;
 import newspaper.models.CreditCard;
+import newspaper.ui.Command;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,7 +20,8 @@ import java.util.Scanner;
  * Manages methods for interacting with the subscriber file system.
  * @author Jonah Armstrong
  */
-public class SubscriptionManager {
+public class SubscriptionManager implements Commandable
+{
 	/**
 	 * Stores the Subscriptions in memory
 	 */
@@ -327,5 +330,12 @@ public class SubscriptionManager {
 	
 	public HashMap<String,Subscription> getAll() {
 		return Subscriptions;
+	}
+
+	@Override
+	public String executeCommand(Command command)
+	{
+		// TODO
+		return null;
 	}
 }

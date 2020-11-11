@@ -2,11 +2,13 @@ package newspaper.managers;
 
 import newspaper.Global;
 import newspaper.models.Distributor;
+import newspaper.ui.Command;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class DistributionManager
+public class DistributionManager implements Commandable
 {
     private int customerCount;
     private HashMap<String, Distributor> registry;
@@ -145,5 +147,12 @@ public class DistributionManager
     }
     public HashMap<String, Distributor> getAll() {
     	return registry;
+    }
+
+    @Override
+    public String executeCommand(Command command)
+    {
+        // TODO
+        return null;
     }
 }
