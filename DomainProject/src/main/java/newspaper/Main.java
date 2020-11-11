@@ -9,12 +9,17 @@ public class Main
 {
     public static void main(String[] args)
     {
+        // Clear console
+        Global.flushConsole();
+
+        // Initialize
         CommandProcessor cp = new CommandProcessor();
         Scanner in = new Scanner(System.in);
 
-        Global.flushConsole();
         System.out.println("Welcome to the FakeNews! NewsPaper Management System.\n");
+
         // Login loop
+        login:
         while (true)
         {
             // Print welcome message
@@ -50,13 +55,37 @@ public class Main
 
             Employee loggedIn = cp.eman.validateLogin(userId, password);
 
+            // Flush and write
+            Global.flushConsole();
             if (loggedIn != null)
             {
-                System.out.println("Welcome, " + loggedIn.FullName() + ". What would you like to do?");
+                System.out.println("Welcome, " + loggedIn.FullName() + ". What would you like to do? Type in a command"
+                        + " or type 'q' to logout");
+                while (true)
+                {
+                    // Get next input string
+                    String cmdString = in.nextLine();
+
+                    // Check for exit case
+                    if (cmdString.compareTo("quit") == 0
+                    ||  cmdString.compareTo("q")    == 0
+                    ||  cmdString.compareTo("Quit") == 0
+                    ||  cmdString.compareTo("QUIT") == 0)
+                    {
+                        Global.flushConsole();
+                        continue login;
+                    }
+
+                    // Flush console and process the command
+                    Global.flushConsole();
+                    System.out.println(cp.processCommand(cmdString));
+
+                    // Prompt for new command
+                    System.out.println("Now what would you like to do?");
+                }
             }
             else
             {
-                Global.flushConsole();
                 System.out.println("Invalid Login, User ID/Password incorrect.");
             }
         }

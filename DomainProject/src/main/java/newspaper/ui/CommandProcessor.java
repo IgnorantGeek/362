@@ -40,7 +40,8 @@ public class CommandProcessor
 
         // Create a command object
         String subCmd = cmdArr[1];
-        String[] options = Arrays.copyOfRange(cmdArr, 2, cmdArr.length - 1);
+        String[] options = null;
+        if (cmdArr.length > 2) options = Arrays.copyOfRange(cmdArr, 2, cmdArr.length - 1);
 
         Command command = new Command(subCmd, options);
         switch(cmdArr[0])
