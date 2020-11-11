@@ -5,8 +5,10 @@ import newspaper.models.Distributor;
 import newspaper.ui.Command;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Set;
 
 public class DistributionManager implements Commandable
 {
@@ -152,7 +154,76 @@ public class DistributionManager implements Commandable
     @Override
     public String executeCommand(Command command)
     {
-        // TODO
-        return null;
+        StringBuilder build = new StringBuilder();
+
+        switch (command.getCommand())
+        {
+            case "add":
+                //Check params
+                if (command.getOptions() == null || command.getOptions().size() < 2)
+                {
+                    build.append("Distributor cmd Error: Not enough arguments. Required - Name and paperCount");
+                    break;
+                }
+                String name = command.getOptions().get(0);
+                String paperCntStr = command.getOptions().get(1);
+                int paperCount;
+
+                try {
+                    paperCount = Integer.parseInt(paperCntStr);
+                }
+                catch (NumberFormatException e)
+                {
+                    build.append("Distributor cmd Error: Second argument '").append(paperCntStr).append("' not a number");
+                    break;
+                }
+                if (addDistributor(name, paperCount) != 0)
+                {
+                    build.append("Distributor internal Error: Error writing new distributor to file");
+                    break;
+                }
+                build.append("Successfully added new Distributor with ID: ").append(customerCount - 1);
+                break;
+            case "remove":
+                //Check params
+                if (command.getOptions() == null || command.getOptions().size() < 1)
+                {
+                    build.append("Distributor cmd Error: Not enough arguments. Required - Distributor ID");
+                    break;
+                }
+                String idStr = command.getOptions().get(0);
+                int id;
+
+                try {
+                    id = Integer.parseInt(idStr);
+                }
+                catch (NumberFormatException e)
+                {
+                    build.append("Distributor cmd Error: First argument '").append(idStr).append("' not a number");
+                    break;
+                }
+                if (removeDistributor(id) != 0)
+                {
+                    build.append("Distributor internal Error: Error changing database");
+                    break;
+                }
+                build.append("Successfully removed Distributor ").append(id);
+                break;
+            case "list":
+                Collection<Distributor> distributors = registry.values();
+                build.append("Distributors:\n");
+                for (Distributor distributor : distributors)
+                {
+                    build.append(distributor.id()).append(":  ").append(distributor.nameString());
+                    build.append("  PaperCount: ").append(distributor.paperCount()).append("\n");
+                }
+                
+                break;
+            default:
+                build.append("Distributor cmd Error: no binding for ").append(command.getCommand());
+                break;
+        }
+
+        return build.toString();
     }
 }

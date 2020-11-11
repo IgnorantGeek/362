@@ -40,11 +40,15 @@ public class CommandProcessor
         }
 
         // Create a command object
+        String manCmd = cmdArr.get(0);
         String subCmd = cmdArr.get(1);
-        ArrayList<String> options = new ArrayList<>();
 
-        Command command = new Command(subCmd, options);
-        switch(cmdArr.get(0))
+        // Pop two off top of arrayList
+        cmdArr.remove(0);
+        cmdArr.remove(0);
+
+        Command command = new Command(subCmd, cmdArr);
+        switch(manCmd)
         {
             case "newspaper":
                 out = nman.executeCommand(command);
@@ -80,7 +84,7 @@ public class CommandProcessor
                 out = ract.executeCommand(command);
                 break;
             default:
-                out = "No command found for " + cmdArr.get(0);
+                out = "No command found for " + manCmd;
         }
         return out;
     }
@@ -113,7 +117,6 @@ public class CommandProcessor
         }
 
         out.add(build.toString());
-        System.out.println(out);
         return out;
     }
 }
