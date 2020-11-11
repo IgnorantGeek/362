@@ -48,7 +48,7 @@ public class EmployeeManager implements Commandable
      * @param hourlyRate Hourly pay rate of the employee
      * @return The ID of the new employee, -1 on error
      */
-    public int addHourlyEmployee(String employeeName, String password, int supervisorId, int hourlyRate)
+    public int addHourlyEmployee(String employeeName, String password, int supervisorId, double hourlyRate)
     {
         Employee in = new HourlyEmployee(idCounter++, password, supervisorId, employeeName, hourlyRate);
         employeeCount++;
@@ -144,7 +144,7 @@ public class EmployeeManager implements Commandable
     /**
      * Checks whether some employee is authorized to make changes to some other employee
      * @param supervisor the supervisor to check
-     * @param worker the worker whos supervisor we are checking
+     * @param workerID the worker who's supervisor we are checking
      * @return true if Employee has supervisor privileges, false otherwise
      */
     public boolean checkPrivilege(Employee supervisor, int workerID)
@@ -178,7 +178,6 @@ public class EmployeeManager implements Commandable
     /**
      * Initializes the Employees Database and builds any present
      * Employee files into memory
-     * @return true on success, false otherwise
      */
     public void init()
     {
@@ -301,9 +300,306 @@ public class EmployeeManager implements Commandable
     }
 
     @Override
-    public String executeCommand(Command command)
+    public String executeCommand(Employee loggedIn, Command command)
     {
-        // TODO
-        return null;
+        StringBuilder build = new StringBuilder();
+        switch (command.getCommand())
+        {
+            case "add":
+                // Check params
+                if (command.getOptions().size() < 2)
+                {
+                    build.append("Employee cmd Error: Not enough arguments\n");
+                    build.append("\nExpected - add <name> <password> ");
+                    break;
+                }
+                if (command.getOptions().size() == 2)
+                {
+                    // Default hourly employee
+                    String name = command.getOptions().get(0);
+                    String password = command.getOptions().get(1);
+
+                    int ret = addHourlyEmployee(name, password, loggedIn.Id(), Global.DEFAULT_WAGE);
+
+                    if (ret < 0) {
+                        // Employee add failure
+                        build.append("Employee internal Error: Error writing new Employee");
+                    }
+                    else build.append("Successfully added Hourly Employee with ID: ").append(ret);
+                    break;
+                }
+                if (command.getOptions().size() == 3)
+                {
+                    build.append("Employee cmd Error: Not enough arguments\n");
+                    build.append("Expected - add <name> <password> [-i <supervisorId>] [-s <salary>]");
+                    build.append(" || [-h <hourlyRate>]");
+                    break;
+                }
+                if (command.getOptions().size() == 4)
+                {
+                    // Check flag
+                    String name = command.getOptions().get(0);
+                    String password = command.getOptions().get(1);
+                    String flag = command.getOptions().get(2);
+                    int supId = loggedIn.Id();
+                    double rate = Global.DEFAULT_WAGE;
+                    switch (flag)
+                    {
+                        case "-i":
+                        case "-I":
+                            try {
+                                supId = Integer.parseInt(command.getOptions().get(3));
+                            }
+                            catch (NumberFormatException e)
+                            {
+                                build.append("Employee cmd Error: Supervisor Id argument '");
+                                build.append(command.getOptions().get(3)).append("' is not a valid number");
+                                // Exit
+                                return build.toString();
+                            }
+                            break;
+                        case "-h":
+                        case "-H":
+                            // Hourly employee
+                            try {
+                                rate = Double.parseDouble(command.getOptions().get(3));
+                            }
+                            catch (NumberFormatException e)
+                            {
+                                build.append("Employee cmd Error: Hourly rate argument '");
+                                build.append(command.getOptions().get(3)).append("' is not a valid number");
+                                return build.toString();
+                            }
+                            break;
+                        case "-s":
+                        case "-S":
+                            // Salary employee
+                            try {
+                                rate = Double.parseDouble(command.getOptions().get(3));
+                            }
+                            catch (NumberFormatException e)
+                            {
+                                build.append("Employee cmd Error: Salary argument '");
+                                build.append(command.getOptions().get(3)).append("' is not a valid number");
+                                return build.toString();
+                            }
+                            break;
+                        default:
+                            build.append("Employee cmd Error: Invalid flag '").append(flag).append("'\n");
+                            build.append("Expected - add <name> <password> [-i <supervisorId>] [-s <salary>]");
+                            build.append(" || [-h <hourlyRate>]");
+                            // Exit
+                            return build.toString();
+                    }
+
+                    int ret;
+                    if (flag.compareTo("-s") == 0
+                    ||  flag.compareTo("-S") == 0)
+                    {
+                        ret = addSalariedEmployee(name, password, supId, rate);
+
+                        if (ret < 0) {
+                            // Employee add failure
+                            build.append("Employee internal Error: Error writing new Employee");
+                        } else build.append("Successfully added Salaried Employee with ID: ").append(ret);
+                    }
+                    else
+                    {
+                        ret = addHourlyEmployee(name, password, supId, rate);
+
+                        if (ret < 0) {
+                            // Employee add failure
+                            build.append("Employee internal Error: Error writing new Employee");
+                        } else build.append("Successfully added Hourly Employee with ID: ").append(ret);
+                    }
+                    break;
+                }
+                if (command.getOptions().size() == 5)
+                {
+                    build.append("Employee cmd Error: Not enough arguments\n");
+                    build.append("Expected - add <name> <password> [-i <supervisorId>] [-s <salary>]");
+                    build.append(" || [-h <hourlyRate>]");
+                    break;
+                }
+
+                String name = command.getOptions().get(0);
+                String password = command.getOptions().get(1);
+                String flag1 = command.getOptions().get(2);
+                String flag2 = command.getOptions().get(4);
+                int supId = loggedIn.Id();
+                double rate = -1;
+                int ret;
+
+                // First flag
+                switch (flag1)
+                {
+                    case "-h":
+                    case "-H":
+                        // Hourly employee
+                        try {
+                            rate = Double.parseDouble(command.getOptions().get(3));
+                        }
+                        catch (NumberFormatException e)
+                        {
+                            build.append("Employee cmd Error: Hourly rate argument '");
+                            build.append(command.getOptions().get(3)).append("' is not a valid number");
+                            return build.toString();
+                        }
+                        break;
+                    case "-s":
+                    case "-S":
+                        // Salary employee
+                        try {
+                            rate = Double.parseDouble(command.getOptions().get(3));
+                        }
+                        catch (NumberFormatException e)
+                        {
+                            build.append("Employee cmd Error: Salary argument '");
+                            build.append(command.getOptions().get(3)).append("' is not a valid number");
+                            return build.toString();
+                        }
+                        break;
+                    case "-i":
+                    case "-I":
+                        try {
+                            supId = Integer.parseInt(command.getOptions().get(3));
+                        }
+                        catch (NumberFormatException e)
+                        {
+                            build.append("Employee cmd Error: Supervisor Id argument '");
+                            build.append(command.getOptions().get(3)).append("' is not a valid number");
+                            // Exit
+                            return build.toString();
+                        }
+                        break;
+
+                    default:
+                        build.append("Employee cmd Error: Not enough arguments\n");
+                        build.append("Expected - add <name> <password> [-i <supervisorId>] [-s <salary>]");
+                        build.append(" || [-h <hourlyRate>]\n");
+                        build.append("Invalid flag: ").append(flag1);
+                }
+
+                // Flag 2
+                switch (flag2)
+                {
+                    case "-h":
+                    case "-H":
+                        // Hourly employee
+                        if (rate != -1)
+                        {
+                            build.append("Employee cmd Error: Duplicate employee type. Employee can only be ");
+                            build.append("hourly (-h) or salaried (-s).");
+                            return build.toString();
+                        }
+                        try {
+                            rate = Double.parseDouble(command.getOptions().get(3));
+                        }
+                        catch (NumberFormatException e)
+                        {
+                            build.append("Employee cmd Error: Hourly rate argument '");
+                            build.append(command.getOptions().get(3)).append("' is not a valid number");
+                            return build.toString();
+                        }
+                        break;
+                    case "-s":
+                    case "-S":
+                        // Salary employee
+                        if (rate != -1)
+                        {
+                            build.append("Employee cmd Error: Duplicate employee type. Employee can only be ");
+                            build.append("hourly (-h) or salaried (-s).");
+                            return build.toString();
+                        }
+                        try {
+                            rate = Double.parseDouble(command.getOptions().get(3));
+                        }
+                        catch (NumberFormatException e)
+                        {
+                            build.append("Employee cmd Error: Salary argument '");
+                            build.append(command.getOptions().get(3)).append("' is not a valid number");
+                            return build.toString();
+                        }
+                        break;
+                    case "-i":
+                    case "-I":
+                        if (flag1.compareTo(flag2) == 0)
+                        {
+                            build.append("Employee cmd Error: Duplicate supervisor Id flag (-i)");
+                            return build.toString();
+                        }
+                        try {
+                            supId = Integer.parseInt(command.getOptions().get(3));
+                        }
+                        catch (NumberFormatException e)
+                        {
+                            build.append("Employee cmd Error: Supervisor Id argument '");
+                            build.append(command.getOptions().get(3)).append("' is not a valid number");
+                            // Exit
+                            return build.toString();
+                        }
+                        break;
+                }
+
+                // Check new Employee type
+                if (flag1.compareTo("-s") == 0
+                ||  flag1.compareTo("-S") == 0
+                ||  flag2.compareTo("-s") == 0
+                ||  flag2.compareTo("-S") == 0)
+                {
+                    // Salaried
+                    ret = addSalariedEmployee(name, password, supId, rate);
+
+                    if (ret < 0) {
+                        // Employee add failure
+                        build.append("Employee internal Error: Error writing new Employee");
+                    }
+                    else build.append("Successfully added Hourly Employee with ID: ").append(ret);
+                }
+                else if (flag1.compareTo("-h") == 0
+                ||  flag1.compareTo("-H") == 0
+                ||  flag2.compareTo("-h") == 0
+                ||  flag2.compareTo("-H") == 0)
+                {
+                    // Salaried
+                    ret = addHourlyEmployee(name, password, supId, rate);
+
+                    if (ret < 0) {
+                        // Employee add failure
+                        build.append("Employee internal Error: Error writing new Employee");
+                    }
+                    else build.append("Successfully added Hourly Employee with ID: ").append(ret);
+                }
+                break;
+            case "remove":
+                if (command.getOptions() == null
+                ||  command.getOptions().size() < 1)
+                {
+                    build.append("Employee cmd Error: Not enough arguments\n");
+                    build.append("Expected - remove <id1> <id2> ... <idn>");
+                    break;
+                }
+                for (String op : command.getOptions())
+                {
+                    int ID;
+
+                    try {
+                        ID = Integer.parseInt(op);
+                    }
+                    catch (NumberFormatException e)
+                    {
+                        build.append("Argument '").append(op).append("' not a valid number. Skipped\n");
+                        continue;
+                    }
+
+
+                }
+                break;
+            case "update":
+                break;
+            default:
+                build.append("Employee cmd Error: No binding found for '").append(command.getCommand()).append("'");
+        }
+        return build.toString();
     }
 }

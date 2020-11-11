@@ -34,7 +34,7 @@ public class HourlyEmployee extends Employee{
         // Write the employe to the db file
         String fileName = this.Id() + ".txt";
         String build = "";
-        build += this.FullName() + "\n" + this.supervisorId();
+        build += this.FullName() + "\n" + this.supervisorId() + "\n" + this.Password() + "\n";
         build += 1 + "\n" + this.hourlyRate() + "\n" + this.hoursWorked(); // 0 for salary and 1 for hourly
 
         try

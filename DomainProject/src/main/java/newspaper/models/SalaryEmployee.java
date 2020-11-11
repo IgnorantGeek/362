@@ -24,7 +24,7 @@ public class SalaryEmployee extends Employee {
         // Write the employe to the db file
         String fileName = this.Id() + ".txt";
         String build = "";
-        build += this.FullName() + "\n" + this.supervisorId();
+        build += this.FullName() + "\n" + this.supervisorId() + "\n" + this.Password() + "\n";
         build += 0 + "\n" + this.salary(); // 0 for salary and 1 for hourly
 
         try

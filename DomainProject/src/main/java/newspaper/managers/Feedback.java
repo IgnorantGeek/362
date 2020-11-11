@@ -1,5 +1,6 @@
 package newspaper.managers;
 
+import newspaper.models.Employee;
 import newspaper.ui.Command;
 
 import java.io.BufferedWriter;
@@ -320,7 +321,7 @@ public class Feedback implements Commandable
 	}
 
 	@Override
-	public String executeCommand(Command command)
+	public String executeCommand(Employee loggedIn, Command command)
 	{
 		// TODO
 		return null;

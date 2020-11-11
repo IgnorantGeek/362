@@ -1,5 +1,6 @@
 package newspaper.managers;
 
+import newspaper.models.Employee;
 import newspaper.models.Subscription;
 import newspaper.models.PaymentInformation;
 import newspaper.models.CreditCard;
@@ -333,7 +334,7 @@ public class SubscriptionManager implements Commandable
 	}
 
 	@Override
-	public String executeCommand(Command command)
+	public String executeCommand(Employee loggedIn, Command command)
 	{
 		// TODO
 		return null;

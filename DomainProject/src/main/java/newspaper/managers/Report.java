@@ -222,7 +222,7 @@ public class Report implements  Commandable
 	}
 
 	@Override
-	public String executeCommand(Command command)
+	public String executeCommand(Employee loggedIn, Command command)
 	{
 		// TODO
 		return null;

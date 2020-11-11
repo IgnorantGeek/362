@@ -8,12 +8,10 @@ import java.io.IOException;
 
 public abstract class Employee implements Writeable
 {
-    private int Id;
+    private final int Id;
     private int supervisorId;
     private String FullName;
     private String Password;
-
-    public Employee() { }
 
     public Employee(int Id, String FullName)
     {

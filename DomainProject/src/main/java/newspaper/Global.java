@@ -9,6 +9,7 @@ public class Global
     public static String EMPLOYEE_DB_PATH = "../Database/Employees/";
     public static String DISTRIBUTOR_DB_PATH = "../Database/Customers/";
     public static String ADVERTISER_DB_PATH = "../Database/Advertisers/";
+    public static double DEFAULT_WAGE = 7.25;
     public static String generateID()
     {
         int lowerlet  = 65;

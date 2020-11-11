@@ -3,6 +3,7 @@ package newspaper.managers;
 import newspaper.models.Ad;
 import newspaper.models.Advertiser;
 import newspaper.Global;
+import newspaper.models.Employee;
 import newspaper.ui.Command;
 
 import java.io.File;
@@ -52,7 +53,7 @@ public class AdManager implements Commandable
             // Initialize the ad structure, read all ads in /Ads/
             for (String fName : root.list())
             {
-                File adFile = new File(databasePath + "/Ads/" + fName);
+                File adFile = new File(databasePath + "/Ads" + fName);
 
                 Ad insert = new Ad(adFile);
 
@@ -117,16 +118,16 @@ public class AdManager implements Commandable
     }
 
     @Override
-    public String executeCommand(Command command)
+    public String executeCommand(Employee loggedIn, Command command)
     {
         // Get the command
         switch (command.getCommand())
         {
-            case "new-ad":
+            case "add":
                 // Process a new ad
 
                 break;
-            case "drop-ad":
+            case "remove":
                 break;
             default:
                 return null;

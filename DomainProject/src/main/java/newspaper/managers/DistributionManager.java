@@ -2,6 +2,7 @@ package newspaper.managers;
 
 import newspaper.Global;
 import newspaper.models.Distributor;
+import newspaper.models.Employee;
 import newspaper.ui.Command;
 
 import java.io.File;
@@ -152,7 +153,7 @@ public class DistributionManager implements Commandable
     }
 
     @Override
-    public String executeCommand(Command command)
+    public String executeCommand(Employee loggedIn, Command command)
     {
         StringBuilder build = new StringBuilder();
 

@@ -1,6 +1,7 @@
 package newspaper.ui;
 
 import newspaper.managers.*;
+import newspaper.models.Employee;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +22,7 @@ public class CommandProcessor
 
     public CommandProcessor() { }
 
-    public String processCommand(String commandStr)
+    public String processCommand(Employee loggedIn, String commandStr)
     {
         // Param check
         if (commandStr == null
@@ -51,37 +52,37 @@ public class CommandProcessor
         switch(manCmd)
         {
             case "newspaper":
-                out = nman.executeCommand(command);
+                out = nman.executeCommand(loggedIn, command);
                 break;
             case "article":
-                out = aman.executeCommand(command);
+                out = aman.executeCommand(loggedIn, command);
                 break;
             case "advert":
-                out = adman.executeCommand(command);
+                out = adman.executeCommand(loggedIn, command);
                 break;
             case "subscription":
-                out = sman.executeCommand(command);
+                out = sman.executeCommand(loggedIn, command);
                 break;
             case "distributor":
-                out = dman.executeCommand(command);
+                out = dman.executeCommand(loggedIn, command);
                 break;
             case "dm":
-                out = dme.executeCommand(command);
+                out = dme.executeCommand(loggedIn, command);
                 break;
             case "feedback":
-                out = fback.executeCommand(command);
+                out = fback.executeCommand(loggedIn, command);
                 break;
             case "employee":
-                out = eman.executeCommand(command);
+                out = eman.executeCommand(loggedIn, command);
                 break;
             case "finance":
-                out = fman.executeCommand(command);
+                out = fman.executeCommand(loggedIn, command);
                 break;
             case "report":
-                out = rport.executeCommand(command);
+                out = rport.executeCommand(loggedIn, command);
                 break;
             case "react":
-                out = ract.executeCommand(command);
+                out = ract.executeCommand(loggedIn, command);
                 break;
             default:
                 out = "No command found for " + manCmd;

@@ -78,7 +78,7 @@ public class Main
 
                     // Flush console and process the command
                     Global.flushConsole();
-                    System.out.println(cp.processCommand(cmdString));
+                    System.out.println(cp.processCommand(loggedIn, cmdString));
 
                     // Prompt for new command
                     System.out.println("Now what would you like to do?");

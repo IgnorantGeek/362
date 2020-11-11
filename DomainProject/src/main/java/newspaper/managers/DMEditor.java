@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.HashMap;
+
+import newspaper.models.Employee;
 import newspaper.models.Newspaper;
 import newspaper.ui.Command;
 
@@ -403,7 +405,7 @@ public class DMEditor implements Commandable
 	}
 
 	@Override
-	public String executeCommand(Command command)
+	public String executeCommand(Employee loggedIn, Command command)
 	{
 		// TODO
 		return null;
