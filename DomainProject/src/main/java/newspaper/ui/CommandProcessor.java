@@ -2,6 +2,7 @@ package newspaper.ui;
 
 import newspaper.managers.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class CommandProcessor
@@ -29,22 +30,21 @@ public class CommandProcessor
             return "Error. Empty input string";
         }
         // Split the strings by spaces
-        String[] cmdArr = commandStr.split(" ");
+        ArrayList<String> cmdArr = commandSplit(commandStr);
         String out;
 
         // Check for required manager and command input
-        if (cmdArr.length < 2)
+        if (cmdArr.size() < 2)
         {
             return "Error. Not enough arguments.\nRequired format:\n<manager> <command> <options>*";
         }
 
         // Create a command object
-        String subCmd = cmdArr[1];
-        String[] options = null;
-        if (cmdArr.length > 2) options = Arrays.copyOfRange(cmdArr, 2, cmdArr.length - 1);
+        String subCmd = cmdArr.get(1);
+        ArrayList<String> options = new ArrayList<>();
 
         Command command = new Command(subCmd, options);
-        switch(cmdArr[0])
+        switch(cmdArr.get(0))
         {
             case "newspaper":
                 out = nman.executeCommand(command);
@@ -80,8 +80,38 @@ public class CommandProcessor
                 out = ract.executeCommand(command);
                 break;
             default:
-                out = "No command found for " + cmdArr[0];
+                out = "No command found for " + cmdArr.get(0);
         }
+        return out;
+    }
+
+    private ArrayList<String> commandSplit(String commandStr)
+    {
+        ArrayList<String> out = new ArrayList<>();
+        StringBuilder build = new StringBuilder();
+        boolean quoteOpen = false;
+
+        for (int i = 0; i < commandStr.length(); i++)
+        {
+            if (commandStr.charAt(i) == '"')
+            {
+                // Toggle quote Open
+                quoteOpen = !quoteOpen;
+            }
+            if (commandStr.charAt(i) == ' ')
+            {
+                if (quoteOpen) build.append(commandStr.charAt(i));
+                else
+                {
+                    out.add(build.toString());
+                    build = new StringBuilder();
+                }
+            }
+            else build.append(commandStr.charAt(i));
+        }
+
+        out.add(build.toString());
+        System.out.println(out);
         return out;
     }
 }
