@@ -19,10 +19,6 @@ public class FinancialManager implements Commandable
 	double printCost;
 	double revenue;
 	double expenses;
-
-	public FinancialManager(EmployeeManager eman, AdManager adman, SubscriptionManager sman, DistributionManager dman){
-
-	}
 	
 	public FinancialManager(EmployeeManager eman, AdManager adman, SubscriptionManager sman, CustomerManager cman) {
 		employeeRegistry = eman.getRegistry();

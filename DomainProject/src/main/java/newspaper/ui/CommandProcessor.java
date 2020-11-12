@@ -12,7 +12,6 @@ public class CommandProcessor
     private ArticleManager aman = new ArticleManager();
     private AdManager adman = new AdManager();
     private SubscriptionManager sman = new SubscriptionManager();
-    private DistributionManager dman = new DistributionManager();
     private DMEditor dme = new DMEditor();
     private Feedback fback = new Feedback();
     public EmployeeManager eman = new EmployeeManager(10); // Reserve ids 0-9 for testing, public for login
