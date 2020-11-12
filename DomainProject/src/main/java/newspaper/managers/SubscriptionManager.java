@@ -60,13 +60,13 @@ public class SubscriptionManager implements Commandable
 			}
 			s.close();
 		} catch (FileNotFoundException e) {
-			System.out.println("Subscribtion file is inaccessible.");
+			System.out.println("Subscription file is inaccessible.");
 		}	
 	}
 	/**
 	 * Adds a subscription to file and memory
 	 * @param s Subscription to be added
-	 * *@return True if save was succesful, false if not.
+	 **@return True if save was successful, false if not.
 	 */
 	public boolean addSub(Subscription s) {
 		if(s != null && getSub(s.email) == null) {
@@ -79,7 +79,7 @@ public class SubscriptionManager implements Commandable
 	/**
 	 * Adds a subscription to file
 	 * @param s Subscription to be added
-	 *@return True if save was succesful, false if not.
+	 * @return True if save was successful, false if not.
 	 */
 	private boolean writeSub(Subscription s) {
 		PrintWriter out = null;
