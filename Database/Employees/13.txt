@@ -1,0 +1,6 @@
+John Smith
+10
+password
+13
+7.25
+0.0

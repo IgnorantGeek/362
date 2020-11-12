@@ -328,6 +328,16 @@ public class SubscriptionManager implements Commandable
 		in.close();
 		return false;
 	}
+
+	public String removeSubscription(String email)
+	{
+		if (Subscriptions.containsKey(email))
+		{
+			if (removeSub(email)) return "Successfully dropped subscription for " + email;
+			else return "Subscription internal Error: Failed to remove subscription for " + email;
+		}
+		return "Subscription internal Error: No subscription found with email " + email;
+	}
 	
 	public HashMap<String,Subscription> getAll() {
 		return Subscriptions;
@@ -336,7 +346,28 @@ public class SubscriptionManager implements Commandable
 	@Override
 	public String executeCommand(Employee loggedIn, Command command)
 	{
-		// TODO
-		return null;
+		StringBuilder build = new StringBuilder();
+
+		switch (command.getCommand())
+		{
+			case "remove":
+				if (command.getOptions().size() < 1)
+				{
+					build.append("Retract cmd Error: missing required email parameter\n");
+					build.append("Expected - remove <email>*");
+					break;
+				}
+
+				for (String opt : command.getOptions())
+				{
+					build.append(removeSubscription(opt)).append('\n');
+				}
+				break;
+			case "add":
+
+			default:
+				build.append("Retract cmd Error: No binding found for '").append(command.getCommand()).append("'");
+		}
+		return build.toString();
 	}
 }

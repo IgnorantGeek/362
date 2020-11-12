@@ -494,7 +494,7 @@ public class App
 										}
 									}
 
-									int id = eman.addHourlyEmployee(name, newEmpPassword, supervisorID, 10);
+									int id = eman.addHourlyEmployee(name, newEmpPassword, supervisorID, 0, 10);
 
 									// This isn't working and I don't know why. Still adds the employee
 									// But the output message does not work

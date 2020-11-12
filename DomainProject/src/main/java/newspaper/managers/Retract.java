@@ -28,6 +28,8 @@ public class Retract implements Commandable
 	 * The list of all retracted newspapers.
 	 */
 	private HashMap<String,Newspaper> newspaperRetractions;
+	private NewspaperManager nman;
+	private ArticleManager aman;
 	/**
 	 * Constructor for the retract class.
 	 * @param papers The app.java's newspaper manager
@@ -39,6 +41,8 @@ public class Retract implements Commandable
 		articleRetractions = new HashMap<String,Article>();
 		newspaperRetractions = new HashMap<String,Newspaper>();
 		init(papers,arts);
+		this.nman = papers;
+		this.aman = arts;
 	}
 	/**
 	 * Allows the user to retract an article or newspaper.
@@ -131,6 +135,18 @@ public class Retract implements Commandable
 			in = scan.nextLine();
 		}
 		return true;
+	}
+
+	public String retractArticle(Employee loggedIn)
+	{
+		StringBuilder build = new StringBuilder();
+		return build.toString();
+	}
+
+	public String retractPaper(Employee loggedIn)
+	{
+		StringBuilder build = new StringBuilder();
+		return build.toString();
 	}
 	/**
 	 * Returns the list of retracted articles.
@@ -270,7 +286,16 @@ public class Retract implements Commandable
 	@Override
 	public String executeCommand(Employee loggedIn, Command command)
 	{
-		// TODO
-		return null;
+		StringBuilder build = new StringBuilder();
+		switch (command.getCommand())
+		{
+			case "get-papers":
+				break;
+			case "get-articles":
+				break;
+			default:
+				build.append("Retract cmd Error: No binding found for '").append(command.getCommand()).append("'");
+		}
+		return build.toString();
 	}
 }

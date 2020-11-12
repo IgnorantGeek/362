@@ -127,6 +127,13 @@ public class Feedback implements Commandable
 			return false;
 		}
 	}
+
+	public String removeFeedback(Employee loggedIn, int feedbackID)
+	{
+		StringBuilder build = new StringBuilder();
+
+		return build.toString();
+	}
 	
 	/**
 	 * Allows the user to input feedback

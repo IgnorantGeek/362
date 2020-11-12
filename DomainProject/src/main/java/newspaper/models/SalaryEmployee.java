@@ -9,12 +9,8 @@ import newspaper.Global;
 public class SalaryEmployee extends Employee {
 	double salary;
 	
-	public SalaryEmployee(int Id, String FullName) {
-		super(Id, FullName);
-	}
-	
-	public SalaryEmployee(int Id, String password, int supervisorId, String FullName, double salary) {
-		super(Id, password, supervisorId, FullName);
+	public SalaryEmployee(int Id, String password, int supervisorId, String FullName, int clearance, double salary) {
+		super(Id, FullName, password, supervisorId, clearance);
 		this.salary = salary;
 	}
 	
@@ -25,7 +21,7 @@ public class SalaryEmployee extends Employee {
         String fileName = this.Id() + ".txt";
         String build = "";
         build += this.FullName() + "\n" + this.supervisorId() + "\n" + this.Password() + "\n";
-        build += 0 + "\n" + this.salary(); // 0 for salary and 1 for hourly
+        build += this.Clearance() + '\n' + 0 + "\n" + this.salary(); // 0 for salary and 1 for hourly
 
         try
         {

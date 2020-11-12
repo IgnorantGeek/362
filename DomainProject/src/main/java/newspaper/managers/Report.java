@@ -329,7 +329,6 @@ public class Report implements  Commandable
 				break;
 
 			case "remove":
-				build.append("Not done yet");
 				break;
 			default:
 				build.append("No binding for command '").append(command.getCommand()).append("'");

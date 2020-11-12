@@ -49,9 +49,9 @@ public class EmployeeManager implements Commandable
      * @param hourlyRate Hourly pay rate of the employee
      * @return The ID of the new employee, -1 on error
      */
-    public int addHourlyEmployee(String employeeName, String password, int supervisorId, double hourlyRate)
+    public int addHourlyEmployee(String employeeName, String password, int supervisorId, int clearance, double hourlyRate)
     {
-        Employee in = new HourlyEmployee(idCounter++, password, supervisorId, employeeName, hourlyRate);
+        Employee in = new HourlyEmployee(idCounter++, password, supervisorId, employeeName, clearance, hourlyRate);
         employeeCount++;
 
         registry.put(in.Id(), in);
@@ -68,9 +68,9 @@ public class EmployeeManager implements Commandable
      * @param salary Yearly salary of the employee
      * @return The ID of the new employee, -1 on error
      */
-    public int addSalariedEmployee(String employeeName, String password, int supervisorId, double salary)
+    public int addSalariedEmployee(String employeeName, String password, int supervisorId, int clearance, double salary)
     {
-        Employee in = new SalaryEmployee(idCounter++, password, supervisorId, employeeName,salary);
+        Employee in = new SalaryEmployee(idCounter++, password, supervisorId, employeeName, clearance, salary);
         employeeCount++;
 
         registry.put(in.Id(), in);
@@ -224,6 +224,7 @@ public class EmployeeManager implements Commandable
             String name = fileScanner.nextLine();
             int supIdString = Integer.parseInt(fileScanner.nextLine());
             String password = fileScanner.nextLine();
+            int clearance = Integer.parseInt(fileScanner.nextLine());
             int type = Integer.parseInt(fileScanner.nextLine());
 
             String fname = "";
@@ -236,13 +237,13 @@ public class EmployeeManager implements Commandable
             
             if(type == 0) {
             	double salary = Double.parseDouble(fileScanner.nextLine());
-            	out = new SalaryEmployee(id, password, supIdString, name, salary);
+            	out = new SalaryEmployee(id, password, supIdString, name, clearance, salary);
             }
             
             else {
             	double rate = Double.parseDouble(fileScanner.nextLine());
             	double hours = Double.parseDouble(fileScanner.nextLine());
-            	out = new HourlyEmployee(id, password, supIdString, name, rate, hours);
+            	out = new HourlyEmployee(id, password, supIdString, name, clearance, rate, hours);
             	
             }
             
@@ -310,20 +311,30 @@ public class EmployeeManager implements Commandable
         {
             case "add":
                 // Check params
-                if (command.getOptions().size() < 2)
+                if (command.getOptions().size() < 3)
                 {
                     build.append("Employee cmd Error: Not enough arguments\n");
-                    build.append("Expected - add <name> <password> [-i <supervisorId>] [-s <salary>]");
+                    build.append("Expected - add <name> <password> <clearance> [-i <supervisorId>] [-s <salary>]");
                     build.append(" || [-h <hourlyRate>]");
                     break;
                 }
-                if (command.getOptions().size() == 2)
+                if (command.getOptions().size() == 3)
                 {
                     // Default hourly employee
                     String name = command.getOptions().get(0);
                     String password = command.getOptions().get(1);
+                    int clearance;
+                    try {
+                        clearance = Integer.parseInt(command.getOptions().get(2));
+                    }
+                    catch (NumberFormatException e)
+                    {
+                        build.append("Employee cmd Error: Entered clearance parameter '");
+                        build.append(command.getOptions().get(2)).append("' is not a valid number");
+                        return build.toString();
+                    }
 
-                    int ret = addHourlyEmployee(name, password, loggedIn.Id(), Global.DEFAULT_WAGE);
+                    int ret = addHourlyEmployee(name, password, loggedIn.Id(), clearance, Global.DEFAULT_WAGE);
 
                     if (ret < 0) {
                         // Employee add failure
@@ -332,18 +343,28 @@ public class EmployeeManager implements Commandable
                     else build.append("Successfully added Hourly Employee with ID: ").append(ret);
                     break;
                 }
-                if (command.getOptions().size() == 3)
+                if (command.getOptions().size() == 4)
                 {
                     build.append("Employee cmd Error: Not enough arguments\n");
-                    build.append("Expected - add <name> <password> [-i <supervisorId>] [-s <salary>]");
+                    build.append("Expected - add <name> <password> <clearance> [-i <supervisorId>] [-s <salary>]");
                     build.append(" || [-h <hourlyRate>]");
                     break;
                 }
-                if (command.getOptions().size() == 4)
+                if (command.getOptions().size() == 5)
                 {
                     // Check flag
                     String name = command.getOptions().get(0);
                     String password = command.getOptions().get(1);
+                    int clearance;
+                    try {
+                        clearance = Integer.parseInt(command.getOptions().get(2));
+                    }
+                    catch (NumberFormatException e)
+                    {
+                        build.append("Employee cmd Error: Entered clearance parameter '");
+                        build.append(command.getOptions().get(2)).append("' is not a valid number");
+                        return build.toString();
+                    }
                     String flag = command.getOptions().get(2);
                     int supId = loggedIn.Id();
                     double rate = Global.DEFAULT_WAGE;
@@ -390,7 +411,7 @@ public class EmployeeManager implements Commandable
                             break;
                         default:
                             build.append("Employee cmd Error: Invalid flag '").append(flag).append("'\n");
-                            build.append("Expected - add <name> <password> [-i <supervisorId>] [-s <salary>]");
+                            build.append("Expected - add <name> <password> <clearance> [-i <supervisorId>] [-s <salary>]");
                             build.append(" || [-h <hourlyRate>]");
                             // Exit
                             return build.toString();
@@ -400,7 +421,7 @@ public class EmployeeManager implements Commandable
                     if (flag.compareTo("-s") == 0
                     ||  flag.compareTo("-S") == 0)
                     {
-                        ret = addSalariedEmployee(name, password, supId, rate);
+                        ret = addSalariedEmployee(name, password, supId, clearance, rate);
 
                         if (ret < 0) {
                             // Employee add failure
@@ -409,7 +430,7 @@ public class EmployeeManager implements Commandable
                     }
                     else
                     {
-                        ret = addHourlyEmployee(name, password, supId, rate);
+                        ret = addHourlyEmployee(name, password, supId, clearance, rate);
 
                         if (ret < 0) {
                             // Employee add failure
@@ -418,18 +439,28 @@ public class EmployeeManager implements Commandable
                     }
                     break;
                 }
-                if (command.getOptions().size() == 5)
+                if (command.getOptions().size() == 6)
                 {
                     build.append("Employee cmd Error: Not enough arguments\n");
-                    build.append("Expected - add <name> <password> [-i <supervisorId>] [-s <salary>]");
+                    build.append("Expected - add <name> <password> <clearance> [-i <supervisorId>] [-s <salary>]");
                     build.append(" || [-h <hourlyRate>]");
                     break;
                 }
 
                 String name = command.getOptions().get(0);
                 String password = command.getOptions().get(1);
-                String flag1 = command.getOptions().get(2);
-                String flag2 = command.getOptions().get(4);
+                int clearance;
+                try {
+                    clearance = Integer.parseInt(command.getOptions().get(2));
+                }
+                catch (NumberFormatException e)
+                {
+                    build.append("Employee cmd Error: Entered clearance parameter '");
+                    build.append(command.getOptions().get(2)).append("' is not a valid number");
+                    return build.toString();
+                }
+                String flag1 = command.getOptions().get(3);
+                String flag2 = command.getOptions().get(5);
                 int supId = loggedIn.Id();
                 double rate = -1;
                 int ret;
@@ -441,12 +472,12 @@ public class EmployeeManager implements Commandable
                     case "-H":
                         // Hourly employee
                         try {
-                            rate = Double.parseDouble(command.getOptions().get(3));
+                            rate = Double.parseDouble(command.getOptions().get(4));
                         }
                         catch (NumberFormatException e)
                         {
                             build.append("Employee cmd Error: Hourly rate argument '");
-                            build.append(command.getOptions().get(3)).append("' is not a valid number");
+                            build.append(command.getOptions().get(4)).append("' is not a valid number");
                             return build.toString();
                         }
                         break;
@@ -454,24 +485,24 @@ public class EmployeeManager implements Commandable
                     case "-S":
                         // Salary employee
                         try {
-                            rate = Double.parseDouble(command.getOptions().get(3));
+                            rate = Double.parseDouble(command.getOptions().get(4));
                         }
                         catch (NumberFormatException e)
                         {
                             build.append("Employee cmd Error: Salary argument '");
-                            build.append(command.getOptions().get(3)).append("' is not a valid number");
+                            build.append(command.getOptions().get(4)).append("' is not a valid number");
                             return build.toString();
                         }
                         break;
                     case "-i":
                     case "-I":
                         try {
-                            supId = Integer.parseInt(command.getOptions().get(3));
+                            supId = Integer.parseInt(command.getOptions().get(4));
                         }
                         catch (NumberFormatException e)
                         {
                             build.append("Employee cmd Error: Supervisor Id argument '");
-                            build.append(command.getOptions().get(3)).append("' is not a valid number");
+                            build.append(command.getOptions().get(4)).append("' is not a valid number");
                             // Exit
                             return build.toString();
                         }
@@ -497,12 +528,12 @@ public class EmployeeManager implements Commandable
                             return build.toString();
                         }
                         try {
-                            rate = Double.parseDouble(command.getOptions().get(3));
+                            rate = Double.parseDouble(command.getOptions().get(6));
                         }
                         catch (NumberFormatException e)
                         {
                             build.append("Employee cmd Error: Hourly rate argument '");
-                            build.append(command.getOptions().get(3)).append("' is not a valid number");
+                            build.append(command.getOptions().get(6)).append("' is not a valid number");
                             return build.toString();
                         }
                         break;
@@ -516,12 +547,12 @@ public class EmployeeManager implements Commandable
                             return build.toString();
                         }
                         try {
-                            rate = Double.parseDouble(command.getOptions().get(3));
+                            rate = Double.parseDouble(command.getOptions().get(6));
                         }
                         catch (NumberFormatException e)
                         {
                             build.append("Employee cmd Error: Salary argument '");
-                            build.append(command.getOptions().get(3)).append("' is not a valid number");
+                            build.append(command.getOptions().get(6)).append("' is not a valid number");
                             return build.toString();
                         }
                         break;
@@ -533,12 +564,12 @@ public class EmployeeManager implements Commandable
                             return build.toString();
                         }
                         try {
-                            supId = Integer.parseInt(command.getOptions().get(3));
+                            supId = Integer.parseInt(command.getOptions().get(6));
                         }
                         catch (NumberFormatException e)
                         {
                             build.append("Employee cmd Error: Supervisor Id argument '");
-                            build.append(command.getOptions().get(3)).append("' is not a valid number");
+                            build.append(command.getOptions().get(6)).append("' is not a valid number");
                             // Exit
                             return build.toString();
                         }
@@ -552,7 +583,7 @@ public class EmployeeManager implements Commandable
                 ||  flag2.compareTo("-S") == 0)
                 {
                     // Salaried
-                    ret = addSalariedEmployee(name, password, supId, rate);
+                    ret = addSalariedEmployee(name, password, supId, clearance, rate);
 
                     if (ret < 0) {
                         // Employee add failure
@@ -566,7 +597,7 @@ public class EmployeeManager implements Commandable
                 ||  flag2.compareTo("-H") == 0)
                 {
                     // Salaried
-                    ret = addHourlyEmployee(name, password, supId, rate);
+                    ret = addHourlyEmployee(name, password, supId, clearance, rate);
 
                     if (ret < 0) {
                         // Employee add failure
