@@ -294,6 +294,8 @@ public class EmployeeManager implements Commandable
             else return null;
         }
     }
+
+    public Employee getEmployee(int EmployeeID) { return registry.get(EmployeeID); }
     
     public HashMap<Integer, Employee> getRegistry()
     {
