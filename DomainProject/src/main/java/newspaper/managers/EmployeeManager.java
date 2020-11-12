@@ -7,6 +7,7 @@ import newspaper.Global;
 import newspaper.ui.Command;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -721,6 +722,24 @@ public class EmployeeManager implements Commandable
 
                 find.write();
                 build.append("Successfully updated Employee ").append(findID);
+                break;
+            case "list":
+                build.append("Employees:\n");
+                Collection<Employee> employees = registry.values();
+                for (Employee e : employees)
+                {
+                    build.append(e.Id()).append(": ").append(e.FullName()).append(" -- ").append(e.supervisorId());
+                    build.append('\n');
+                    if (e instanceof SalaryEmployee)
+                    {
+                        build.append("Salary: ").append(((SalaryEmployee) e).salary()).append('\n');
+                    }
+                    if (e instanceof HourlyEmployee)
+                    {
+                        build.append("Hourly Rate: ").append(((HourlyEmployee) e).hourlyRate()).append('\n');
+                    }
+                    build.append("---------------------------\n");
+                }
                 break;
             default:
                 build.append("Employee cmd Error: No binding found for '").append(command.getCommand()).append("'");
