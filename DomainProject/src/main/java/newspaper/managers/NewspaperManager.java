@@ -540,7 +540,16 @@ public class NewspaperManager implements Commandable
 	@Override
 	public String executeCommand(Employee loggedIn, Command command)
 	{
-		// TODO
-		return null;
+		StringBuilder build = new StringBuilder();
+		switch (command.getCommand())
+		{
+			case "list":
+				break;
+			case "add":
+				break;
+			default:
+				build.append("Retract cmd Error: No binding found for '").append(command.getCommand()).append("'");
+		}
+		return build.toString();
 	}
 }

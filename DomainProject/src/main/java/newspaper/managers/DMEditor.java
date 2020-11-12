@@ -407,7 +407,16 @@ public class DMEditor implements Commandable
 	@Override
 	public String executeCommand(Employee loggedIn, Command command)
 	{
-		// TODO
-		return null;
+		StringBuilder build = new StringBuilder();
+		switch (command.getCommand())
+		{
+			case "remove-comments":
+				break;
+			case "read-comments":
+				break;
+			default:
+				build.append("DMEditor cmd Error: No binding found for '").append(command.getCommand()).append("'");
+		}
+		return build.toString();
 	}
 }

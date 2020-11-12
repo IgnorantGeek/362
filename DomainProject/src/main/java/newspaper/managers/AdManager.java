@@ -120,20 +120,16 @@ public class AdManager implements Commandable
     @Override
     public String executeCommand(Employee loggedIn, Command command)
     {
-        // Get the command
+        StringBuilder build = new StringBuilder();
         switch (command.getCommand())
         {
-            case "add":
-                // Process a new ad
-
+            case "new":
                 break;
             case "remove":
                 break;
             default:
-                return null;
+                build.append("Retract cmd Error: No binding found for '").append(command.getCommand()).append("'");
         }
-
-        // Good return
-        return null;
+        return build.toString();
     }
 }

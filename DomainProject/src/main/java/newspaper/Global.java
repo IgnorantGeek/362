@@ -7,8 +7,11 @@ public class Global
 {
     public static String DB_PATH = "../Database/";
     public static String EMPLOYEE_DB_PATH = "../Database/Employees/";
-    public static String DISTRIBUTOR_DB_PATH = "../Database/Customers/";
+    public static String TASK_DB_PATH = "../Database/Tasks/Tasks.txt";
+    public static String DISTRIBUTOR_DB_PATH = "../Database/Distributors/";
     public static String ADVERTISER_DB_PATH = "../Database/Advertisers/";
+    public static String PRINTINGPRESS_DB_PATH = "../Database/PrintingPress.txt";
+    public static String FINANCE_DB_PATH = "../Database/Finance.txt";
     public static double DEFAULT_WAGE = 7.25;
     public static String generateID()
     {

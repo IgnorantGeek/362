@@ -1,15 +1,22 @@
 package newspaper.managers;
 
-import newspaper.models.Employee;
-import newspaper.models.SalaryEmployee;
-import newspaper.models.HourlyEmployee;
-import newspaper.Global;
-import newspaper.ui.Command;
-
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Scanner;
+
+import newspaper.Global;
+import newspaper.models.Employee;
+import newspaper.models.HourlyEmployee;
+import newspaper.models.SalaryEmployee;
+import newspaper.models.Task;
+import newspaper.ui.Command;
 
 /**
  * EmployeeManager - Manages Employees and Login Verification
@@ -21,14 +28,18 @@ public class EmployeeManager implements Commandable
     private int idCounter;
     private int employeeCount;
     private HashMap<Integer, Employee> registry;
+    private HashMap<Integer, ArrayList<Task>> tasks;
 
     // Constructors
     public EmployeeManager()
     {
         registry = new HashMap<>();
+        tasks = new HashMap<Integer, ArrayList<Task>>();
+
         idCounter = 0;
         employeeCount = 0;
         this.init();
+        this.initTasks();
     }
 
     public EmployeeManager(int start)
@@ -36,7 +47,9 @@ public class EmployeeManager implements Commandable
         this.idCounter = start;
         employeeCount = 0;
         registry = new HashMap<>();
+        tasks = new HashMap<Integer, ArrayList<Task>>();
         this.init();
+        this.initTasks();
     }
 
     // Methods
@@ -59,7 +72,7 @@ public class EmployeeManager implements Commandable
         if (in.write() < 0) return -1;
         return in.Id();
     }
-    
+
     /**
      * Adds a salaried employee to the system
      * @param employeeName Name of the new employee
@@ -77,6 +90,108 @@ public class EmployeeManager implements Commandable
 
         if (in.write() == 0) return in.Id();
         else return -1;
+    }
+
+
+    public boolean addTask(int id, String desc)
+    {
+        Task t = new Task(desc, id);
+        ArrayList<Task> list = tasks.get(id);
+        if(list == null) {
+            list = new ArrayList<Task>();
+            tasks.put(id, list);
+        }
+        list.add(t);
+        return writeTask(t);
+    }
+
+    /**
+     * gets all unfinished tasks for given employee
+     * @param id Id of the employee
+     * @return ArrayList of the tasks, null on error
+     */
+    public ArrayList<Task> getTasks(int id)
+    {
+        return tasks.get(id);
+    }
+
+    /**
+     * deletes a task from memory
+     * @param t task to be deleted
+     * @return true it delete is successful, false if not
+     */
+    public boolean deleteTask(Task t)
+    {
+        ArrayList<Task> list = tasks.get(t.getID());
+        if(list == null) {
+            return false;
+        }
+        for(int i = 0; i < tasks.size(); i++) {
+            Task t2 = list.get(i);
+            if(t2.getDesc().equals(t.getDesc())) {
+                list.remove(i);
+                return eraseTask(t2);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * writes a task to file
+     * @param t task to be deleted
+     * @return true it delete is successful, false if not
+     */
+    public boolean writeTask(Task t)
+    {
+        PrintWriter out = null;
+        try {
+            out = new PrintWriter(new BufferedWriter(new FileWriter(Global.EMPLOYEE_DB_PATH, true)));
+            out.print("\n" + t.toString());
+        } catch (IOException e) {
+            System.out.println("Tasks File system corrupted. Seek IT help.");
+            return false;
+        } finally {
+            if (out != null) {
+                out.close();
+            }
+        }
+        return true;
+    }
+
+    /**
+     * erases a task from file
+     * @param t Task to be erased
+     * @return true it delete is successful, false if not
+     */
+    public boolean eraseTask(Task t)
+    {
+        if(t == null) {
+            return false;
+        }
+        tasks.remove(t);
+        Collection<ArrayList<Task>> tsks = tasks.values();
+        PrintWriter out = null;
+        try {
+            out = new PrintWriter(new BufferedWriter(new FileWriter(Global.EMPLOYEE_DB_PATH, false)));
+            int i = 0;
+            for(ArrayList<Task> tsklst: tsks) {
+                for(Task tsk: tsklst) {
+                    if(i > 0)
+                        out.print("\n");
+                    out.print(tsk.toString());
+                    i++;
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Task file system corrupted. Seek IT help.");
+            return false;
+        } finally {
+            if (out != null) {
+                out.close();
+            }
+        }
+        return true;
+
     }
 
     /**
@@ -195,7 +310,7 @@ public class EmployeeManager implements Commandable
         {
             Employee employee = buildFromFile(employeeFileName);
 
-            if (employee != null) 
+            if (employee != null)
             {
                 registry.put(employee.Id(), employee);
                 employeeCount++;
@@ -205,6 +320,38 @@ public class EmployeeManager implements Commandable
             idCounter++;
         }
     }
+
+
+
+    /**
+     * Initializes the Tasks Database and builds any present
+     * Employee files into memory
+     * @return true on success, false otherwise
+     */
+    public void initTasks()
+    {
+        File Archive =  new File(Global.TASK_DB_PATH);
+        try {
+            Scanner s = new Scanner(Archive);
+            while(s.hasNextLine())
+            {
+                String[] line = s.nextLine().split(",");
+                int id = Integer.parseInt(line[0]);
+                String desc = line[1].trim();
+                Task t = new Task(desc, id);
+                ArrayList<Task> tlist = tasks.get(id);
+                if(tlist == null) {
+                    tlist = new ArrayList<Task>();
+                    tasks.put(id, tlist);
+                }
+                tlist.add(t);
+            }
+            s.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Task file is inaccessible.");
+        }
+    }
+
 
     /**
      * Builds an Employee class from a filename
@@ -217,7 +364,7 @@ public class EmployeeManager implements Commandable
         File employeeFile = new File(Global.EMPLOYEE_DB_PATH + fileName);
         Scanner fileScanner;
 
-        try 
+        try
         {
             fileScanner = new Scanner(employeeFile);
 
@@ -234,19 +381,19 @@ public class EmployeeManager implements Commandable
                 else fname += fileName.charAt(i);
             }
             int id = Integer.parseInt(fname);
-            
+
             if(type == 0) {
-            	double salary = Double.parseDouble(fileScanner.nextLine());
-            	out = new SalaryEmployee(id, password, supIdString, name, clearance, salary);
+                double salary = Double.parseDouble(fileScanner.nextLine());
+                out = new SalaryEmployee(id, password, supIdString, name, clearance, salary);
             }
-            
+
             else {
-            	double rate = Double.parseDouble(fileScanner.nextLine());
-            	double hours = Double.parseDouble(fileScanner.nextLine());
-            	out = new HourlyEmployee(id, password, supIdString, name, clearance, rate, hours);
-            	
+                double rate = Double.parseDouble(fileScanner.nextLine());
+                double hours = Double.parseDouble(fileScanner.nextLine());
+                out = new HourlyEmployee(id, password, supIdString, name, clearance, rate, hours);
+
             }
-            
+
 
             fileScanner.close();
         }
@@ -297,10 +444,10 @@ public class EmployeeManager implements Commandable
     }
 
     public Employee getEmployee(int EmployeeID) { return registry.get(EmployeeID); }
-    
+
     public HashMap<Integer, Employee> getRegistry()
     {
-    	return registry;
+        return registry;
     }
 
     @Override
@@ -419,7 +566,7 @@ public class EmployeeManager implements Commandable
 
                     int ret;
                     if (flag.compareTo("-s") == 0
-                    ||  flag.compareTo("-S") == 0)
+                            ||  flag.compareTo("-S") == 0)
                     {
                         ret = addSalariedEmployee(name, password, supId, clearance, rate);
 
@@ -578,9 +725,9 @@ public class EmployeeManager implements Commandable
 
                 // Check new Employee type
                 if (flag1.compareTo("-s") == 0
-                ||  flag1.compareTo("-S") == 0
-                ||  flag2.compareTo("-s") == 0
-                ||  flag2.compareTo("-S") == 0)
+                        ||  flag1.compareTo("-S") == 0
+                        ||  flag2.compareTo("-s") == 0
+                        ||  flag2.compareTo("-S") == 0)
                 {
                     // Salaried
                     ret = addSalariedEmployee(name, password, supId, clearance, rate);
@@ -592,9 +739,9 @@ public class EmployeeManager implements Commandable
                     else build.append("Successfully added Hourly Employee with ID: ").append(ret);
                 }
                 else if (flag1.compareTo("-h") == 0
-                ||  flag1.compareTo("-H") == 0
-                ||  flag2.compareTo("-h") == 0
-                ||  flag2.compareTo("-H") == 0)
+                        ||  flag1.compareTo("-H") == 0
+                        ||  flag2.compareTo("-h") == 0
+                        ||  flag2.compareTo("-H") == 0)
                 {
                     // Salaried
                     ret = addHourlyEmployee(name, password, supId, clearance, rate);
@@ -608,7 +755,7 @@ public class EmployeeManager implements Commandable
                 break;
             case "remove":
                 if (command.getOptions() == null
-                ||  command.getOptions().size() < 1)
+                        ||  command.getOptions().size() < 1)
                 {
                     build.append("Employee cmd Error: Not enough arguments\n");
                     build.append("Expected - remove <id1> <id2> ... <idn>");
@@ -696,8 +843,8 @@ public class EmployeeManager implements Commandable
                 {
                     // If all values have been updated, exit
                     if (updateName != null
-                    &&  updatePass != null
-                    &&  updateID   != -1) break;
+                            &&  updatePass != null
+                            &&  updateID   != -1) break;
 
                     // Get the next flag
                     String flag = command.getOptions().get(i);
@@ -774,6 +921,41 @@ public class EmployeeManager implements Commandable
                     build.append("----------------------------\n");
                 }
                 break;
+
+            case "viewtasks":
+                ArrayList<Task> list = tasks.get(loggedIn.Id());
+                int i = 1;
+                for(Task t: list) {
+                    build.append("\n"+ i + ": " + t.getDesc());
+                    i++;
+                }
+                break;
+
+            case "addtask":
+                if (command.getOptions().size() != 1) {
+                    build.append("addTask requires 1 argument, the task description");
+                }
+                else {
+                    if(addTask(loggedIn.Id(), command.getOptions().get(0))) {
+                        build.append("Task succesfully added");
+                    }
+                    else {
+                        build.append("No task was added");
+                    }
+                }
+                break;
+
+            case "completetask":
+                if (command.getOptions().size() != 1) {
+                    build.append("addTask requires 1 argument, the task number given when viewing tasks");
+                }
+                else {
+                    int num = Integer.parseInt(command.getOptions().get(0));
+                    ArrayList<Task> list3 = tasks.get(loggedIn.Id());
+                    list3.remove(num);
+                }
+                break;
+
             default:
                 build.append("Employee cmd Error: No binding found for '").append(command.getCommand()).append("'");
         }
