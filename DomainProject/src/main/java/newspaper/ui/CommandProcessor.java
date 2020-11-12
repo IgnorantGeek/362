@@ -16,7 +16,8 @@ public class CommandProcessor
     private DMEditor dme = new DMEditor();
     private Feedback fback = new Feedback();
     public EmployeeManager eman = new EmployeeManager(10); // Reserve ids 0-9 for testing, public for login
-    private FinancialManager fman = new FinancialManager(eman,adman,sman,dman);
+    private CustomerManager cman = new CustomerManager(eman);
+    private FinancialManager fman = new FinancialManager(eman,adman,sman,cman);
     private Report rport = new Report(eman);
     private Retract ract = new Retract(nman, aman);
 
@@ -63,8 +64,8 @@ public class CommandProcessor
             case "subscription":
                 out = sman.executeCommand(loggedIn, command);
                 break;
-            case "distributor":
-                out = dman.executeCommand(loggedIn, command);
+            case "customer":
+                out = cman.executeCommand(loggedIn, command);
                 break;
             case "dm":
                 out = dme.executeCommand(loggedIn, command);

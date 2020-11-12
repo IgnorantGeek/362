@@ -738,7 +738,7 @@ public class EmployeeManager implements Commandable
                     {
                         build.append("Hourly Rate: ").append(((HourlyEmployee) e).hourlyRate()).append('\n');
                     }
-                    build.append("---------------------------\n");
+                    build.append("----------------------------\n");
                 }
                 break;
             default:

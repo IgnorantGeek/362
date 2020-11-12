@@ -19,11 +19,11 @@ public class App
 		ArticleManager aman = new ArticleManager();
 		AdManager adman = new AdManager();
 		SubscriptionManager sman = new SubscriptionManager();
-		DistributionManager dman = new DistributionManager();
 		DMEditor messageToEditor = new DMEditor();
 		Feedback feedback = new Feedback();
 		EmployeeManager eman = new EmployeeManager(10); // Reserve ids 0-9 for testing
-		FinancialManager fman = new FinancialManager(eman,adman,sman,dman);
+		CustomerManager cman = new CustomerManager(eman);
+		FinancialManager fman = new FinancialManager(eman,adman,sman,cman);
 		Report rport = new Report(eman);
 		Retract ract = new Retract(nman, aman);
 		// Flush screen and begin outer loop
@@ -398,61 +398,6 @@ public class App
 								}
 								break;
 							}
-							break;
-						case "5":
-							// Add or remove a new distributor
-							System.out.println("Would you like to add or remove a Distributor? (a/r)");
-
-							input = in.nextLine();
-
-							switch (input)
-							{
-							case "a":
-							case "add":
-							case "Add":
-							case "ADD":
-								System.out.println("Enter the name of the new Distributor");
-
-								String name = in.nextLine();
-
-								System.out.println("Enter the number of papers to send to this Distributor");
-								String paperStr = in.nextLine();
-
-								int pc;
-								try
-								{
-									pc = Integer.parseInt(paperStr);
-								}
-								catch(Exception NumberFormatException)
-								{
-									System.out.println(input+" is not a valid number. Cancelling current attempt.");
-									continue;
-								}
-
-								if (dman.addDistributor(name, pc) == 0)
-								{
-									System.out.println("Added new Distributor: " + name);
-								}
-								break;
-
-							case "r":
-							case "remove":
-							case "Remove":
-							case "REMOVE":
-								System.out.println("Enter the ID of the Distributor you would like to drop");
-
-								input = in.nextLine();
-
-								if (dman.removeDistributor(Integer.parseInt(input)) < 0)
-								{
-									System.out.println("Failed to remove Distributor with ID: " + input +" no entry found.");
-								}
-								else System.out.println("Successfully remove Distributor: " + input);
-								break;
-							default:
-								System.out.println("Seriously?");
-							}
-
 							break;
 						case "6":
 							System.out.println("Welcome to our reviews section. Would you like to see all of our reviews (enter 1), enter a new review (enter 2), or");

@@ -3,11 +3,7 @@ package newspaper.managers;
 import java.util.Collection;
 import java.util.HashMap;
 
-import newspaper.models.Ad;
-import newspaper.models.Distributor;
-import newspaper.models.Employee;
-import newspaper.models.HourlyEmployee;
-import newspaper.models.Subscription;
+import newspaper.models.*;
 import newspaper.ui.Command;
 
 public class FinancialManager implements Commandable
@@ -15,7 +11,7 @@ public class FinancialManager implements Commandable
 	HashMap<Integer, Employee> employeeRegistry;
 	HashMap<String, Subscription> subs;
 	HashMap<String, Ad> ads;
-	HashMap<String, Distributor> distributers;
+	HashMap<Integer, Customer> customers;
 	
 	double subPrice;
 	double paperPrice;
@@ -23,12 +19,16 @@ public class FinancialManager implements Commandable
 	double printCost;
 	double revenue;
 	double expenses;
+
+	public FinancialManager(EmployeeManager eman, AdManager adman, SubscriptionManager sman, DistributionManager dman){
+
+	}
 	
-	public FinancialManager(EmployeeManager eman, AdManager adman, SubscriptionManager sman, DistributionManager dman) { 
+	public FinancialManager(EmployeeManager eman, AdManager adman, SubscriptionManager sman, CustomerManager cman) {
 		employeeRegistry = eman.getRegistry();
 		subs = sman.getAll();
 		ads = adman.getAll();
-		distributers = dman.getAll();
+		customers = cman.getRegistry();
 		
 		subPrice = 12.00;
 		paperPrice = 3.00;
@@ -37,7 +37,7 @@ public class FinancialManager implements Commandable
 	}
 	
 	public String payRoll() {
-		String result = "Payroll should be payed as follows:";
+		String result = "";
 		Collection<Employee> vals = employeeRegistry.values();
 		for(Employee e: vals) {
 			double val =  e.getPaycheckValue();
@@ -59,7 +59,7 @@ public class FinancialManager implements Commandable
 	}
 	
 	public String FinancialReport() {
-		String result = "This month's Financial Report\n\nRevenue:\n" + getRevenue() + "\n";
+		String result = "-------------------------\nRevenue:\n" + getRevenue() + "\n";
 		result += "Expences:\n" + getExpences()  + "\n";
 		result += "Total Profit:\n" + getProfit()  + "\n";
 		result += "";
@@ -86,9 +86,10 @@ public class FinancialManager implements Commandable
 			payrollCost += val;
 		}
 		
-		Collection<Distributor> dVals = distributers.values();
-		for(Distributor d:dVals) {
-			int papers = d.paperCount();
+		Collection<Customer> dVals = customers.values();
+		for(Customer d:dVals) {
+			if (!(d instanceof Distributor)) continue;
+			int papers = ((Distributor) d).paperCount();
 			double val =  papers * this.printCost;
 			printCost += val;
 		}
@@ -125,9 +126,10 @@ public class FinancialManager implements Commandable
 		subRev =  subCount * subPrice;
 		subRev = round(subRev);
 		
-		Collection<Distributor> dVals = distributers.values();
-		for(Distributor d:dVals) {
-			int papers = d.paperCount();
+		Collection<Customer> dVals = customers.values();
+		for(Customer d:dVals) {
+			if (!(d instanceof Distributor)) continue;
+			int papers = ((Distributor) d).paperCount();
 			double val =  papers * paperPrice;
 			dstRev += val;
 		}
@@ -135,7 +137,7 @@ public class FinancialManager implements Commandable
 		
 		result += "income from ads: " + adRev + "\n";
 		result += "income from subscriptions: " + subRev + "\n";
-		result += "income from distributers: " + dstRev + "\n";
+		result += "income from distribution: " + dstRev + "\n";
 		revenue += adRev + subRev + dstRev;
 		return result;
 	}
@@ -150,7 +152,29 @@ public class FinancialManager implements Commandable
 	@Override
 	public String executeCommand(Employee loggedIn, Command command)
 	{
-		// TODO
-		return null;
+		StringBuilder build = new StringBuilder();
+		switch (command.getCommand())
+		{
+			case "get-revenue":
+				build.append("Revenue Report:\n").append(getRevenue());
+				break;
+			case "get-expenses":
+				build.append("Expenses Report:\n").append(getExpences());
+				break;
+			case "get-profit":
+				build.append("Estimated Net Profits: ").append(getProfit());
+				break;
+			case "get-report":
+				build.append("Financial Report:\n").append(FinancialReport());
+				break;
+			case "get-payroll":
+				build.append("Payroll:").append(payRoll());
+				break;
+			case "reset-hours":
+				resetEmployeeHours();
+				build.append("Successfully reset Hourly-Employee hours");
+				break;
+		}
+		return build.toString();
 	}
 }
