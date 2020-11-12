@@ -601,19 +601,126 @@ public class EmployeeManager implements Commandable
                     }
                     else if (dropStatus == -1)
                     {
-                        build.append("Employee internal Error: No Employee found with ID ").append(ID).append(". Skipped\n");
+                        build.append("Employee internal Error: No Employee found with ID ").append(ID);
+                        build.append(". Skipped\n");
                     }
                     else if (dropStatus == -2)
                     {
-                        build.append("Employee internal Error: User not authorized to drop Employee ").append(ID).append(". Skipped\n");
+                        build.append("Employee internal Error: User not authorized to drop Employee ").append(ID);
+                        build.append(". Skipped\n");
                     }
                     else if (dropStatus == -3)
                     {
-                        build.append("Employee internal Error: Error writing Employee ").append(ID).append(" to database. Skipped\n");
+                        build.append("Employee internal Error: Error writing Employee ").append(ID);
+                        build.append(" to database. Skipped\n");
                     }
                 }
                 break;
             case "update":
+                // Check params
+                if (command.getOptions().size() < 1)
+                {
+                    build.append("Employee cmd Error: Missing required Employee ID\n");
+                    build.append("Expected - update <ID> [-n <name>] [-p <password>] [-i <supervisorId>");
+                    break;
+                }
+                if (command.getOptions().size() < 3)
+                {
+                    build.append("Employee cmd Error: Missing update parameters\n");
+                    build.append("Expected - update <ID> [-n <name>] [-p <password>] [-i <supervisorId>");
+                    break;
+                }
+
+                int findID;
+                Employee find;
+
+                // Check Employee param
+                try {
+                    findID = Integer.parseInt(command.getOptions().get(0));
+                }
+                catch (NumberFormatException e)
+                {
+                    build.append("Employee cmd Error: Entered value for supervisor ID is not a number: ");
+                    build.append(command.getOptions().get(0));
+                    break;
+                }
+
+                // Check Employee
+                if (registry.containsKey(findID)) find = registry.get(findID);
+                else
+                {
+                    build.append("Employee cmd Error: No Employee found with ID ").append(findID);
+                    break;
+                }
+
+                String updateName = null;
+                String updatePass = null;
+                int    updateID   = -1;
+
+                // Check update options
+                for (int i = 1; i < command.getOptions().size(); i+=2)
+                {
+                    // If all values have been updated, exit
+                    if (updateName != null
+                    &&  updatePass != null
+                    &&  updateID   != -1) break;
+
+                    // Get the next flag
+                    String flag = command.getOptions().get(i);
+
+                    if ((i+1) >= command.getOptions().size()
+                            ||  command.getOptions().get(i+1).charAt(0) == '-')
+                    {
+                        // There are either no more values to parse, or
+                        // The expected value is missing
+                        build.append("Employee cmd Error: Missing expected value for flag '");
+                        build.append(flag).append("'");
+                        return build.toString();
+                    }
+
+                    if (!checkPrivilege(loggedIn, find.Id()))
+                    {
+                        build.append("Employee cmd Error: User not authorized to update this user.");
+                        return build.toString();
+                    }
+
+                    switch (flag)
+                    {
+                        case "-n":
+                        case "-N":
+                            if (updateName == null) updateName = command.getOptions().get(i+1);
+                            break;
+
+                        case "-p":
+                        case "-P":
+                            if (updatePass == null ) updatePass = command.getOptions().get(i+1);
+                            break;
+
+                        case "-i":
+                        case "-I":
+                            if (updateID == -1)
+                            {
+                                try {
+                                    updateID = Integer.parseInt(command.getOptions().get(i+1));
+                                }
+                                catch (NumberFormatException e) {
+                                    build.append("Employee cmd Error: Supervisor ID not a number");
+                                    return build.toString();
+                                }
+                            }
+                            break;
+                        default:
+                            build.append("Employee cmd Error: No binding found for flag '").append(flag).append("'");
+                            return build.toString();
+                    }
+                }
+
+                if (updateID != -1) find.setSupervisorId(updateID);
+                if (updateName != null) find.setFullName(updateName);
+                if (updatePass != null) find.setPassword(updatePass);
+
+                find.write();
+                build.append("Successfully updated Employee ").append(findID);
                 break;
             default:
                 build.append("Employee cmd Error: No binding found for '").append(command.getCommand()).append("'");
