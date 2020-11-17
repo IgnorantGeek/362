@@ -22,7 +22,7 @@ public class Ad implements Writeable
     {
         this.advertID = advertID;
         this.paperID = paperID;
-        this.img_name = advertID + "_img.png";
+        this.img_name = "";
         this.advertiserID = advertiserID;
     }
 
@@ -72,7 +72,7 @@ public class Ad implements Writeable
 
             this.advertiserID = Integer.parseInt(scan.nextLine());
         } catch (FileNotFoundException e) {
-            System.out.println("Could not locate ad file: " + e.getMessage());
+            System.out.println("Ad Warning: Could not locate ad file: " + e.getMessage());
         }
         
     }

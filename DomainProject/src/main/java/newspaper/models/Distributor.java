@@ -38,7 +38,7 @@ public class Distributor extends Customer implements Writeable
 
         // try to write to file
         try {
-            BufferedWriter write = new BufferedWriter(new FileWriter(Global.DISTRIBUTOR_DB_PATH + fileName));
+            BufferedWriter write = new BufferedWriter(new FileWriter(Global.CUSTOMER_DB_PATH + fileName));
 
             write.write(build);
 

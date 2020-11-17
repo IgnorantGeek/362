@@ -21,7 +21,7 @@ public class CustomerManager implements Commandable
 
     public CustomerManager(EmployeeManager eman)
     {
-        this.databasePath = Global.DISTRIBUTOR_DB_PATH;
+        this.databasePath = Global.CUSTOMER_DB_PATH;
         this.registry = new HashMap<>();
         this.eman = eman;
         this.init();
@@ -286,25 +286,24 @@ public class CustomerManager implements Commandable
                 break;
             case "list":
                 Collection<Customer> customers = registry.values();
-                build.append("Customers:\n");
+                build.append("Customers:");
                 for (Customer c : customers)
                 {
                      if (c instanceof Distributor)
                      {
                          Distributor distributor = (Distributor) c;
-                         build.append("-Distributor----------------\n");
+                         build.append("\n-Distributor----------------\n");
                          build.append(distributor.id()).append(":  ").append(distributor.nameString());
-                         build.append("\nPaperCount: ").append(distributor.paperCount()).append('\n');
-                         build.append("----------------------------\n");
+                         build.append("\nPaperCount: ").append(distributor.paperCount());
                      }
                      else if (c instanceof Advertiser)
                      {
                          Advertiser advertiser = (Advertiser) c;
-                         build.append("-Advertiser-----------------\n");
-                         build.append(advertiser.id()).append(":  ").append(advertiser.Name()).append('\n');
-                         build.append("----------------------------\n");
+                         build.append("\n-Advertiser-----------------\n");
+                         build.append(advertiser.id()).append(":  ").append(advertiser.Name());
                      }
                 }
+                build.append("\n----------------------------\n");
                 break;
             default:
                 build.append("No binding for command '").append(command.getCommand()).append("'");

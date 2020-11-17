@@ -169,8 +169,13 @@ public class Report implements  Commandable
 
 	public String removeReport(Employee loggedIn, int dropId)
 	{
-		// todo
-		return null;
+		Employee check = eman.getEmployee(dropId);
+
+		if (loggedIn.Id() == check.Id())
+			return "Report internal Error: You are not allowed to delete reports on yourself.";
+
+		employeeToMessage.remove(check);
+		return "Removed Report for employee " + dropId;
 	}
 	/**
 	 * Saves current progress made in the class.
@@ -237,12 +242,12 @@ public class Report implements  Commandable
 					in = lines.remove(0);
 				}
 				int toggle = 0;
-				for(int i = 0; i < a.getEmployeeCount();i++)
+				for (Employee employee : a.getRegistry().values())
 				{
-					if(a.getRegistry().get(a.getRegistry().keySet().toArray()[i]).FullName().compareTo(name)==0)
+					if(employee.FullName().compareTo(name)==0)
 					{
 						toggle = 1;
-						employeeToMessage.put(a.getRegistry().get(a.getRegistry().keySet().toArray()[i]), message);
+						employeeToMessage.put(employee, message);
 					}
 				}
 				if(toggle==0)
@@ -329,6 +334,30 @@ public class Report implements  Commandable
 				break;
 
 			case "remove":
+				if (command.getOptions().size() < 1)
+				{
+					build.append("Report cmd Error: Missing required argument\n");
+					build.append("Expected - remove <employeeID>");
+				}
+				else if (command.getOptions().size() == 1)
+				{
+					int check;
+
+					try {
+						check = Integer.parseInt(command.getOptions().get(0));
+					} catch (NumberFormatException e)
+					{
+						build.append("Report cmd Error: EmployeeID value is not a number: ").append(e.getMessage());
+						break;
+					}
+
+					build.append(removeReport(loggedIn, check));
+				}
+				else
+				{
+					build.append("Report cmd Error: Too many arguments\n");
+					build.append("Expected - remove <employeeID>");
+				}
 				break;
 			default:
 				build.append("No binding for command '").append(command.getCommand()).append("'");

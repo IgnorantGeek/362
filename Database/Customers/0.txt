@@ -1,0 +1,2 @@
+Johnny apple seed
+type=advertiser

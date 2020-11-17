@@ -312,7 +312,6 @@ public class Retract implements Commandable
 					{
 						if (article.getName().compareTo(op) == 0)
 						{
-							aman.getArticles().remove(article);
 							this.articleRetractions.put(article.getName(), article);
 							save();
 							found = true;
@@ -325,61 +324,47 @@ public class Retract implements Commandable
 				}
 				break;
 			case "paper":
-				for (String op : command.getOptions())
+				if (command.getOptions().size() < 2)
 				{
-					// Need to parse options and check for a valid int array
-					if (op.length() != 5)
-					{
-						build.append("Retract cmd Error: Invalid info array. Required length is 5. Skipping: ");
-						build.append(op).append("\n");
-						continue;
-					}
-					int[] identifier = getIdentifier(op);
+					build.append("Retract cmd Error: Not enough arguments.\n");
+					build.append("Expected - paper <volume> <issue>");
+					break;
+				}
 
-					if (identifier == null)
-					{
-						build.append("Retract cmd Error: Invalid info array. Entered value was not a valid int array.");
-						build.append(" Skipping: ").append(op).append("\n");
-						continue;
-					}
+				String op1 = command.getOptions().get(0);
+				String op2 = command.getOptions().get(1);
 
-					boolean found = false;
-					for (Newspaper paper : nman.getVolIss().values())
-					{
-						if (paper.getInfo().equals(identifier))
-						{
-							nman.getVolIss().remove(paper);
-							newspaperRetractions.put(paper.getInfo()[0] + ", " + paper.getInfo()[1], paper);
-							save();
-							found = true;
-							break;
-						}
-					}
+				int Vol, Issue;
 
-					if (!found) build.append("Retract internal Error: No paper found with ID: ").append(op).append(", skipping.");
-					else build.append("Retracted paper: ").append(op);
+				try {
+					Vol = Integer.parseInt(op1);
+					Issue = Integer.parseInt(op2);
+				}
+				catch (NumberFormatException e)
+				{
+					build.append("Retract cmd Error: Volume and/or Issue not a valid number: ").append(e.getMessage());
+					break;
+				}
+
+				String volIssueStr = Vol+", "+Issue;
+				Newspaper find = nman.getVolIss().get(volIssueStr);
+
+				if (find == null)
+				{
+					build.append(volIssueStr);
+					build.append("Retract internal Error: No paper found with ID: [").append(op1).append(",");
+					build.append(op2).append("]. Skipping.\n");
+				}
+				else
+				{
+					newspaperRetractions.put(Vol + ", " + Issue, find);
+					save();
+					build.append("Retracted paper: [").append(op1).append(",").append(op2).append("]");
 				}
 				break;
 			default:
 				build.append("Retract cmd Error: No binding found for '").append(command.getCommand()).append("'");
 		}
 		return build.toString();
-	}
-
-	private static int[] getIdentifier(String in)
-	{
-		int[] identifier = new int[5];
-
-		for (int i = 0; i < in.length(); i++)
-		{
-			int hold = Character.getNumericValue(in.charAt(i));
-			if (hold > 9)
-			{
-				return null;
-			}
-			identifier[i] = hold;
-		}
-
-		return identifier;
 	}
 }

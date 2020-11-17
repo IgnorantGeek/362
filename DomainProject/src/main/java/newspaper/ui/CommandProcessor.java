@@ -10,12 +10,12 @@ public class CommandProcessor
 {
     private NewspaperManager nman = new NewspaperManager();
     private ArticleManager aman = new ArticleManager();
-    private AdManager adman = new AdManager();
     private SubscriptionManager sman = new SubscriptionManager();
     private DMEditor dme = new DMEditor();
     private Feedback fback = new Feedback();
     public EmployeeManager eman = new EmployeeManager(10); // Reserve ids 0-9 for testing, public for login
     private CustomerManager cman = new CustomerManager(eman);
+    private AdManager adman = new AdManager(cman);
     private FinancialManager fman = new FinancialManager(eman,adman,sman,cman);
     private Report rport = new Report(eman);
     private Retract ract = new Retract(nman, aman);
@@ -58,7 +58,7 @@ public class CommandProcessor
             case "article":
                 out = aman.executeCommand(loggedIn, command);
                 break;
-            case "advert":
+            case "ad":
                 out = adman.executeCommand(loggedIn, command);
                 break;
             case "subscription":
