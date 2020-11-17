@@ -81,7 +81,7 @@ public class CommandProcessor
             case "report":
                 out = rport.executeCommand(loggedIn, command);
                 break;
-            case "react":
+            case "retract":
                 out = ract.executeCommand(loggedIn, command);
                 break;
             default:

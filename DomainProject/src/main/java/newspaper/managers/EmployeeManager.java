@@ -400,7 +400,7 @@ public class EmployeeManager implements Commandable
         catch (Exception e)
         {
             System.out.println("ERROR: Failed to add employee file: " + fileName);
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             return null;
         }
 

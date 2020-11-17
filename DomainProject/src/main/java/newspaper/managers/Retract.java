@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 import newspaper.models.Article;
@@ -290,8 +291,21 @@ public class Retract implements Commandable
 		switch (command.getCommand())
 		{
 			case "get-papers":
+				System.out.println("Retracted papers:");
+				for (Newspaper paper : this.getPapers())
+				{
+					System.out.println("ID: " + Arrays.toString(paper.getInfo()));
+				}
 				break;
 			case "get-articles":
+				System.out.println("Retracted Articles:");
+				for (Article article : this.getArticles())
+				{
+					System.out.println("ID: " + article.getName());
+				}
+				break;
+			case "article":
+				
 				break;
 			default:
 				build.append("Retract cmd Error: No binding found for '").append(command.getCommand()).append("'");

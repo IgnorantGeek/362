@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -544,6 +545,11 @@ public class NewspaperManager implements Commandable
 		switch (command.getCommand())
 		{
 			case "list":
+				System.out.println("Active Papers:");
+				for (Newspaper paper : this.news)
+				{
+					System.out.println("ID: " + Arrays.toString(paper.getInfo()));
+				}
 				break;
 			case "add":
 				break;

@@ -21,7 +21,7 @@ public class SalaryEmployee extends Employee {
         String fileName = this.Id() + ".txt";
         String build = "";
         build += this.FullName() + "\n" + this.supervisorId() + "\n" + this.Password() + "\n";
-        build += this.Clearance() + '\n' + 0 + "\n" + this.salary(); // 0 for salary and 1 for hourly
+        build += this.Clearance() + "\n" + 0 + "\n" + this.salary(); // 0 for salary and 1 for hourly
 
         try
         {

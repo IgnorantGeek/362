@@ -31,7 +31,7 @@ public class HourlyEmployee extends Employee{
         String fileName = this.Id() + ".txt";
         String build = "";
         build += this.FullName() + "\n" + this.supervisorId() + "\n" + this.Password() + "\n";
-        build += this.Clearance() + '\n' + 1 + "\n" + this.hourlyRate() + "\n" + this.hoursWorked();
+        build += this.Clearance() + "\n" + 1 + "\n" + this.hourlyRate() + "\n" + this.hoursWorked();
 
         try
         {

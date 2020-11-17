@@ -1,6 +1,7 @@
-John Smith
+Johnny Test
 10
 password
-13
+1
+1
 7.25
 0.0
