@@ -545,10 +545,11 @@ public class NewspaperManager implements Commandable
 		switch (command.getCommand())
 		{
 			case "list":
-				build.append("Active Papers:");
+				build.append("Active Papers:\n");
 				for (Newspaper paper : this.news)
 				{
-					build.append("ID: ").append(Arrays.toString(paper.getInfo()));
+					build.append("ID: ").append(Arrays.toString(paper.getInfo())).append("\n");
+
 				}
 				break;
 			case "add":

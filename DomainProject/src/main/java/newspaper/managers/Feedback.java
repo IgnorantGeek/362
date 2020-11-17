@@ -8,10 +8,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Class that represents the feedback for the company.
@@ -334,6 +331,24 @@ public class Feedback implements Commandable
 		switch (command.getCommand())
 		{
 			case "list":
+				if (command.getOptions().size() >= 1)
+				{
+					build.append("Feedback cmd Error: Not enough arguments\n");
+					build.append("Expected - feedback list");
+				}
+				if (command.getOptions().size() == 0)
+				{
+					build.append("Feedback:");
+					Object[] messages = emailToMessage.values().toArray();
+					Object[] ratings = emailToRating.values().toArray();
+					Object[] emails = emailToMessage.keySet().toArray();
+					for (int i = 0; i < messages.length; i++)
+					{
+						build.append("\n-------------------------------------\n");
+						build.append("From: ").append(emails[i]).append("\n");
+						build.append(ratings[i]).append(": ").append(messages[i]).append("\n");
+					}
+				}
 				break;
 			case "add":
 				break;
