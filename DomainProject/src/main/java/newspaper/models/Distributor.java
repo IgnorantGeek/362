@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import newspaper.Global;
+
 public class Distributor extends Customer implements Writeable
 {
     private int paperCount; // Number of papers to recieve
@@ -36,7 +38,7 @@ public class Distributor extends Customer implements Writeable
 
         // try to write to file
         try {
-            BufferedWriter write = new BufferedWriter(new FileWriter("../Database/Customers/" + fileName));
+            BufferedWriter write = new BufferedWriter(new FileWriter(Global.CUSTOMER_DB_PATH + fileName));
 
             write.write(build);
 

@@ -6,9 +6,11 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 import newspaper.models.Article;
+import newspaper.models.Employee;
 import newspaper.models.Newspaper;
 import newspaper.ui.Command;
 
@@ -27,6 +29,8 @@ public class Retract implements Commandable
 	 * The list of all retracted newspapers.
 	 */
 	private HashMap<String,Newspaper> newspaperRetractions;
+	private NewspaperManager nman;
+	private ArticleManager aman;
 	/**
 	 * Constructor for the retract class.
 	 * @param papers The app.java's newspaper manager
@@ -38,6 +42,8 @@ public class Retract implements Commandable
 		articleRetractions = new HashMap<String,Article>();
 		newspaperRetractions = new HashMap<String,Newspaper>();
 		init(papers,arts);
+		this.nman = papers;
+		this.aman = arts;
 	}
 	/**
 	 * Allows the user to retract an article or newspaper.
@@ -130,6 +136,18 @@ public class Retract implements Commandable
 			in = scan.nextLine();
 		}
 		return true;
+	}
+
+	public String retractArticle(Employee loggedIn)
+	{
+		StringBuilder build = new StringBuilder();
+		return build.toString();
+	}
+
+	public String retractPaper(Employee loggedIn)
+	{
+		StringBuilder build = new StringBuilder();
+		return build.toString();
 	}
 	/**
 	 * Returns the list of retracted articles.
@@ -267,9 +285,86 @@ public class Retract implements Commandable
 	}
 
 	@Override
-	public String executeCommand(Command command)
+	public String executeCommand(Employee loggedIn, Command command)
 	{
-		// TODO
-		return null;
+		StringBuilder build = new StringBuilder();
+		switch (command.getCommand())
+		{
+			case "get-papers":
+				build.append("Retracted papers:\n");
+				for (Newspaper paper : this.getPapers())
+				{
+					build.append("ID: ").append(Arrays.toString(paper.getInfo())).append("\n");
+				}
+				break;
+			case "get-articles":
+				build.append("Retracted articles:\n");
+				for (Article article : this.getArticles())
+				{
+					build.append("ID: ").append(article.getName()).append("\n");
+				}
+				break;
+			case "article":
+				for (String op : command.getOptions())
+				{
+					boolean found = false;
+					for (Article article : aman.getArticles())
+					{
+						if (article.getName().compareTo(op) == 0)
+						{
+							this.articleRetractions.put(article.getName(), article);
+							save();
+							found = true;
+							break;
+						}
+					}
+
+					if (!found) build.append("Retract internal Error: No article found with name: ").append(op).append(", skipping.");
+					else build.append("Retracted article: ").append(op);
+				}
+				break;
+			case "paper":
+				if (command.getOptions().size() < 2)
+				{
+					build.append("Retract cmd Error: Not enough arguments.\n");
+					build.append("Expected - paper <volume> <issue>");
+					break;
+				}
+
+				String op1 = command.getOptions().get(0);
+				String op2 = command.getOptions().get(1);
+
+				int Vol, Issue;
+
+				try {
+					Vol = Integer.parseInt(op1);
+					Issue = Integer.parseInt(op2);
+				}
+				catch (NumberFormatException e)
+				{
+					build.append("Retract cmd Error: Volume and/or Issue not a valid number: ").append(e.getMessage());
+					break;
+				}
+
+				String volIssueStr = Vol+", "+Issue;
+				Newspaper find = nman.getVolIss().get(volIssueStr);
+
+				if (find == null)
+				{
+					build.append(volIssueStr);
+					build.append("Retract internal Error: No paper found with ID: [").append(op1).append(",");
+					build.append(op2).append("]. Skipping.\n");
+				}
+				else
+				{
+					newspaperRetractions.put(Vol + ", " + Issue, find);
+					save();
+					build.append("Retracted paper: [").append(op1).append(",").append(op2).append("]");
+				}
+				break;
+			default:
+				build.append("Retract cmd Error: No binding found for '").append(command.getCommand()).append("'");
+		}
+		return build.toString();
 	}
 }

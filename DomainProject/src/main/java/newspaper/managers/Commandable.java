@@ -1,5 +1,6 @@
 package newspaper.managers;
 
+import newspaper.models.Employee;
 import newspaper.ui.Command;
 
 /**
@@ -7,5 +8,5 @@ import newspaper.ui.Command;
  */
 public interface Commandable
 {
-    String executeCommand(Command command);
+    String executeCommand(Employee loggedIn, Command command);
 }

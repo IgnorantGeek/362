@@ -1,6 +1,7 @@
 package newspaper.managers;
 
 import newspaper.models.Article;
+import newspaper.models.Employee;
 import newspaper.models.UnfinishedArticle;
 import newspaper.models.FinishedArticle;
 import newspaper.ui.Command;
@@ -425,9 +426,25 @@ public class ArticleManager implements Commandable
 	}
 
 	@Override
-	public String executeCommand(Command command)
+	public String executeCommand(Employee loggedIn, Command command)
 	{
-		// TODO
-		return null;
+		StringBuilder build = new StringBuilder();
+		switch (command.getCommand())
+		{
+			case "list":
+				build.append("Active Articles:\n");
+				int i = 1;
+				for (Article article : this.articles)
+				{
+					build.append(i).append(": ").append(article.getName()).append("\n");
+					i++;
+				}
+				break;
+			case "add":
+				break;
+			default:
+				build.append("Article cmd Error: No binding found for '").append(command.getCommand()).append("'");
+		}
+		return build.toString();
 	}
 }

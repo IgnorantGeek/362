@@ -1,5 +1,6 @@
 package newspaper.managers;
 
+import newspaper.models.Employee;
 import newspaper.models.Subscription;
 import newspaper.models.PaymentInformation;
 import newspaper.models.CreditCard;
@@ -59,13 +60,13 @@ public class SubscriptionManager implements Commandable
 			}
 			s.close();
 		} catch (FileNotFoundException e) {
-			System.out.println("Subscribtion file is inaccessible.");
+			System.out.println("Subscription file is inaccessible.");
 		}	
 	}
 	/**
 	 * Adds a subscription to file and memory
 	 * @param s Subscription to be added
-	 * *@return True if save was succesful, false if not.
+	 **@return True if save was successful, false if not.
 	 */
 	public boolean addSub(Subscription s) {
 		if(s != null && getSub(s.email) == null) {
@@ -78,7 +79,7 @@ public class SubscriptionManager implements Commandable
 	/**
 	 * Adds a subscription to file
 	 * @param s Subscription to be added
-	 *@return True if save was succesful, false if not.
+	 * @return True if save was successful, false if not.
 	 */
 	private boolean writeSub(Subscription s) {
 		PrintWriter out = null;
@@ -327,15 +328,46 @@ public class SubscriptionManager implements Commandable
 		in.close();
 		return false;
 	}
+
+	public String removeSubscription(String email)
+	{
+		if (Subscriptions.containsKey(email))
+		{
+			if (removeSub(email)) return "Successfully dropped subscription for " + email;
+			else return "Subscription internal Error: Failed to remove subscription for " + email;
+		}
+		return "Subscription internal Error: No subscription found with email " + email;
+	}
 	
 	public HashMap<String,Subscription> getAll() {
 		return Subscriptions;
 	}
 
 	@Override
-	public String executeCommand(Command command)
+	public String executeCommand(Employee loggedIn, Command command)
 	{
-		// TODO
-		return null;
+		StringBuilder build = new StringBuilder();
+
+		switch (command.getCommand())
+		{
+			case "remove":
+				if (command.getOptions().size() < 1)
+				{
+					build.append("Retract cmd Error: missing required email parameter\n");
+					build.append("Expected - remove <email>*");
+					break;
+				}
+
+				for (String opt : command.getOptions())
+				{
+					build.append(removeSubscription(opt)).append('\n');
+				}
+				break;
+			case "add":
+
+			default:
+				build.append("Retract cmd Error: No binding found for '").append(command.getCommand()).append("'");
+		}
+		return build.toString();
 	}
 }

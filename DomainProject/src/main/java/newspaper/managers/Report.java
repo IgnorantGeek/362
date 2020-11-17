@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Set;
+
 import newspaper.models.Employee;
 import newspaper.ui.Command;
 
@@ -22,6 +24,7 @@ public class Report implements  Commandable
 	 * A hashmap of all employee reports with their corresponding messages.
 	 */
 	private HashMap<Employee, String> employeeToMessage;
+	private EmployeeManager eman;
 	/**
 	 * The constructor for the Report class.
 	 * @param e the employee manager to get used.
@@ -31,6 +34,7 @@ public class Report implements  Commandable
 	{
 		employeeToMessage = new HashMap<Employee, String>();
 		init(e);
+		this.eman = e;
 	}
 	/**
 	 * Prints out all employees reported, prompts for a choice, then it prints out that employees report message.
@@ -47,7 +51,6 @@ public class Report implements  Commandable
 		for(int i = 0; i < employeeToMessage.size(); i++)
 		{
 			list.add((Employee) employeeToMessage.keySet().toArray()[i]);
-			System.out.println(i+": "+list.get(i).FullName());
 		}
 		System.out.println("Select a number from above to read their report(s).");
 		String spot = in.nextLine();
@@ -63,6 +66,30 @@ public class Report implements  Commandable
 		}
 		System.out.println(list.get(index)+":\n"+employeeToMessage.get(list.get(index)));
 		return true;
+	}
+
+	public String readReport(int employeeID)
+	{
+		StringBuilder build = new StringBuilder();
+		Employee find = eman.getEmployee(employeeID);
+
+		Set<Employee> reports = employeeToMessage.keySet();
+		int i = 0;
+		for (Employee report : reports)
+		{
+			if (report.Id() == find.Id())
+			{
+				if (i == 0)
+				{
+					build.append("Reports for Employee: ").append(employeeID);
+				}
+				build.append('\n').append(i).append(":  ").append(employeeToMessage.get(report));
+				i++;
+			}
+		}
+
+		if (i == 0) build.append("Report internal Error: No reports for Employee ").append(employeeID);
+		return build.toString();
 	}
 	/**
 	 * Allows the user to report another employee or themselves.
@@ -105,6 +132,22 @@ public class Report implements  Commandable
 		save();
 		return true;
 	}
+
+	public String addReport(int EmployeeID, String message)
+	{
+		StringBuilder build = new StringBuilder();
+
+		if (!eman.checkID(EmployeeID))
+		{
+			build.append("Report cmd Error: no Employee found with ID ").append(EmployeeID);
+			return build.toString();
+		}
+
+		employeeToMessage.put(eman.getEmployee(EmployeeID), message);
+		build.append("Successfully added new Report for Employee ").append(EmployeeID);
+
+		return build.toString();
+	}
 	/**
 	 * Allows the user to remove an employee report, only if it is not themselves.
 	 * @param e The employee to get removed
@@ -122,6 +165,17 @@ public class Report implements  Commandable
 		employeeToMessage.remove(e);
 		save();
 		return true;
+	}
+
+	public String removeReport(Employee loggedIn, int dropId)
+	{
+		Employee check = eman.getEmployee(dropId);
+
+		if (loggedIn.Id() == check.Id())
+			return "Report internal Error: You are not allowed to delete reports on yourself.";
+
+		employeeToMessage.remove(check);
+		return "Removed Report for employee " + dropId;
 	}
 	/**
 	 * Saves current progress made in the class.
@@ -188,12 +242,12 @@ public class Report implements  Commandable
 					in = lines.remove(0);
 				}
 				int toggle = 0;
-				for(int i = 0; i < a.getEmployeeCount();i++)
+				for (Employee employee : a.getRegistry().values())
 				{
-					if(a.getRegistry().get(a.getRegistry().keySet().toArray()[i]).FullName().compareTo(name)==0)
+					if(employee.FullName().compareTo(name)==0)
 					{
 						toggle = 1;
-						employeeToMessage.put(a.getRegistry().get(a.getRegistry().keySet().toArray()[i]), message);
+						employeeToMessage.put(employee, message);
 					}
 				}
 				if(toggle==0)
@@ -222,9 +276,92 @@ public class Report implements  Commandable
 	}
 
 	@Override
-	public String executeCommand(Command command)
+	public String executeCommand(Employee loggedIn, Command command)
 	{
-		// TODO
-		return null;
+		StringBuilder build = new StringBuilder();
+
+		switch (command.getCommand())
+		{
+			case "read":
+				if (command.getOptions().size() < 1)
+				{
+					build.append("Report cmd Error: Missing required argument\n");
+					build.append("Expected - read <employeeID>");
+					break;
+				}
+				String empIDStr = command.getOptions().get(0);
+				int readID;
+
+				try {
+					readID = Integer.parseInt(empIDStr);
+				}
+				catch (NumberFormatException e)
+				{
+					build.append("Report cmd Error: Employee ID value '").append(empIDStr);
+					build.append("' is not a valid number");
+					break;
+				}
+
+				if (eman.checkID(readID))
+				{
+					build.append(readReport(readID));
+				}
+				else build.append("Report cmd Error: No Employee found with ID: ").append(readID);
+				break;
+
+			case "add":
+				// add a new report
+				if (command.getOptions().size() < 2)
+				{
+					build.append("Report cmd Error: Missing required argument\n");
+					build.append("Expected - add <employeeID> <message>");
+					break;
+				}
+
+				int addID;
+
+				try{
+					addID = Integer.parseInt(command.getOptions().get(0));
+				}
+				catch (NumberFormatException e)
+				{
+					build.append("Report cmd Error: Employee ID argument '").append(command.getOptions().get(0));
+					build.append("' is not a valid number");
+					break;
+				}
+
+				build.append(addReport(addID, command.getOptions().get(1)));
+				break;
+
+			case "remove":
+				if (command.getOptions().size() < 1)
+				{
+					build.append("Report cmd Error: Missing required argument\n");
+					build.append("Expected - remove <employeeID>");
+				}
+				else if (command.getOptions().size() == 1)
+				{
+					int check;
+
+					try {
+						check = Integer.parseInt(command.getOptions().get(0));
+					} catch (NumberFormatException e)
+					{
+						build.append("Report cmd Error: EmployeeID value is not a number: ").append(e.getMessage());
+						break;
+					}
+
+					build.append(removeReport(loggedIn, check));
+				}
+				else
+				{
+					build.append("Report cmd Error: Too many arguments\n");
+					build.append("Expected - remove <employeeID>");
+				}
+				break;
+			default:
+				build.append("No binding for command '").append(command.getCommand()).append("'");
+		}
+		return build.toString();
 	}
 }

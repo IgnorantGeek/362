@@ -1,5 +1,6 @@
 package newspaper.managers;
 
+import newspaper.models.Employee;
 import newspaper.ui.Command;
 
 import java.io.BufferedWriter;
@@ -125,6 +126,13 @@ public class Feedback implements Commandable
 			System.out.println("You do not have access to this function.");
 			return false;
 		}
+	}
+
+	public String removeFeedback(Employee loggedIn, int feedbackID)
+	{
+		StringBuilder build = new StringBuilder();
+
+		return build.toString();
 	}
 	
 	/**
@@ -320,9 +328,20 @@ public class Feedback implements Commandable
 	}
 
 	@Override
-	public String executeCommand(Command command)
+	public String executeCommand(Employee loggedIn, Command command)
 	{
-		// TODO
-		return null;
+		StringBuilder build = new StringBuilder();
+		switch (command.getCommand())
+		{
+			case "list":
+				break;
+			case "add":
+				break;
+			case "remove":
+				break;
+			default:
+				build.append("Retract cmd Error: No binding found for '").append(command.getCommand()).append("'");
+		}
+		return build.toString();
 	}
 }

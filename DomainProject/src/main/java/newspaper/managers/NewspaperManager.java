@@ -1,5 +1,6 @@
 package newspaper.managers;
 
+import newspaper.models.Employee;
 import newspaper.models.Newspaper;
 import newspaper.ui.Command;
 
@@ -12,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -537,9 +539,23 @@ public class NewspaperManager implements Commandable
 	}
 	
 	@Override
-	public String executeCommand(Command command)
+	public String executeCommand(Employee loggedIn, Command command)
 	{
-		// TODO
-		return null;
+		StringBuilder build = new StringBuilder();
+		switch (command.getCommand())
+		{
+			case "list":
+				build.append("Active Papers:");
+				for (Newspaper paper : this.news)
+				{
+					build.append("ID: ").append(Arrays.toString(paper.getInfo()));
+				}
+				break;
+			case "add":
+				break;
+			default:
+				build.append("Retract cmd Error: No binding found for '").append(command.getCommand()).append("'");
+		}
+		return build.toString();
 	}
 }

@@ -1,2 +1,2 @@
-Test
+Johnny apple seed
 type=advertiser

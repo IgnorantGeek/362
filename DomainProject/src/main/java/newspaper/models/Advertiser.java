@@ -31,10 +31,6 @@ public class Advertiser extends Customer implements Writeable
     {
         this.ads.add(ad);
     }
-    
-    public int id() {
-        return this.id();
-    }
 
     @Override
     public int write()

@@ -8,25 +8,19 @@ import java.io.IOException;
 
 public abstract class Employee implements Writeable
 {
-    private int Id;
+    private final int Id;
+    private final int clearance;
     private int supervisorId;
     private String FullName;
     private String Password;
 
-    public Employee() { }
-
-    public Employee(int Id, String FullName)
-    {
-        this.Id = Id;
-        this.FullName = FullName;
-    }
-
-    public Employee(int Id, String password, int supervisorId, String FullName)
+    public Employee(int Id, String FullName, String password, int supervisorId, int clearance)
     {
         this.Id = Id;
         this.Password = password;
         this.supervisorId = supervisorId;
         this.FullName = FullName;
+        this.clearance = clearance;
     }
 
     public String FullName()
@@ -49,6 +43,8 @@ public abstract class Employee implements Writeable
         return Password;
     }
 
+    public int Clearance() { return clearance; }
+
     public void setFullName(String fullName)
     {
         FullName = fullName;
@@ -70,7 +66,7 @@ public abstract class Employee implements Writeable
         // Write the employee to the db file
         String fileName = this.Id() + ".txt";
         String build = "";
-        build += FullName + "\n" + this.supervisorId() + "\n" + Password;
+        build += FullName + "\n" + this.supervisorId() + "\n" + Password + "\n" + clearance;
 
         try
         {

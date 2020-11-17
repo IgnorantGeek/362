@@ -3,6 +3,8 @@ package newspaper.managers;
 import newspaper.models.Ad;
 import newspaper.models.Advertiser;
 import newspaper.Global;
+import newspaper.models.Customer;
+import newspaper.models.Employee;
 import newspaper.ui.Command;
 
 import java.io.File;
@@ -16,12 +18,22 @@ public class AdManager implements Commandable
     private HashMap<String, Ad> ads;
     private final String databasePath;
     private int customerCount;
+    private CustomerManager cman;
 
     public AdManager()
     {
-        ads = new HashMap<String, Ad>();
+        ads = new HashMap<>();
         databasePath = Global.DB_PATH;
         this.init();
+        this.cman = null;
+    }
+
+    public AdManager(CustomerManager cman)
+    {
+        ads = new HashMap<>();
+        databasePath = Global.DB_PATH;
+        this.init();
+        this.cman = cman;
     }
 
 
@@ -33,7 +45,7 @@ public class AdManager implements Commandable
     public int init()
     {
         // main method (CLI)
-        File root = new File(databasePath + "/Ads");
+        File root = new File(databasePath + "/Ads/");
 
         // If there is no root dir, build
         if (!root.exists())
@@ -82,34 +94,34 @@ public class AdManager implements Commandable
         return insert;
     }
 
-    public int newAd(int[] paperIdentifier, String imageName, int advertiserID)
+    public Ad newAd(int[] paperIdentifier, String imageName, int advertiserID)
     {
         // Locals
-        Ad in;
+        Ad out;
 
         // Validate class
-        if (databasePath == null || databasePath == "")
+        if (databasePath == null || databasePath.equals(""))
         {
-            return -1;
+            return null;
         }
 
-        if (imageName == null || imageName == "")
+        if (imageName == null || imageName.equals(""))
         {
-            in = new Ad(Global.generateID(), paperIdentifier, advertiserID);
+            out = new Ad(Global.generateID(), paperIdentifier, advertiserID);
         }
-        else in = new Ad(Global.generateID(), paperIdentifier, advertiserID, imageName);
+        else out = new Ad(Global.generateID(), paperIdentifier, advertiserID, imageName);
         
-        if (in.write() < 0)
+        if (out.write() < 0)
         {
             // error writing ad to database (file)
-            return -3;
+            return null;
         }
 
         // Insert Ad into list
-        this.ads.put(in.getAdvertID(), in);
+        this.ads.put(out.getAdvertID(), out);
 
         // Success
-        return 0;
+        return out;
     }
     
     public HashMap<String, Ad> getAll() {
@@ -117,18 +129,115 @@ public class AdManager implements Commandable
     }
 
     @Override
-    public String executeCommand(Command command)
+    public String executeCommand(Employee loggedIn, Command command)
     {
-        // Get the command
+        StringBuilder build = new StringBuilder();
         switch (command.getCommand())
         {
-            case "test":
+            case "new":
+                if (command.getOptions().size() < 3)
+                {
+                    build.append("Ad cmd Error: Not enough arguments.\n");
+                    build.append("Expected - ad new <advertiserID> <volume> <issue> [imageFileName]");
+                }
+                else if (command.getOptions().size() == 3)
+                {
+                    int advertiserId, vol, issue;
+                    try {
+                        advertiserId = Integer.parseInt(command.getOptions().get(0));
+                        vol = Integer.parseInt(command.getOptions().get(1));
+                        issue = Integer.parseInt(command.getOptions().get(2));
+                    } catch (NumberFormatException e)
+                    {
+                        build.append("Ad cmd Error: Volume/Issue not a valid number: ").append(e.getMessage());
+                        break;
+                    }
+
+                    if (cman.getRegistry().containsKey(advertiserId))
+                    {
+                        if (cman.getRegistry().get(advertiserId) instanceof Advertiser)
+                        {
+                            int[] paperId = {vol, issue, 0, 0, 0};
+
+                            newAd(paperId, null, advertiserId);
+
+                            build.append("Warning! You created an Ad with an empty image name. No image will appear ");
+                            build.append("in the finalized paper unless a valid image file is added");
+                        }
+                        else
+                        {
+                            build.append("Ad internal Error: Customer with ID ").append(advertiserId);
+                            build.append(" is not of type Advertiser. Canceling.");
+                        }
+                    }
+                    else
+                    {
+                        build.append("Ad internal Error: No advertiser found with ID: ").append(advertiserId);
+                    }
+                }
+                else
+                {
+                    int advertiserId, vol, issue;
+                    try {
+                        advertiserId = Integer.parseInt(command.getOptions().get(0));
+                        vol = Integer.parseInt(command.getOptions().get(1));
+                        issue = Integer.parseInt(command.getOptions().get(2));
+                    } catch (NumberFormatException e)
+                    {
+                        build.append("Ad cmd Error: Volume/Issue not a valid number: ").append(e.getMessage());
+                        break;
+                    }
+
+                    if (cman.getRegistry().containsKey(advertiserId))
+                    {
+                        if (cman.getRegistry().get(advertiserId) instanceof Advertiser)
+                        {
+                            if (cman.getRegistry().get(advertiserId) instanceof Advertiser)
+                            {
+                                int[] paperId = {vol, issue, 0, 0, 0};
+
+                                if (command.getOptions().get(3).equals(""))
+                                {
+                                    build.append("Warning! You created an Ad with an empty image name. No image will appear ");
+                                    build.append("in the finalized paper unless a valid image file is added");
+                                    newAd(paperId, null, advertiserId);
+                                }
+                                else
+                                {
+                                    Ad in = newAd(paperId, command.getOptions().get(3), advertiserId);
+                                    build.append("Created new Ad: ").append(in.getAdvertID());
+                                }
+                            }
+                            else
+                            {
+                                build.append("Ad internal Error: Customer with ID ").append(advertiserId);
+                                build.append(" is not of type Advertiser. Canceling.");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        build.append("Ad internal Error: No advertiser found with ID: ").append(advertiserId);
+                    }
+                }
+                break;
+            case "remove":
+                break;
+            case "list":
+                build.append("Tracked Advertisements:");
+                int i = 0;
+                for (Ad ad : ads.values())
+                {
+                    build.append("\n-").append(i).append("--------------------------------------\n");
+                    build.append("| ").append(ad.getAdvertID()).append("\n");
+                    build.append("| imgFile: ").append(ad.getImagePath());
+                    i++;
+                }
+                build.append("\n----------------------------------------\n");
                 break;
             default:
-                return null;
+                build.append("Retract cmd Error: No binding found for '").append(command.getCommand()).append("'");
         }
-
-        // Good return
-        return null;
+        return build.toString();
     }
 }

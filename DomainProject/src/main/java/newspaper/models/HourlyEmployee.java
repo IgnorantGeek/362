@@ -11,21 +11,17 @@ public class HourlyEmployee extends Employee{
 	double hourlyRate;
 	double hoursWorked;
 	
-	public HourlyEmployee(int Id, String password, int supervisorId, String FullName, double hourlyRate, double hoursWorked) {
-		super(Id, password, supervisorId, FullName);
+	public HourlyEmployee(int Id, String password, int supervisorId, String FullName, int clearance, double hourlyRate, double hoursWorked) {
+		super(Id, FullName, password, supervisorId, clearance);
 		this.hourlyRate = hourlyRate;
 		this.hoursWorked = hoursWorked;
 
 	}
 	
-	public HourlyEmployee(int Id, String password, int supervisorId, String FullName, double hourlyRate) {
-		super(Id, password, supervisorId, FullName);
+	public HourlyEmployee(int Id, String password, int supervisorId, String FullName, int clearance, double hourlyRate) {
+		super(Id, FullName, password, supervisorId, clearance);
 		this.hourlyRate = hourlyRate;
 		this.hoursWorked = 0;
-	}
-	
-	public HourlyEmployee(int Id, String FullName) {
-		super(Id, FullName);
 	}
 	
 	@Override
@@ -34,8 +30,8 @@ public class HourlyEmployee extends Employee{
         // Write the employe to the db file
         String fileName = this.Id() + ".txt";
         String build = "";
-        build += this.FullName() + "\n" + this.supervisorId();
-        build += 1 + "\n" + this.hourlyRate() + "\n" + this.hoursWorked(); // 0 for salary and 1 for hourly
+        build += this.FullName() + "\n" + this.supervisorId() + "\n" + this.Password() + "\n";
+        build += this.Clearance() + "\n" + 1 + "\n" + this.hourlyRate() + "\n" + this.hoursWorked();
 
         try
         {
