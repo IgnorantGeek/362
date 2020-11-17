@@ -1,11 +1,7 @@
 Johnny Test
 10
 password
-<<<<<<< HEAD
 1
-=======
-13
->>>>>>> 737b4dccd33dbf5e987e5acd996913c3f08547e3
 1
 7.25
 0.0
