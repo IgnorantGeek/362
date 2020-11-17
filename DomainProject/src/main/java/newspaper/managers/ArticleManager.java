@@ -432,6 +432,12 @@ public class ArticleManager implements Commandable
 		switch (command.getCommand())
 		{
 			case "list":
+				System.out.println("Active Articles:");
+				int i = 1;
+				for (Article article : this.articles)
+				{
+					System.out.println(i + ": " + article.getName());
+				}
 				break;
 			case "add":
 				break;

@@ -291,25 +291,95 @@ public class Retract implements Commandable
 		switch (command.getCommand())
 		{
 			case "get-papers":
-				System.out.println("Retracted papers:");
+				build.append("Retracted papers:\n");
 				for (Newspaper paper : this.getPapers())
 				{
-					System.out.println("ID: " + Arrays.toString(paper.getInfo()));
+					build.append("ID: ").append(Arrays.toString(paper.getInfo())).append("\n");
 				}
 				break;
 			case "get-articles":
-				System.out.println("Retracted Articles:");
+				build.append("Retracted articles:\n");
 				for (Article article : this.getArticles())
 				{
-					System.out.println("ID: " + article.getName());
+					build.append("ID: ").append(article.getName()).append("\n");
 				}
 				break;
 			case "article":
-				
+				for (String op : command.getOptions())
+				{
+					boolean found = false;
+					for (Article article : aman.getArticles())
+					{
+						if (article.getName().compareTo(op) == 0)
+						{
+							aman.getArticles().remove(article);
+							this.articleRetractions.put(article.getName(), article);
+							save();
+							found = true;
+							break;
+						}
+					}
+
+					if (!found) build.append("Retract internal Error: No article found with name: ").append(op).append(", skipping.");
+					else build.append("Retracted article: ").append(op);
+				}
+				break;
+			case "paper":
+				for (String op : command.getOptions())
+				{
+					// Need to parse options and check for a valid int array
+					if (op.length() != 5)
+					{
+						build.append("Retract cmd Error: Invalid info array. Required length is 5. Skipping: ");
+						build.append(op).append("\n");
+						continue;
+					}
+					int[] identifier = getIdentifier(op);
+
+					if (identifier == null)
+					{
+						build.append("Retract cmd Error: Invalid info array. Entered value was not a valid int array.");
+						build.append(" Skipping: ").append(op).append("\n");
+						continue;
+					}
+
+					boolean found = false;
+					for (Newspaper paper : nman.getVolIss().values())
+					{
+						if (paper.getInfo().equals(identifier))
+						{
+							nman.getVolIss().remove(paper);
+							newspaperRetractions.put(paper.getInfo()[0] + ", " + paper.getInfo()[1], paper);
+							save();
+							found = true;
+							break;
+						}
+					}
+
+					if (!found) build.append("Retract internal Error: No paper found with ID: ").append(op).append(", skipping.");
+					else build.append("Retracted paper: ").append(op);
+				}
 				break;
 			default:
 				build.append("Retract cmd Error: No binding found for '").append(command.getCommand()).append("'");
 		}
 		return build.toString();
+	}
+
+	private static int[] getIdentifier(String in)
+	{
+		int[] identifier = new int[5];
+
+		for (int i = 0; i < in.length(); i++)
+		{
+			int hold = Character.getNumericValue(in.charAt(i));
+			if (hold > 9)
+			{
+				return null;
+			}
+			identifier[i] = hold;
+		}
+
+		return identifier;
 	}
 }

@@ -72,7 +72,7 @@ public class Ad implements Writeable
 
             this.advertiserID = Integer.parseInt(scan.nextLine());
         } catch (FileNotFoundException e) {
-            System.out.println("Could not locate ad file");
+            System.out.println("Could not locate ad file: " + e.getMessage());
         }
         
     }

@@ -34,7 +34,7 @@ public class AdManager implements Commandable
     public int init()
     {
         // main method (CLI)
-        File root = new File(databasePath + "/Ads");
+        File root = new File(databasePath + "/Ads/");
 
         // If there is no root dir, build
         if (!root.exists())
@@ -53,7 +53,7 @@ public class AdManager implements Commandable
             // Initialize the ad structure, read all ads in /Ads/
             for (String fName : root.list())
             {
-                File adFile = new File(databasePath + "/Ads" + fName);
+                File adFile = new File(databasePath + "/Ads/" + fName);
 
                 Ad insert = new Ad(adFile);
 
