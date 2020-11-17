@@ -19,6 +19,7 @@ public class CommandProcessor
     private FinancialManager fman = new FinancialManager(eman,adman,sman,cman);
     private Report rport = new Report(eman);
     private Retract ract = new Retract(nman, aman);
+    private PrintingPress press = new PrintingPress(nman);
 
     public CommandProcessor() { }
 
@@ -83,6 +84,9 @@ public class CommandProcessor
                 break;
             case "retract":
                 out = ract.executeCommand(loggedIn, command);
+                break;
+            case "printingPress":
+                out = press.executeCommand(loggedIn, command);
                 break;
             default:
                 out = "No command found for " + manCmd;

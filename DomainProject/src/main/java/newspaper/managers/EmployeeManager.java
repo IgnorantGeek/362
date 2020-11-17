@@ -145,7 +145,7 @@ public class EmployeeManager implements Commandable
     {
         PrintWriter out = null;
         try {
-            out = new PrintWriter(new BufferedWriter(new FileWriter(Global.EMPLOYEE_DB_PATH, true)));
+            out = new PrintWriter(new BufferedWriter(new FileWriter(Global.TASK_DB_PATH, true)));
             out.print("\n" + t.toString());
         } catch (IOException e) {
             System.out.println("Tasks File system corrupted. Seek IT help.");
@@ -172,7 +172,7 @@ public class EmployeeManager implements Commandable
         Collection<ArrayList<Task>> tsks = tasks.values();
         PrintWriter out = null;
         try {
-            out = new PrintWriter(new BufferedWriter(new FileWriter(Global.EMPLOYEE_DB_PATH, false)));
+            out = new PrintWriter(new BufferedWriter(new FileWriter(Global.TASK_DB_PATH, false)));
             int i = 0;
             for(ArrayList<Task> tsklst: tsks) {
                 for(Task tsk: tsklst) {
@@ -932,11 +932,17 @@ public class EmployeeManager implements Commandable
                 break;
 
             case "addtask":
-                if (command.getOptions().size() != 1) {
-                    build.append("addTask requires 1 argument, the task description");
+                if (command.getOptions().size() < 1) {
+                    build.append("addTask requires a task description");
                 }
                 else {
-                    if(addTask(loggedIn.Id(), command.getOptions().get(0))) {
+                	String description = "";
+                	ArrayList<String> ops = command.getOptions();
+                	for(String word : ops) {
+                		description += word + " ";
+                	}
+                	
+                    if(addTask(loggedIn.Id(), description)) {
                         build.append("Task succesfully added");
                     }
                     else {
@@ -952,7 +958,12 @@ public class EmployeeManager implements Commandable
                 else {
                     int num = Integer.parseInt(command.getOptions().get(0));
                     ArrayList<Task> list3 = tasks.get(loggedIn.Id());
-                    list3.remove(num);
+                    if(deleteTask(list3.get(num - 1))) {
+                    	build.append("Task successfully completed");
+                    }
+                    else {
+                    	build.append("Task could not be marked complete");
+                    }
                 }
                 break;
 
