@@ -290,18 +290,36 @@ public class Retract implements Commandable
 		StringBuilder build = new StringBuilder();
 		switch (command.getCommand())
 		{
-			case "get-papers":
-				build.append("Retracted papers:\n");
-				for (Newspaper paper : this.getPapers())
+			case "list":
+				if (command.getOptions().size() != 1)
 				{
-					build.append("ID: ").append(Arrays.toString(paper.getInfo())).append("\n");
+					build.append("Retract cmd Error: Invalid arguments\n");
+					build.append("Expected - 'retract list papers '||' retract list articles'");
+					break;
 				}
-				break;
-			case "get-articles":
-				build.append("Retracted articles:\n");
-				for (Article article : this.getArticles())
+
+				String choose = command.getOptions().get(0);
+
+				if (choose.equals("papers"))
 				{
-					build.append("ID: ").append(article.getName()).append("\n");
+					build.append("Retracted papers:\n");
+					for (Newspaper paper : this.getPapers())
+					{
+						build.append("ID: ").append(Arrays.toString(paper.getInfo())).append("\n");
+					}
+				}
+				else if (choose.equals("articles"))
+				{
+					build.append("Retracted articles:\n");
+					for (Article article : this.getArticles())
+					{
+						build.append("ID: ").append(article.getName()).append("\n");
+					}
+				}
+				else
+				{
+					build.append("Retract cmd Error: Invalid list modifier\n");
+					build.append("Expected - 'retract list papers '||' retract list articles'");
 				}
 				break;
 			case "article":
